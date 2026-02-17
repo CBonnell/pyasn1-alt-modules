@@ -2,8 +2,8 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# 
-# Copyright (c) 2021-2025, Vigil Security, LLC
+#
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -63,16 +63,16 @@ QVBJOnZzcy1kdi1ycy1wMTE=
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
         self.assertIn(rfc5055.id_ct_scvp_certValRequest, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
         }
 
         substrate = pem.readBase64fromText(self.cvrequest_pem_text)
@@ -92,19 +92,25 @@ QVBJOnZzcy1kdi1ycy1wMTE=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual('URN:VSSAPI:vss-dv-rs-p11',
-            asn1Object['requestorName']['uniformResourceIdentifier'])
+        self.assertEqual(
+            "URN:VSSAPI:vss-dv-rs-p11",
+            asn1Object["requestorName"]["uniformResourceIdentifier"],
+        )
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cvrequest_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual('URN:VSSAPI:vss-dv-rs-p11',
-            asn1Object['content']['requestorName']['uniformResourceIdentifier'])
+        self.assertEqual(
+            "URN:VSSAPI:vss-dv-rs-p11",
+            asn1Object["content"]["requestorName"]["uniformResourceIdentifier"],
+        )
+
 
 class SCVPCVResponseTestCase(unittest.TestCase):
     cvresponse_pem_text = """\
@@ -318,18 +324,18 @@ vMNSPw==
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
         self.assertIn(rfc5055.id_ct_scvp_certValResponse, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
         }
 
         substrate = pem.readBase64fromText(self.cvresponse_pem_text)
@@ -349,62 +355,72 @@ vMNSPw==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual('URN:VSSAPI:vss-dv-rs-p11',
-            asn1Object['requestorName'][0]['uniformResourceIdentifier'])
+        self.assertEqual(
+            "URN:VSSAPI:vss-dv-rs-p11",
+            asn1Object["requestorName"][0]["uniformResourceIdentifier"],
+        )
 
-        scvpWantBackMap = opentypemap.get('scvpWantBackMap')
+        scvpWantBackMap = opentypemap.get("scvpWantBackMap")
         found = False
-        for cr in asn1Object['replyObjects']:
-            for rwb in cr['replyWantBacks']:
-                if rwb['wb'] in scvpWantBackMap:
-                    wbv, rest = der_decoder(rwb['value'], 
-                        asn1Spec=scvpWantBackMap[rwb['wb']])
+        for cr in asn1Object["replyObjects"]:
+            for rwb in cr["replyWantBacks"]:
+                if rwb["wb"] in scvpWantBackMap:
+                    wbv, rest = der_decoder(
+                        rwb["value"], asn1Spec=scvpWantBackMap[rwb["wb"]]
+                    )
                     self.assertFalse(rest)
                     self.assertTrue(wbv.prettyPrint())
-                    self.assertEqual(rwb['value'], der_encoder(wbv))
-            
-                    self.assertEqual(2, wbv[0]['tbsCertificate']['version'])
+                    self.assertEqual(rwb["value"], der_encoder(wbv))
+
+                    self.assertEqual(2, wbv[0]["tbsCertificate"]["version"])
                     found = True
 
         self.assertTrue(found)
 
     def testOpenTypes(self):
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         substrate = pem.readBase64fromText(self.cvresponse_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
-        oid = asn1Object['content']['encapContentInfo']['eContentType']
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
+        oid = asn1Object["content"]["encapContentInfo"]["eContentType"]
         asn1Spec = cmsContentTypesMap[oid]
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual('URN:VSSAPI:vss-dv-rs-p11',
-            asn1Object['requestorName'][0]['uniformResourceIdentifier'])
+        self.assertEqual(
+            "URN:VSSAPI:vss-dv-rs-p11",
+            asn1Object["requestorName"][0]["uniformResourceIdentifier"],
+        )
 
-        scvpWantBackMap = opentypemap.get('scvpWantBackMap')
+        scvpWantBackMap = opentypemap.get("scvpWantBackMap")
         found = False
-        for cr in asn1Object['replyObjects']:
-            for rwb in cr['replyWantBacks']:
-                if rwb['wb'] in scvpWantBackMap:
-                    wbv, rest = der_decoder(rwb['value'], 
-                        asn1Spec=scvpWantBackMap[rwb['wb']],
-                        decodeOpenTypes=True)
+        for cr in asn1Object["replyObjects"]:
+            for rwb in cr["replyWantBacks"]:
+                if rwb["wb"] in scvpWantBackMap:
+                    wbv, rest = der_decoder(
+                        rwb["value"],
+                        asn1Spec=scvpWantBackMap[rwb["wb"]],
+                        decodeOpenTypes=True,
+                    )
                     self.assertFalse(rest)
                     self.assertTrue(wbv.prettyPrint())
-                    self.assertEqual(rwb['value'], der_encoder(wbv))
-            
-                    self.assertEqual(2, wbv[0]['tbsCertificate']['version'])
+                    self.assertEqual(rwb["value"], der_encoder(wbv))
+
+                    self.assertEqual(2, wbv[0]["tbsCertificate"]["version"])
                     found = True
 
         self.assertTrue(found)
+
 
 class SCVPValPolRequestTestCase(unittest.TestCase):
     valpolrequest_pem_text = """\
@@ -415,16 +431,16 @@ MCMGCyqGSIb3DQEJEAEMoBQwEgQQ7V8C3E2ZIRLNgTQZzWGb+Q==
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
         self.assertIn(rfc5055.id_ct_scvp_valPolRequest, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
         }
 
         substrate = pem.readBase64fromText(self.valpolrequest_pem_text)
@@ -444,18 +460,20 @@ MCMGCyqGSIb3DQEJEAEMoBQwEgQQ7V8C3E2ZIRLNgTQZzWGb+Q==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['vpRequestVersion'])
+        self.assertEqual(1, asn1Object["vpRequestVersion"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.valpolrequest_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['content']['vpRequestVersion'])
+        self.assertEqual(1, asn1Object["content"]["vpRequestVersion"])
+
 
 class SCVPValPolResponseTestCase(unittest.TestCase):
     valpolresponse_pem_text = """\
@@ -587,18 +605,18 @@ Y8yBvZcgq9UK6oRgyI81bE26Fo7mDVvhfb40vehuJ9ql22CoFMm0
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
         self.assertIn(rfc5055.id_ct_scvp_valPolResponse, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
         }
 
         substrate = pem.readBase64fromText(self.valpolresponse_pem_text)
@@ -618,32 +636,34 @@ Y8yBvZcgq9UK6oRgyI81bE26Fo7mDVvhfb40vehuJ9ql22CoFMm0
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(10, asn1Object['clockSkew'])
+        self.assertEqual(10, asn1Object["clockSkew"])
 
     def testOpenTypes(self):
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         substrate = pem.readBase64fromText(self.valpolresponse_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
-        oid = asn1Object['content']['encapContentInfo']['eContentType']
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
+        oid = asn1Object["content"]["encapContentInfo"]["eContentType"]
         asn1Spec = cmsContentTypesMap[oid]
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(10, asn1Object['clockSkew'])
+        self.assertEqual(10, asn1Object["clockSkew"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

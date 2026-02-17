@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -15,6 +15,7 @@ from pyasn1_alt_modules import pem
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc7773
 from pyasn1_alt_modules import opentypemap
+
 
 class AuthenticationContextExtnTestCase(unittest.TestCase):
     pem_text = """\
@@ -87,26 +88,26 @@ tAGXsYdcuQpglUngmo/FV4Z9qjIDkYQ=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         extn_list = []
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
 
-            if extn['extnID'] == rfc7773.id_ce_authContext:
-                acs, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+            if extn["extnID"] == rfc7773.id_ce_authContext:
+                acs, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(acs.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(acs))
-                self.assertIn('id.elegnamnden.se', acs[0]['contextType'])
-                self.assertIn(
-                    'AuthContextInfo IdentityProvider', acs[0]['contextInfo'])
+                self.assertEqual(extn["extnValue"], der_encoder(acs))
+                self.assertIn("id.elegnamnden.se", acs[0]["contextType"])
+                self.assertIn("AuthContextInfo IdentityProvider", acs[0]["contextInfo"])
 
         self.assertIn(rfc7773.id_ce_authContext, extn_list)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

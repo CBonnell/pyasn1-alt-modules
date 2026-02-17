@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Copyright (c) 2005-2020, Ilya Etingof <etingof@gmail.com>
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -25,7 +25,6 @@ isWVpesQdXMCBDXe9M+iIzAhMB8GCSsGAQUFBzABAgQSBBBjdJOiIW9EKJGELNNf/rdA
         self.asn1Spec = rfc2560.OCSPRequest()
 
     def testDerCodec(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -76,6 +75,6 @@ HAESdf7nebz1wtqAOXE1jWF/y8g=
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

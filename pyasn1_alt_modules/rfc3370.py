@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Cryptographic Message Syntax (CMS) Algorithms
@@ -22,15 +22,13 @@ from pyasn1_alt_modules import rfc5990
 from pyasn1_alt_modules import rfc8018
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
-smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
-
+smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
 
 # Imports from RFC 5280
 
 AlgorithmIdentifier = rfc5280.AlgorithmIdentifier
-
 
 # Imports from RFC 3279
 
@@ -68,7 +66,6 @@ sha_1 = id_sha1
 
 sha1WithRSAEncryption = rfc3279.sha1WithRSAEncryption
 
-
 # Imports from RFC 5753
 
 CBCParameter = rfc5753.CBCParameter
@@ -77,11 +74,9 @@ CBCParameter = rfc5753.IV
 
 KeyWrapAlgorithm = rfc5753.KeyWrapAlgorithm
 
-
 # Imports from RFC 5990
 
 id_alg_CMS3DESwrap = rfc5990.id_alg_CMS3DESwrap
-
 
 # Imports from RFC 8018
 
@@ -101,19 +96,15 @@ PBKDF2_params = rfc8018.PBKDF2_params
 
 id_PBKDF2 = rfc8018.id_PBKDF2
 
-
 # The few things that are not already defined elsewhere
 
-hMAC_SHA1 = univ.ObjectIdentifier('1.3.6.1.5.5.8.1.2')
+hMAC_SHA1 = univ.ObjectIdentifier("1.3.6.1.5.5.8.1.2")
 
+id_alg_ESDH = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.5")
 
-id_alg_ESDH = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.5')
+id_alg_SSDH = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.10")
 
-
-id_alg_SSDH = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.10')
-
-
-id_alg_CMSRC2wrap = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.7')
+id_alg_CMSRC2wrap = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.7")
 
 
 class RC2ParameterVersion(univ.Integer):

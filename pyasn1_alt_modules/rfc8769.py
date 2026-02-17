@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # CBOR Content for CMS
@@ -14,8 +14,6 @@
 
 from pyasn1.type import univ
 
+id_ct_cbor = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.44")
 
-id_ct_cbor = univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.44')
-
-
-id_ct_cborSequence = univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.45')
+id_ct_cborSequence = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.45")

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -14,6 +14,7 @@ from pyasn1.codec.der.encoder import encode as der_encoder
 from pyasn1_alt_modules import pem
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc9289
+
 
 class RPCServerCertificateTestCase(unittest.TestCase):
     cert_pem_text = """\
@@ -46,21 +47,23 @@ RX4igo315i+/xgOux9A=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] in rfc5280.certificateExtensionsMap:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] in rfc5280.certificateExtensionsMap:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'],
-                    asn1Spec=rfc5280.certificateExtensionsMap[extn['extnID']])
+                    extn["extnValue"],
+                    asn1Spec=rfc5280.certificateExtensionsMap[extn["extnID"]],
+                )
 
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
-                if extn['extnID'] == rfc5280.id_ce_extKeyUsage:
+                if extn["extnID"] == rfc5280.id_ce_extKeyUsage:
                     self.assertEqual(rfc9289.id_kp_rpcTLSServer, extnValue[0])
                     found = True
 
         self.assertTrue(found)
 
+
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -16,9 +16,12 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc8226
 from pyasn1_alt_modules import opentypemap
 
+
 class JWTClaimConstraintsTestCase(unittest.TestCase):
-    jwtcc_pem_text = ("MD2gBzAFFgNmb2+hMjAwMBkWA2ZvbzASDARmb28xDARmb28yDARmb2"
-                      "8zMBMWA2JhcjAMDARiYXIxDARiYXIy")
+    jwtcc_pem_text = (
+        "MD2gBzAFFgNmb2+hMjAwMBkWA2ZvbzASDARmb28xDARmb28yDARmb2"
+        "8zMBMWA2JhcjAMDARiYXIxDARiYXIy"
+    )
 
     def setUp(self):
         self.asn1Spec = rfc8226.JWTClaimConstraints()
@@ -32,8 +35,7 @@ class JWTClaimConstraintsTestCase(unittest.TestCase):
 
 
 class TNAuthorizationListTestCase(unittest.TestCase):
-    tnal_pem_text = ("MCugBxYFYm9ndXOhEjAQFgo1NzE1NTUxMjEyAgIDFKIMFgo3MDM1NTU"
-                     "xMjEy")
+    tnal_pem_text = "MCugBxYFYm9ndXOhEjAQFgo1NzE1NTUxMjEyAgIDFKIMFgo3MDM1NTU" "xMjEy"
 
     def setUp(self):
         self.asn1Spec = rfc8226.TNAuthorizationList()
@@ -74,23 +76,24 @@ yEFWA6G95b/HbtPMTjLpPKtrOjhofc4LyVCDYhFhKzpvHh1qeA==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
         extn_list = []
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
-            if extn['extnID'] in certificateExtensionsMap:
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
+            if extn["extnID"] in certificateExtensionsMap:
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
-                if extn['extnID'] == rfc8226.id_pe_TNAuthList:
-                    self.assertEqual('fake', extnValue[0]['spc'])
+                if extn["extnID"] == rfc8226.id_pe_TNAuthList:
+                    self.assertEqual("fake", extnValue[0]["spc"])
 
         self.assertIn(rfc8226.id_pe_TNAuthList, extn_list)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

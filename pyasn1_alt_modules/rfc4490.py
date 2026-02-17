@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Using the GOST 28147-89, GOST R 34.11-94, GOST R 34.10-94, and
@@ -23,8 +23,7 @@ from pyasn1_alt_modules import rfc4357
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
 # Imports from RFC 4357
 
@@ -42,7 +41,6 @@ GostR3410_94_PublicKeyParameters = rfc4357.GostR3410_94_PublicKeyParameters
 
 GostR3410_2001_PublicKeyParameters = rfc4357.GostR3410_2001_PublicKeyParameters
 
-
 # Imports from RFC 5280
 
 SubjectPublicKeyInfo = rfc5280.SubjectPublicKeyInfo
@@ -50,60 +48,79 @@ SubjectPublicKeyInfo = rfc5280.SubjectPublicKeyInfo
 
 # CMS/PKCS#7 key agreement algorithms & parameters
 
+
 class Gost28147_89_KeyWrapParameters(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('encryptionParamSet', Gost28147_89_ParamSet()),
-        namedtype.OptionalNamedType('ukm', univ.OctetString().subtype(
-            subtypeSpec=constraint.ValueSizeConstraint(8, 8)))
+        namedtype.NamedType("encryptionParamSet", Gost28147_89_ParamSet()),
+        namedtype.OptionalNamedType(
+            "ukm",
+            univ.OctetString().subtype(
+                subtypeSpec=constraint.ValueSizeConstraint(8, 8)
+            ),
+        ),
     )
 
 
-id_Gost28147_89_CryptoPro_KeyWrap = id_CryptoPro_algorithms + (13, 1, )
+id_Gost28147_89_CryptoPro_KeyWrap = id_CryptoPro_algorithms + (
+    13,
+    1,
+)
 
+id_Gost28147_89_None_KeyWrap = id_CryptoPro_algorithms + (
+    13,
+    0,
+)
 
-id_Gost28147_89_None_KeyWrap = id_CryptoPro_algorithms + (13, 0, )
+id_GostR3410_2001_CryptoPro_ESDH = id_CryptoPro_algorithms + (96,)
 
-
-id_GostR3410_2001_CryptoPro_ESDH = id_CryptoPro_algorithms + (96, )
-
-
-id_GostR3410_94_CryptoPro_ESDH = id_CryptoPro_algorithms + (97, )
-
+id_GostR3410_94_CryptoPro_ESDH = id_CryptoPro_algorithms + (97,)
 
 # CMS/PKCS#7 key transport algorithms & parameters
 
 id_GostR3410_2001_KeyTransportSMIMECapability = id_GostR3410_2001
-
 
 id_GostR3410_94_KeyTransportSMIMECapability = id_GostR3410_94
 
 
 class GostR3410_TransportParameters(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('encryptionParamSet', Gost28147_89_ParamSet()),
-        namedtype.OptionalNamedType('ephemeralPublicKey', 
-            SubjectPublicKeyInfo().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 0))),
-        namedtype.NamedType('ukm', univ.OctetString().subtype(
-            subtypeSpec=constraint.ValueSizeConstraint(8, 8)))
+        namedtype.NamedType("encryptionParamSet", Gost28147_89_ParamSet()),
+        namedtype.OptionalNamedType(
+            "ephemeralPublicKey",
+            SubjectPublicKeyInfo().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "ukm",
+            univ.OctetString().subtype(
+                subtypeSpec=constraint.ValueSizeConstraint(8, 8)
+            ),
+        ),
     )
+
 
 class GostR3410_KeyTransport(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('sessionEncryptedKey', Gost28147_89_EncryptedKey()),
-        namedtype.OptionalNamedType('transportParameters',
-            GostR3410_TransportParameters().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 0)))
+        namedtype.NamedType("sessionEncryptedKey", Gost28147_89_EncryptedKey()),
+        namedtype.OptionalNamedType(
+            "transportParameters",
+            GostR3410_TransportParameters().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
     )
 
 
 # GOST R 34.10-94 signature algorithm & parameters
+
 
 class GostR3410_94_Signature(univ.OctetString):
     subtypeSpec = constraint.ValueSizeConstraint(64, 64)
 
 
 # GOST R 34.10-2001 signature algorithms and parameters
+
 
 class GostR3410_2001_Signature(univ.OctetString):
     subtypeSpec = constraint.ValueSizeConstraint(64, 64)

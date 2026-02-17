@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 
@@ -91,9 +91,9 @@ BQQGAgIBADAABCAaWobQZ1EuANtF/NjfuaBXR0nR0fKnGJ7Z8t/mregtvQ==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        svp = asn1Object['signPolicyInfo']['signatureValidationPolicy']
-        sr = svp['commonRules']['signerAndVeriferRules']['signerRules']
-        msa = sr['mandatedSignedAttr']
+        svp = asn1Object["signPolicyInfo"]["signatureValidationPolicy"]
+        sr = svp["commonRules"]["signerAndVeriferRules"]["signerRules"]
+        msa = sr["mandatedSignedAttr"]
 
         self.assertIn(rfc2985.pkcs_9_at_contentType, msa)
         self.assertIn(rfc2985.pkcs_9_at_messageDigest, msa)
@@ -102,7 +102,7 @@ BQQGAgIBADAABCAaWobQZ1EuANtF/NjfuaBXR0nR0fKnGJ7Z8t/mregtvQ==
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     result = unittest.TextTestRunner(verbosity=2).run(suite)

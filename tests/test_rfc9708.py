@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 
@@ -35,8 +35,8 @@ RTQypYiFzZugQxI1Rmv/llHGySEkQE1F+lPPFhwo8a1ajg==
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         self.assertEqual(
-            asn1Object['algorithm']['algorithm'],
-            rfc9708.id_alg_hss_lms_hashsig)
+            asn1Object["algorithm"]["algorithm"], rfc9708.id_alg_hss_lms_hashsig
+        )
 
 
 class HashSigSignedDataTestCase(unittest.TestCase):
@@ -113,15 +113,14 @@ xnWEK6+/x824hIOzJ2wp1PCjQcLUBuQNRlO35NBFhRrPagoOqccQuAXM7UY1
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(asn1Object['contentType'], rfc5652.id_signedData)
-        sd, rest = der_decoder(
-            asn1Object['content'], asn1Spec=rfc5652.SignedData())
+        self.assertEqual(asn1Object["contentType"], rfc5652.id_signedData)
+        sd, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.SignedData())
 
-        oid = sd['signerInfos'][0]['signatureAlgorithm']['algorithm']
+        oid = sd["signerInfos"][0]["signatureAlgorithm"]["algorithm"]
         self.assertEqual(rfc9708.id_alg_hss_lms_hashsig, oid)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

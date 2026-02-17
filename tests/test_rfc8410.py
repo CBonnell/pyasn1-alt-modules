@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -17,8 +17,9 @@ from pyasn1_alt_modules import rfc8410
 
 
 class PrivateKeyTestCase(unittest.TestCase):
-    no_pub_key_pem_text = ("MC4CAQAwBQYDK2VwBCIEINTuctv5E1hK1bbY8fdp+K06/nwo"
-                           "y/HU++CXqI9EdVhC")
+    no_pub_key_pem_text = (
+        "MC4CAQAwBQYDK2VwBCIEINTuctv5E1hK1bbY8fdp+K06/nwo" "y/HU++CXqI9EdVhC"
+    )
 
     def setUp(self):
         self.asn1Spec = rfc5208.PrivateKeyInfo()
@@ -30,15 +31,15 @@ class PrivateKeyTestCase(unittest.TestCase):
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(
-            rfc8410.id_Ed25519, asn1Object['privateKeyAlgorithm']['algorithm'])
-        self.assertTrue(asn1Object['privateKey'].isValue)
-        self.assertEqual(
-            "0x0420d4ee", asn1Object['privateKey'].prettyPrint()[0:10])
+            rfc8410.id_Ed25519, asn1Object["privateKeyAlgorithm"]["algorithm"]
+        )
+        self.assertTrue(asn1Object["privateKey"].isValue)
+        self.assertEqual("0x0420d4ee", asn1Object["privateKey"].prettyPrint()[0:10])
         self.assertEqual(substrate, der_encoder.encode(asn1Object))
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -46,16 +46,17 @@ hRLkCY3Zoz2OCNQ=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc9118.id_pe_eJWTClaimConstraints:
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=rfc9118.EnhancedJWTClaimConstraints())
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc9118.id_pe_eJWTClaimConstraints:
+                ev, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=rfc9118.EnhancedJWTClaimConstraints()
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
-    
-                self.assertIn('confidence', ev['mustInclude'])
-                self.assertIn('medium', ev['permittedValues'][0]['values'])
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
+
+                self.assertIn("confidence", ev["mustInclude"])
+                self.assertIn("medium", ev["permittedValues"][0]["values"])
                 found = True
 
         self.assertTrue(found)
@@ -67,16 +68,17 @@ hRLkCY3Zoz2OCNQ=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc9118.id_pe_eJWTClaimConstraints:
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc9118.id_pe_eJWTClaimConstraints:
+                ev, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

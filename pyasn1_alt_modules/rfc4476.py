@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Attribute Certificate Policies Extension
@@ -21,12 +21,11 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-policyQualifierInfosMap = opentypemap.get('policyQualifierInfosMap')
+policyQualifierInfosMap = opentypemap.get("policyQualifierInfosMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Imports from RFC 5280
 
@@ -37,7 +36,6 @@ PolicyQualifierInfo = rfc5280.PolicyQualifierInfo
 UserNotice = rfc5280.UserNotice
 
 id_pkix = rfc5280.id_pkix
-
 
 # Object Identifiers
 
@@ -54,6 +52,7 @@ id_qt_acunotice = id_qt + (5,)
 
 # Attribute Certificate Policies Extension
 
+
 class ACUserNotice(UserNotice):
     pass
 
@@ -68,10 +67,13 @@ class AcPolicyId(univ.ObjectIdentifier):
 
 class PolicyInformation(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('policyIdentifier', AcPolicyId()),
-        namedtype.OptionalNamedType('policyQualifiers',
+        namedtype.NamedType("policyIdentifier", AcPolicyId()),
+        namedtype.OptionalNamedType(
+            "policyQualifiers",
             univ.SequenceOf(componentType=PolicyQualifierInfo()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)))
+                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+            ),
+        ),
     )
 
 
@@ -88,7 +90,6 @@ _policyQualifierInfosMapUpdate = {
 }
 
 policyQualifierInfosMap.update(_policyQualifierInfosMapUpdate)
-
 
 # Update the certificate extension map
 

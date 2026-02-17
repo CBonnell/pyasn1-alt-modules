@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -41,53 +41,49 @@ Nw==
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         ad, rest = der_decoder(
-            asn1Object['content'],
-            asn1Spec=rfc5652.AuthenticatedData())
+            asn1Object["content"], asn1Spec=rfc5652.AuthenticatedData()
+        )
 
         self.assertFalse(rest)
         self.assertTrue(ad.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ad))
+        self.assertEqual(asn1Object["content"], der_encoder(ad))
 
-        self.assertEqual(0, ad['version'])
-        self.assertEqual(
-            rfc9044.id_aes128_GMAC,
-            ad['macAlgorithm']['algorithm'])
+        self.assertEqual(0, ad["version"])
+        self.assertEqual(rfc9044.id_aes128_GMAC, ad["macAlgorithm"]["algorithm"])
 
         param, rest = der_decoder(
-            ad['macAlgorithm']['parameters'],
-            asn1Spec=rfc9044.GCMParameters())
+            ad["macAlgorithm"]["parameters"], asn1Spec=rfc9044.GCMParameters()
+        )
 
         self.assertFalse(rest)
         self.assertTrue(ad.prettyPrint())
-        self.assertEqual(ad['macAlgorithm']['parameters'], der_encoder(param))
+        self.assertEqual(ad["macAlgorithm"]["parameters"], der_encoder(param))
 
-        iv = univ.OctetString(hexValue='bd4fecfd737d29e5419f307e')
-        self.assertEqual(iv, param['nonce'])
-        self.assertEqual(12, param['length'])
+        iv = univ.OctetString(hexValue="bd4fecfd737d29e5419f307e")
+        self.assertEqual(iv, param["nonce"])
+        self.assertEqual(12, param["length"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-                               asn1Spec=self.asn1Spec,
-                               decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        ad = asn1Object['content']
-        self.assertEqual(0, ad['version'])
-        self.assertEqual(
-            rfc9044.id_aes128_GMAC,
-            ad['macAlgorithm']['algorithm'])
+        ad = asn1Object["content"]
+        self.assertEqual(0, ad["version"])
+        self.assertEqual(rfc9044.id_aes128_GMAC, ad["macAlgorithm"]["algorithm"])
 
-        param = ad['macAlgorithm']['parameters']
-        iv = univ.OctetString(hexValue='bd4fecfd737d29e5419f307e')
-        self.assertEqual(iv, param['nonce'])
-        self.assertEqual(12, param['length'])
+        param = ad["macAlgorithm"]["parameters"]
+        iv = univ.OctetString(hexValue="bd4fecfd737d29e5419f307e")
+        self.assertEqual(iv, param["nonce"])
+        self.assertEqual(12, param["length"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

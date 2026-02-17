@@ -4,7 +4,7 @@
 # Created by Russ Housley with some assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # S/MIME Capabilities for Public Key Definitions
@@ -25,15 +25,13 @@ from pyasn1_alt_modules import rfc4055
 from pyasn1_alt_modules import rfc3279
 from pyasn1_alt_modules import opentypemap
 
-smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
+smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Imports from RFC 5280
 
 AlgorithmIdentifier = rfc5280.AlgorithmIdentifier
-
 
 # Imports from RFC 3279
 
@@ -47,7 +45,6 @@ id_ecPublicKey = rfc3279.id_ecPublicKey
 
 rsaEncryption = rfc3279.rsaEncryption
 
-
 # Imports from RFC 4055
 
 id_mgf1 = rfc4055.id_mgf1
@@ -55,7 +52,6 @@ id_mgf1 = rfc4055.id_mgf1
 id_RSAES_OAEP = rfc4055.id_RSAES_OAEP
 
 id_RSASSA_PSS = rfc4055.id_RSASSA_PSS
-
 
 # Imports from RFC 5480
 
@@ -68,6 +64,7 @@ id_ecMQV = rfc5480.id_ecMQV
 
 # RSA
 
+
 class RSAKeySize(univ.Integer):
     # suggested values are 1024, 2048, 3072, 4096, 7680, 8192, and 15360;
     # however, the integer value is not limited to these suggestions
@@ -76,20 +73,21 @@ class RSAKeySize(univ.Integer):
 
 class RSAKeyCapabilities(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('minKeySize', RSAKeySize()),
-        namedtype.OptionalNamedType('maxKeySize', RSAKeySize())
+        namedtype.NamedType("minKeySize", RSAKeySize()),
+        namedtype.OptionalNamedType("maxKeySize", RSAKeySize()),
     )
 
 
 class RsaSsa_Pss_sig_caps(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('hashAlg', AlgorithmIdentifier()),
-        namedtype.OptionalNamedType('maskAlg', AlgorithmIdentifier()),
-        namedtype.DefaultedNamedType('trailerField', univ.Integer().subtype(value=1))
+        namedtype.NamedType("hashAlg", AlgorithmIdentifier()),
+        namedtype.OptionalNamedType("maskAlg", AlgorithmIdentifier()),
+        namedtype.DefaultedNamedType("trailerField", univ.Integer().subtype(value=1)),
     )
 
 
 # Diffie-Hellman and DSA
+
 
 class DSAKeySize(univ.Integer):
     subtypeSpec = constraint.SingleValueConstraint(1024, 2048, 3072, 7680, 15360)
@@ -97,37 +95,61 @@ class DSAKeySize(univ.Integer):
 
 class DSAKeyCapabilities(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('keySizes', univ.Sequence(componentType=namedtype.NamedTypes(
-            namedtype.NamedType('minKeySize',
-                DSAKeySize()),
-            namedtype.OptionalNamedType('maxKeySize',
-                DSAKeySize()),
-            namedtype.OptionalNamedType('maxSizeP',
-                univ.Integer().subtype(explicitTag=tag.Tag(
-                    tag.tagClassContext, tag.tagFormatSimple, 1))),
-            namedtype.OptionalNamedType('maxSizeQ',
-                univ.Integer().subtype(explicitTag=tag.Tag(
-                    tag.tagClassContext, tag.tagFormatSimple, 2))),
-            namedtype.OptionalNamedType('maxSizeG',
-                univ.Integer().subtype(explicitTag=tag.Tag(
-                    tag.tagClassContext, tag.tagFormatSimple, 3)))
-        )).subtype(explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))),
-        namedtype.NamedType('keyParams',
-            Dss_Parms().subtype(explicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 1)))
+        namedtype.NamedType(
+            "keySizes",
+            univ.Sequence(
+                componentType=namedtype.NamedTypes(
+                    namedtype.NamedType("minKeySize", DSAKeySize()),
+                    namedtype.OptionalNamedType("maxKeySize", DSAKeySize()),
+                    namedtype.OptionalNamedType(
+                        "maxSizeP",
+                        univ.Integer().subtype(
+                            explicitTag=tag.Tag(
+                                tag.tagClassContext, tag.tagFormatSimple, 1
+                            )
+                        ),
+                    ),
+                    namedtype.OptionalNamedType(
+                        "maxSizeQ",
+                        univ.Integer().subtype(
+                            explicitTag=tag.Tag(
+                                tag.tagClassContext, tag.tagFormatSimple, 2
+                            )
+                        ),
+                    ),
+                    namedtype.OptionalNamedType(
+                        "maxSizeG",
+                        univ.Integer().subtype(
+                            explicitTag=tag.Tag(
+                                tag.tagClassContext, tag.tagFormatSimple, 3
+                            )
+                        ),
+                    ),
+                )
+            ).subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "keyParams",
+            Dss_Parms().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+            ),
+        ),
     )
 
 
 # Elliptic Curve
 
+
 class EC_SMimeCaps(univ.SequenceOf):
     componentType = ECParameters()
-    subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+    subtypeSpec = constraint.ValueSizeConstraint(1, MAX)
 
 
 # Update the SMIMECapabilities Attribute Map
 #
-# The map can either include an entry for scap-sa-rsaSSA-PSS or 
+# The map can either include an entry for scap-sa-rsaSSA-PSS or
 # scap-pk-rsaSSA-PSS, but not both.  One is associated with the
 # public key and the other is associated with the signature
 # algorithm; however, they use the same OID.  If you need the

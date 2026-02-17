@@ -2,7 +2,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Elliptic Curve Cryptography Brainpool Standard Curves
@@ -13,8 +13,17 @@
 
 from pyasn1.type import univ
 
-
-ecStdCurvesAndGeneration = univ.ObjectIdentifier((1, 3, 36, 3, 3, 2, 8,))
+ecStdCurvesAndGeneration = univ.ObjectIdentifier(
+    (
+        1,
+        3,
+        36,
+        3,
+        3,
+        2,
+        8,
+    )
+)
 
 ellipticCurve = ecStdCurvesAndGeneration + (1,)
 

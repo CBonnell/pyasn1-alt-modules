@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 
@@ -56,20 +56,20 @@ kjBJ
         ]
 
         count = 0
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_pe_authorityInfoAccess:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_pe_authorityInfoAccess:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'],
-                    asn1Spec=rfc5280.AuthorityInfoAccessSyntax())
+                    extn["extnValue"], asn1Spec=rfc5280.AuthorityInfoAccessSyntax()
+                )
 
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
                 for ad in extnValue:
-                    if ad['accessMethod'] in oid_list:
-                        uri = ad['accessLocation']['uniformResourceIdentifier']
-                        self.assertIn('http://repo.example.com/c', uri)
+                    if ad["accessMethod"] in oid_list:
+                        uri = ad["accessLocation"]["uniformResourceIdentifier"]
+                        self.assertIn("http://repo.example.com/c", uri)
                         count += 1
 
         self.assertEqual(len(oid_list), count)
@@ -77,7 +77,7 @@ kjBJ
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     result = unittest.TextTestRunner(verbosity=2).run(suite)

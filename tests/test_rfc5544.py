@@ -2,8 +2,8 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# 
-# Copyright (c) 2021-2025, Vigil Security, LLC
+#
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -160,16 +160,16 @@ ipxGiUWhSeuOeOdhx31qRNOQ+s8QsTfUxWJsXXhSKDqCMbqudPFOX2uezWOM5HiG
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
         self.assertIn(rfc5544.id_ct_timestampedData, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
         }
 
         substrate = pem.readBase64fromText(self.pem_text)
@@ -189,21 +189,22 @@ ipxGiUWhSeuOeOdhx31qRNOQ+s8QsTfUxWJsXXhSKDqCMbqudPFOX2uezWOM5HiG
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertIn(b'come here', asn1Object['content'])
+        self.assertIn(b"come here", asn1Object["content"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertIn(b'come here', asn1Object['content']['content'])
+        self.assertIn(b"come here", asn1Object["content"]["content"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -51,28 +51,31 @@ rYt3o64YQqGz9NTMAjEAmahE0EMiu/TyzRDidlG2SxmY2aHg9hQO0t38i1jInJyi
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_PEPSI = False
-        otherNamesMap = opentypemap.get('otherNamesMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_subjectAltName:
+        otherNamesMap = opentypemap.get("otherNamesMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_subjectAltName:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'], asn1Spec=rfc5280.SubjectAltName())
+                    extn["extnValue"], asn1Spec=rfc5280.SubjectAltName()
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
                 for gn in extnValue:
-                    if gn['otherName'].hasValue():
-                        gn_on = gn['otherName']
-                        if gn_on['type-id'] == rfc4683.id_on_SIM:
-                            self.assertIn(gn_on['type-id'], otherNamesMap)
-                            on, rest = der_decoder(gn_on['value'],
-                                asn1Spec=otherNamesMap[gn_on['type-id']])
+                    if gn["otherName"].hasValue():
+                        gn_on = gn["otherName"]
+                        if gn_on["type-id"] == rfc4683.id_on_SIM:
+                            self.assertIn(gn_on["type-id"], otherNamesMap)
+                            on, rest = der_decoder(
+                                gn_on["value"], asn1Spec=otherNamesMap[gn_on["type-id"]]
+                            )
                             self.assertFalse(rest)
                             self.assertTrue(on.prettyPrint())
-                            self.assertEqual(gn_on['value'], der_encoder(on))
+                            self.assertEqual(gn_on["value"], der_encoder(on))
 
                             self.assertEqual(
-                                 'e6809ff3ea', on['pEPSI'].prettyPrint()[2:12])
+                                "e6809ff3ea", on["pEPSI"].prettyPrint()[2:12]
+                            )
 
                             found_PEPSI = True
 
@@ -81,27 +84,28 @@ rYt3o64YQqGz9NTMAjEAmahE0EMiu/TyzRDidlG2SxmY2aHg9hQO0t38i1jInJyi
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cert_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_PEPSI = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_subjectAltName:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_subjectAltName:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'],
+                    extn["extnValue"],
                     asn1Spec=rfc5280.SubjectAltName(),
-                    decodeOpenTypes=True)
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
                 for gn in extnValue:
-                    if gn['otherName'].hasValue():
-                        pepsi = gn['otherName']['value']['pEPSI']
-                        self.assertEqual(
-                            'e6809ff3ea', pepsi.prettyPrint()[2:12])
+                    if gn["otherName"].hasValue():
+                        pepsi = gn["otherName"]["value"]["pEPSI"]
+                        self.assertEqual("e6809ff3ea", pepsi.prettyPrint()[2:12])
 
                         found_PEPSI = True
 
@@ -110,6 +114,6 @@ rYt3o64YQqGz9NTMAjEAmahE0EMiu/TyzRDidlG2SxmY2aHg9hQO0t38i1jInJyi
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

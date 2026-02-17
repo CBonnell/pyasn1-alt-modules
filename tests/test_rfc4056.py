@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -58,17 +58,17 @@ HLU9QHCpsINg2n+/6H/XmhK4XzTOcgr3bmGI8Iu81n+ileNxQmW/TM9Xxx4XHnQbVNU/TXrI
     def testDerCodec(self):
         substrate = pem.readBase64fromText(self.pem_text)
 
-        layers = { }
+        layers = {}
         layers.update(rfc5652.cmsContentTypesMap)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
         }
 
         layer = rfc5652.id_ct_contentInfo
@@ -79,35 +79,37 @@ HLU9QHCpsINg2n+/6H/XmhK4XzTOcgr3bmGI8Iu81n+ileNxQmW/TM9Xxx4XHnQbVNU/TXrI
             self.assertEqual(substrate, der_encoder(asn1Object))
 
             if layer == rfc5652.id_signedData:
-                alg = asn1Object['signerInfos'][0]['signatureAlgorithm']
+                alg = asn1Object["signerInfos"][0]["signatureAlgorithm"]
 
             substrate = getNextSubstrate[layer](asn1Object)
             layer = getNextLayer[layer](asn1Object)
 
-        self.assertEqual(rfc4056.id_RSASSA_PSS, alg['algorithm'])
-        param, rest = der_decoder(alg['parameters'],
-            asn1Spec=rfc4056.RSASSA_PSS_params())
+        self.assertEqual(rfc4056.id_RSASSA_PSS, alg["algorithm"])
+        param, rest = der_decoder(
+            alg["parameters"], asn1Spec=rfc4056.RSASSA_PSS_params()
+        )
         self.assertFalse(rest)
         self.assertTrue(param.prettyPrint())
-        self.assertEqual(alg['parameters'], der_encoder(param))
+        self.assertEqual(alg["parameters"], der_encoder(param))
 
-        self.assertEqual(222, param['saltLength'])
+        self.assertEqual(222, param["saltLength"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        alg = asn1Object['content']['signerInfos'][0]['signatureAlgorithm']
-        self.assertEqual(rfc4056.id_RSASSA_PSS, alg['algorithm'])
-        self.assertEqual(222, alg['parameters']['saltLength'])
+        alg = asn1Object["content"]["signerInfos"][0]["signatureAlgorithm"]
+        self.assertEqual(rfc4056.id_RSASSA_PSS, alg["algorithm"])
+        self.assertEqual(222, alg["parameters"]["saltLength"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

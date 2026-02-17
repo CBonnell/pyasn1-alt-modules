@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -49,27 +49,29 @@ DAlVlhox680Jxy5J8Pkx
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cert_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         extn_list = []
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
-            if extn['extnID'] in rfc5280.certificateExtensionsMap.keys():
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
+            if extn["extnID"] in rfc5280.certificateExtensionsMap.keys():
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
-                if extn['extnID'] == rfc4334.id_pe_wlanSSID:
-                    self.assertIn(b'Example', extnValue)
-            
-                if extn['extnID'] == rfc5280.id_ce_extKeyUsage:
+                if extn["extnID"] == rfc4334.id_pe_wlanSSID:
+                    self.assertIn(b"Example", extnValue)
+
+                if extn["extnID"] == rfc5280.id_ce_extKeyUsage:
                     self.assertIn(rfc4334.id_kp_eapOverLAN, extnValue)
                     self.assertIn(rfc4334.id_kp_eapOverPPP, extnValue)
 
@@ -79,5 +81,5 @@ DAlVlhox680Jxy5J8Pkx
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

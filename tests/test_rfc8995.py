@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -48,16 +48,17 @@ g7Q2Ew==
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc8995.id_pe_masa_url:
-                extn_value, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc8995.id_pe_masa_url:
+                extn_value, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extn_value.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extn_value))
-                self.assertIn('example.com', extn_value)
+                self.assertEqual(extn["extnValue"], der_encoder(extn_value))
+                self.assertIn("example.com", extn_value)
                 found = True
 
         self.assertTrue(found)
@@ -65,6 +66,6 @@ g7Q2Ew==
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

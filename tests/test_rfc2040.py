@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -33,35 +33,36 @@ ARACARACAUAECAECAwQFBgcIgAja1r2p3+j36A==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc5652.id_encryptedData, asn1Object['contentType'])
-        ed, rest = der_decoder(
-            asn1Object['content'], asn1Spec=rfc5652.EncryptedData())
+        self.assertEqual(rfc5652.id_encryptedData, asn1Object["contentType"])
+        ed, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.EncryptedData())
         self.assertFalse(rest)
         self.assertTrue(ed.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ed))
+        self.assertEqual(asn1Object["content"], der_encoder(ed))
 
-        ai = ed['encryptedContentInfo']['contentEncryptionAlgorithm']
-        self.assertEqual(rfc2040.rc5_CBC, ai['algorithm'])
+        ai = ed["encryptedContentInfo"]["contentEncryptionAlgorithm"]
+        self.assertEqual(rfc2040.rc5_CBC, ai["algorithm"])
         param, rest = der_decoder(
-            ai['parameters'], asn1Spec=rfc2040.RC5_CBC_Parameters())
+            ai["parameters"], asn1Spec=rfc2040.RC5_CBC_Parameters()
+        )
         self.assertFalse(rest)
         self.assertTrue(param.prettyPrint())
-        self.assertEqual(ai['parameters'], der_encoder(param))
+        self.assertEqual(ai["parameters"], der_encoder(param))
 
-        self.assertEqual(16, param['rounds'])
+        self.assertEqual(16, param["rounds"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
-        eci = asn1Object['content']['encryptedContentInfo']
-        ai = eci['contentEncryptionAlgorithm']
-        self.assertEqual(rfc2040.rc5_CBC, ai['algorithm'])
-        self.assertEqual(16, ai['parameters']['rounds'])
+        eci = asn1Object["content"]["encryptedContentInfo"]
+        ai = eci["contentEncryptionAlgorithm"]
+        self.assertEqual(rfc2040.rc5_CBC, ai["algorithm"])
+        self.assertEqual(16, ai["parameters"]["rounds"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

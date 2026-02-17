@@ -5,7 +5,7 @@
 # Modified by Russ Housley to add synonyms with two digit years for
 #   some of the OIDs to align with the ASN.1 module in RFC 9215.
 #
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # GOST R 34.10-2012 and GOST R 34.11-2012 Algorithms
@@ -22,12 +22,11 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
-certificateAttributesMap = opentypemap.get('certificateAttributesMap')
+certificateAttributesMap = opentypemap.get("certificateAttributesMap")
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
 # MODULE: GostR3410-2012-PKISyntax { 1 2 643 7 1 0 2 }
 
@@ -92,15 +91,14 @@ class GostR3410_2012_512_PublicKey(univ.OctetString):
 
 class GostR3410_2012_PublicKey(univ.OctetString):
     subtypeSpec = constraint.ConstraintsUnion(
-        constraint.ValueSizeConstraint(64, 64),
-        constraint.ValueSizeConstraint(128, 128)
+        constraint.ValueSizeConstraint(64, 64), constraint.ValueSizeConstraint(128, 128)
     )
 
 
 class GostR3410_2012_PublicKeyParameters(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('publicKeyParamSet', univ.ObjectIdentifier()),
-        namedtype.OptionalNamedType('digestParamSet', univ.ObjectIdentifier())
+        namedtype.NamedType("publicKeyParamSet", univ.ObjectIdentifier()),
+        namedtype.OptionalNamedType("digestParamSet", univ.ObjectIdentifier()),
     )
 
 
@@ -116,11 +114,13 @@ id_fns = id_ca + (131,)
 class OGRN(char.NumericString):
     subtypeSpec = constraint.ValueSizeConstraint(13, 13)
 
+
 id_OGRN = id_fss + (1,)
 
 
 class SNILS(char.NumericString):
     subtypeSpec = constraint.ValueSizeConstraint(11, 11)
+
 
 id_SNILS = id_fss + (3,)
 
@@ -128,8 +128,8 @@ id_SNILS = id_fss + (3,)
 class OGRNIP(char.NumericString):
     subtypeSpec = constraint.ValueSizeConstraint(15, 15)
 
-id_OGRNIP = id_fss + (5,)
 
+id_OGRNIP = id_fss + (5,)
 
 id_class = id_fss + (113,)
 
@@ -149,11 +149,13 @@ id_class_ka = id_class + (6,)
 class INN(char.NumericString):
     subtypeSpec = constraint.ValueSizeConstraint(12, 12)
 
+
 id_INN = id_fns + (1, 1)
 
 
 class INNLE(char.NumericString):
     subtypeSpec = constraint.ValueSizeConstraint(10, 10)
+
 
 id_INNLE = id_fss + (4,)
 
@@ -161,38 +163,52 @@ id_INNLE = id_fss + (4,)
 class SubjectSignTool(char.UTF8String):
     subtypeSpec = constraint.ValueSizeConstraint(1, 200)
 
+
 id_SubjectSignTool = id_fss + (111,)
 
 
 class IssuerSignTool(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('signTool',
+        namedtype.NamedType(
+            "signTool",
             char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 200))),
-        namedtype.NamedType('cATool',
+                subtypeSpec=constraint.ValueSizeConstraint(1, 200)
+            ),
+        ),
+        namedtype.NamedType(
+            "cATool",
             char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 200))),
-        namedtype.NamedType('signToolCert',
+                subtypeSpec=constraint.ValueSizeConstraint(1, 200)
+            ),
+        ),
+        namedtype.NamedType(
+            "signToolCert",
             char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 100))),
-        namedtype.NamedType('cAToolCert',
+                subtypeSpec=constraint.ValueSizeConstraint(1, 100)
+            ),
+        ),
+        namedtype.NamedType(
+            "cAToolCert",
             char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 100)))
+                subtypeSpec=constraint.ValueSizeConstraint(1, 100)
+            ),
+        ),
     )
+
 
 id_IssuerSignTool = id_fss + (112,)
 
 
 class IdentificationKind(univ.Integer):
     namedValues = namedval.NamedValues(
-        ('personal', 0),
-        ('remote_cert', 1),
-        ('remote_passport', 2),
-        ('remote_system', 3)
+        ("personal", 0),
+        ("remote_cert", 1),
+        ("remote_passport", 2),
+        ("remote_system", 3),
     )
 
-id_IdentificationKind = id_fss + (114,)
 
+id_IdentificationKind = id_fss + (114,)
 
 # Update the Algorithm Identifier Map
 
@@ -203,7 +219,6 @@ _algorithmIdentifierMapUpdate = {
 
 algorithmIdentifierMap.update(_algorithmIdentifierMapUpdate)
 
-
 # Update the Certificate Attribute Map
 
 _certificateAttributesMapUpdate = {
@@ -212,11 +227,10 @@ _certificateAttributesMapUpdate = {
     id_OGRN: OGRN(),
     id_OGRNIP: OGRNIP(),
     id_SNILS: SNILS(),
-    id_IdentificationKind: IdentificationKind()
+    id_IdentificationKind: IdentificationKind(),
 }
 
 certificateAttributesMap.update(_certificateAttributesMapUpdate)
-
 
 # Update the Certificate Extension Map
 

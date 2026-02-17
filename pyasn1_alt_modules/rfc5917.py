@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Clearance Sponsor Attribute
@@ -23,7 +23,7 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-certificateAttributesMap = opentypemap.get('certificateAttributesMap')
+certificateAttributesMap = opentypemap.get("certificateAttributesMap")
 
 
 # DirectoryString is the same as RFC 5280, except for two things:
@@ -31,10 +31,15 @@ certificateAttributesMap = opentypemap.get('certificateAttributesMap')
 #   2. only the 'utf8String' choice remains because the ASN.1
 #      specification says: ( WITH COMPONENTS { utf8String PRESENT } )
 
+
 class DirectoryString(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('utf8String', char.UTF8String().subtype(
-            subtypeSpec=constraint.ValueSizeConstraint(1, 64))),
+        namedtype.NamedType(
+            "utf8String",
+            char.UTF8String().subtype(
+                subtypeSpec=constraint.ValueSizeConstraint(1, 64)
+            ),
+        ),
     )
 
 
@@ -44,11 +49,9 @@ id_clearanceSponsor = univ.ObjectIdentifier((2, 16, 840, 1, 101, 2, 1, 5, 68))
 
 ub_clearance_sponsor = univ.Integer(64)
 
-
 at_clearanceSponsor = rfc5280.Attribute()
-at_clearanceSponsor['type'] = id_clearanceSponsor
-at_clearanceSponsor['values'][0] = DirectoryString()
-
+at_clearanceSponsor["type"] = id_clearanceSponsor
+at_clearanceSponsor["values"][0] = DirectoryString()
 
 # Update the Certificate Attributes Map
 

@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # BRSKI MASA Certificate Extension
@@ -18,8 +18,7 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
 id_pe = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 1))
 
@@ -33,7 +32,7 @@ class MASAURLSyntax(char.IA5String):
 # Update the Certificate Extensions Map
 
 _certificateExtensionsMapUpdate = {
-    id_pe_masa_url: MASAURLSyntax(),	
+    id_pe_masa_url: MASAURLSyntax(),
 }
 
 certificateExtensionsMap.update(_certificateExtensionsMapUpdate)

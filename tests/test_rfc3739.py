@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -61,9 +61,9 @@ Iwtui+Wql/HveMqbAtXkiv9GDXYZms3HBoIaCVuDaUf6
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc3739.id_pe_qcStatements:
-                s = extn['extnValue']
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc3739.id_pe_qcStatements:
+                s = extn["extnValue"]
                 qc_stmts, rest = der_decoder(s, rfc3739.QCStatements())
                 self.assertFalse(rest)
                 self.assertTrue(qc_stmts.prettyPrint())
@@ -79,9 +79,7 @@ Iwtui+Wql/HveMqbAtXkiv9GDXYZms3HBoIaCVuDaUf6
         class SequenceOfOID(univ.SequenceOf):
             componentType = univ.ObjectIdentifier()
 
-        openTypesMap = {
-            univ.ObjectIdentifier('0.4.0.1862.1.6'): SequenceOfOID()
-        }
+        openTypesMap = {univ.ObjectIdentifier("0.4.0.1862.1.6"): SequenceOfOID()}
 
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -91,26 +89,28 @@ Iwtui+Wql/HveMqbAtXkiv9GDXYZms3HBoIaCVuDaUf6
 
         count = 0
         found_qc_stmt_oid = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc3739.id_pe_qcStatements:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc3739.id_pe_qcStatements:
                 qc_stmts, rest = der_decoder(
-                    extn['extnValue'],
-                    asn1Spec=rfc5280.certificateExtensionsMap[extn['extnID']],
+                    extn["extnValue"],
+                    asn1Spec=rfc5280.certificateExtensionsMap[extn["extnID"]],
                     openTypes=openTypesMap,
-                    decodeOpenTypes=True)
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(qc_stmts.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(qc_stmts))
+                self.assertEqual(extn["extnValue"], der_encoder(qc_stmts))
 
                 for qcs in qc_stmts:
                     count += 1
-                    if qcs['statementId'] in openTypesMap.keys():
-                        for oid in qcs['statementInfo']:
-                            if oid == univ.ObjectIdentifier('0.4.0.1862.1.6.1'):
+                    if qcs["statementId"] in openTypesMap.keys():
+                        for oid in qcs["statementInfo"]:
+                            if oid == univ.ObjectIdentifier("0.4.0.1862.1.6.1"):
                                 found_qc_stmt_oid = True
 
         self.assertEqual(2, count)
         self.assertTrue(found_qc_stmt_oid)
+
 
 class WithComponentsTestCase(unittest.TestCase):
 
@@ -121,6 +121,6 @@ class WithComponentsTestCase(unittest.TestCase):
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

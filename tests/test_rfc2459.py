@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Copyright (c) 2005-2020, Ilya Etingof <etingof@gmail.com>
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -39,7 +39,6 @@ PhmcGcwTTYJBtYze4D1gCCAPRX5ron+jjBXu
         self.asn1Spec = rfc2459.Certificate()
 
     def testDerCodec(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -49,11 +48,11 @@ PhmcGcwTTYJBtYze4D1gCCAPRX5ron+jjBXu
         self.assertEqual(der_encoder(asn1Object), substrate)
 
     def testDerCodecDecodeOpenTypes(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
@@ -76,7 +75,6 @@ vjnIhxTFoCb5vA==
         self.asn1Spec = rfc2459.CertificateList()
 
     def testDerCodec(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -86,11 +84,11 @@ vjnIhxTFoCb5vA==
         self.assertEqual(der_encoder(asn1Object), substrate)
 
     def testDerCodecDecodeOpenTypes(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
@@ -115,7 +113,6 @@ INow2I3/ks+0MxDabTY=
         self.asn1Spec = rfc2459.DSAPrivateKey()
 
     def testDerCodec(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -125,11 +122,11 @@ INow2I3/ks+0MxDabTY=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
     def testDerCodecDecodeOpenTypes(self):
-
         substrate = pem.readBase64fromText(self.pem_text)
 
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
@@ -138,6 +135,6 @@ INow2I3/ks+0MxDabTY=
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

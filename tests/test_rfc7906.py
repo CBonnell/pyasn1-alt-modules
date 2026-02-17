@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -128,38 +128,42 @@ toMsV8fLBpBjA5YGQvd3TAcSw1lNbWpArL+hje1dzQ7pxslnkklv3CTxAjBuVebz
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+        cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
         for attr in asn1Object:
-            self.assertIn(attr['type'], cmsAttributesMap)
-            av, rest = der_decoder(attr['values'][0],
-                asn1Spec=cmsAttributesMap[attr['type']])
+            self.assertIn(attr["type"], cmsAttributesMap)
+            av, rest = der_decoder(
+                attr["values"][0], asn1Spec=cmsAttributesMap[attr["type"]]
+            )
             self.assertFalse(rest)
             self.assertTrue(av.prettyPrint())
-            self.assertEqual(attr['values'][0], der_encoder(av))
+            self.assertEqual(attr["values"][0], der_encoder(av))
 
-            if attr['type'] == rfc7906.id_aa_KP_contentDecryptKeyID:
-                self.assertEqual(univ.OctetString(hexValue='7906'), av)
+            if attr["type"] == rfc7906.id_aa_KP_contentDecryptKeyID:
+                self.assertEqual(univ.OctetString(hexValue="7906"), av)
 
     def testOpenTypes(self):
-        openTypesMap = opentypemap.get('certificateAttributesMap').copy()
-        openTypesMap.update(opentypemap.get('cmsAttributesMap'))
+        openTypesMap = opentypemap.get("certificateAttributesMap").copy()
+        openTypesMap.update(opentypemap.get("cmsAttributesMap"))
 
         substrate = pem.readBase64fromText(self.attr_set_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, openTypes=openTypesMap, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate,
+            asn1Spec=self.asn1Spec,
+            openTypes=openTypesMap,
+            decodeOpenTypes=True,
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         for attr in asn1Object:
-            if attr['type'] == rfc7906.id_aa_KP_contentDecryptKeyID:
-                self.assertEqual(
-                    univ.OctetString(hexValue='7906'), attr['values'][0])
+            if attr["type"] == rfc7906.id_aa_KP_contentDecryptKeyID:
+                self.assertEqual(univ.OctetString(hexValue="7906"), attr["values"][0])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

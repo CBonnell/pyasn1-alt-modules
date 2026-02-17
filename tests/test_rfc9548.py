@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2024-2025, Vigil Security, LLC
+# Copyright (c) 2024-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -40,8 +40,8 @@ DglzGOeubudp
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki = asn1Object['tbsCertificate']['subjectPublicKeyInfo']
-        pk_encoded = spki['subjectPublicKey'].asOctets()
+        spki = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]
+        pk_encoded = spki["subjectPublicKey"].asOctets()
         ans1Spec = rfc9548.GostR3410_2012_PublicKey()
         pk, rest = der_decoder(pk_encoded, asn1Spec=ans1Spec)
         self.assertFalse(rest)
@@ -51,6 +51,6 @@ DglzGOeubudp
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

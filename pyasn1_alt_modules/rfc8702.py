@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # SHAKE One-way Hash Functions for CMS
@@ -20,13 +20,11 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc8692
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
 # Imports fprm RFC 5280
 
 AlgorithmIdentifier = rfc5280.AlgorithmIdentifier
-
 
 # Imports from RFC 8692
 
@@ -60,44 +58,45 @@ sa_ecdsa_with_shake256 = rfc8692.sa_ecdsa_with_shake256
 
 pk_ec = rfc8692.pk_ec
 
-
 # KMAC with SHAKE128
 
-id_KMACWithSHAKE128 = univ.ObjectIdentifier('2.16.840.1.101.3.4.2.19')
+id_KMACWithSHAKE128 = univ.ObjectIdentifier("2.16.840.1.101.3.4.2.19")
 
 
 class KMACwithSHAKE128_params(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('kMACOutputLength',
-            univ.Integer().subtype(value=256)),
-        namedtype.DefaultedNamedType('customizationString',
-            univ.OctetString().subtype(value=''))
+        namedtype.DefaultedNamedType(
+            "kMACOutputLength", univ.Integer().subtype(value=256)
+        ),
+        namedtype.DefaultedNamedType(
+            "customizationString", univ.OctetString().subtype(value="")
+        ),
     )
 
 
 maca_KMACwithSHAKE128 = AlgorithmIdentifier()
-maca_KMACwithSHAKE128['algorithm'] = id_KMACWithSHAKE128
-maca_KMACwithSHAKE128['parameters'] = KMACwithSHAKE128_params()
-
+maca_KMACwithSHAKE128["algorithm"] = id_KMACWithSHAKE128
+maca_KMACwithSHAKE128["parameters"] = KMACwithSHAKE128_params()
 
 # KMAC with SHAKE256
 
-id_KMACWithSHAKE256 = univ.ObjectIdentifier('2.16.840.1.101.3.4.2.20')
+id_KMACWithSHAKE256 = univ.ObjectIdentifier("2.16.840.1.101.3.4.2.20")
 
 
 class KMACwithSHAKE256_params(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('kMACOutputLength',
-            univ.Integer().subtype(value=512)),
-        namedtype.DefaultedNamedType('customizationString',
-            univ.OctetString().subtype(value=''))
+        namedtype.DefaultedNamedType(
+            "kMACOutputLength", univ.Integer().subtype(value=512)
+        ),
+        namedtype.DefaultedNamedType(
+            "customizationString", univ.OctetString().subtype(value="")
+        ),
     )
 
 
 maca_KMACwithSHAKE256 = AlgorithmIdentifier()
-maca_KMACwithSHAKE256['algorithm'] = id_KMACWithSHAKE256
-maca_KMACwithSHAKE256['parameters'] = KMACwithSHAKE256_params()
-
+maca_KMACwithSHAKE256["algorithm"] = id_KMACWithSHAKE256
+maca_KMACwithSHAKE256["parameters"] = KMACwithSHAKE256_params()
 
 # Update the Algorithm Identifiers Map
 

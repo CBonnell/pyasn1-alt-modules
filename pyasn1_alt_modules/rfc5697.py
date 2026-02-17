@@ -5,7 +5,7 @@
 #   which did not exist at the time this module was first written.  Also,
 #   include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Other Certificates Extension
@@ -21,8 +21,7 @@ from pyasn1_alt_modules import rfc4055
 from pyasn1_alt_modules import rfc5055
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
 # Imports from RFC 5280
 
@@ -32,11 +31,9 @@ CertificateSerialNumber = rfc5280.CertificateSerialNumber
 
 GeneralNames = rfc5280.GeneralNames
 
-
 # Imports from RFC 4055
 
 id_sha1 = rfc4055.id_sha1
-
 
 # Imports from RFC 5055
 
@@ -46,10 +43,22 @@ sha1_alg_id = rfc5055.algid_SHA1
 
 SCVPCertID = rfc5055.SCVPCertID
 
-
 # Other Certificates Extension
 
-id_pe_otherCerts = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 1, 19,))
+id_pe_otherCerts = univ.ObjectIdentifier(
+    (
+        1,
+        3,
+        6,
+        1,
+        5,
+        5,
+        7,
+        1,
+        19,
+    )
+)
+
 
 class OtherCertificates(univ.SequenceOf):
     componentType = SCVPCertID()

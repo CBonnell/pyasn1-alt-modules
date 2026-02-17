@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -54,30 +54,32 @@ AgTwMBEGCyqGSIb3DQEJEAcBAwIF4DAKBggqhkjOPQQDAwNnADBkAjAZSD+BVqzc
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         cat_value_found = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        securityCategoryMap = opentypemap.get('securityCategoryMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        securityCategoryMap = opentypemap.get("securityCategoryMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5913.id_pe_clearanceConstraints:
-                self.assertIn(extn['extnID'], certificateExtensionsMap)
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5913.id_pe_clearanceConstraints:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                ev, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
 
                 for c in ev:
-                    if c['policyId'] == rfc3114.id_tsp_TEST_Whirlpool:
-                        for sc in c['securityCategories']:
-                            self.assertIn(sc['type'], securityCategoryMap)
-                            scv, rest = der_decoder(sc['value'],
-                                asn1Spec=securityCategoryMap[sc['type']])
+                    if c["policyId"] == rfc3114.id_tsp_TEST_Whirlpool:
+                        for sc in c["securityCategories"]:
+                            self.assertIn(sc["type"], securityCategoryMap)
+                            scv, rest = der_decoder(
+                                sc["value"], asn1Spec=securityCategoryMap[sc["type"]]
+                            )
                             self.assertFalse(rest)
                             self.assertTrue(scv.prettyPrint())
-                            self.assertEqual(sc['value'], der_encoder(scv))
+                            self.assertEqual(sc["value"], der_encoder(scv))
 
                             for cat in scv:
-                                self.assertIn('USE ONLY', cat)
+                                self.assertIn("USE ONLY", cat)
                                 cat_value_found = True
 
         self.assertTrue(cat_value_found)
@@ -85,31 +87,34 @@ AgTwMBEGCyqGSIb3DQEJEAcBAwIF4DAKBggqhkjOPQQDAwNnADBkAjAZSD+BVqzc
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cert_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         cat_value_found = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        securityCategoryMap = opentypemap.get('securityCategoryMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        securityCategoryMap = opentypemap.get("securityCategoryMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5913.id_pe_clearanceConstraints:
-                self.assertIn(extn['extnID'], certificateExtensionsMap)
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']],
-                    decodeOpenTypes=True)
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5913.id_pe_clearanceConstraints:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                ev, rest = der_decoder(
+                    extn["extnValue"],
+                    asn1Spec=certificateExtensionsMap[extn["extnID"]],
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
 
                 for c in ev:
-                    if c['policyId'] == rfc3114.id_tsp_TEST_Whirlpool:
-                        for sc in c['securityCategories']:
-                            self.assertIn(sc['type'], securityCategoryMap)
-                            for cat in sc['value']:
-                                self.assertIn('USE ONLY', cat)
+                    if c["policyId"] == rfc3114.id_tsp_TEST_Whirlpool:
+                        for sc in c["securityCategories"]:
+                            self.assertIn(sc["type"], securityCategoryMap)
+                            for cat in sc["value"]:
+                                self.assertIn("USE ONLY", cat)
                                 cat_value_found = True
 
         self.assertTrue(cat_value_found)
@@ -117,5 +122,5 @@ AgTwMBEGCyqGSIb3DQEJEAcBAwIF4DAKBggqhkjOPQQDAwNnADBkAjAZSD+BVqzc
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

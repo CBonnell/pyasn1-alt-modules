@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -48,51 +48,54 @@ pogu5Q9Vp28CMQC5YVF8dShC1tk9YImRftiVl8C6pbj//1K/+MwmR6nRk/WU+hKl
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_dev_owner = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        dev_own_oid = univ.ObjectIdentifier('1.3.6.1.4.1.22112.48.24')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        dev_own_oid = univ.ObjectIdentifier("1.3.6.1.4.1.22112.48.24")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_subjectDirectoryAttributes:
-                self.assertIn(extn['extnID'], certificateExtensionsMap)
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_subjectDirectoryAttributes:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                ev, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
 
                 for attr in ev:
-                    if attr['type'] == rfc5916.id_deviceOwner:
-                        self.assertEqual(
-                            der_encoder(dev_own_oid), attr['values'][0])
+                    if attr["type"] == rfc5916.id_deviceOwner:
+                        self.assertEqual(der_encoder(dev_own_oid), attr["values"][0])
                         found_dev_owner = True
 
         self.assertTrue(found_dev_owner)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cert_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_dev_owner = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        dev_own_oid = univ.ObjectIdentifier('1.3.6.1.4.1.22112.48.24')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        dev_own_oid = univ.ObjectIdentifier("1.3.6.1.4.1.22112.48.24")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_subjectDirectoryAttributes:
-                self.assertIn(extn['extnID'], certificateExtensionsMap)
-                ev, rest = der_decoder(extn['extnValue'],
-                   asn1Spec=certificateExtensionsMap[extn['extnID']],
-                   decodeOpenTypes=True)
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_subjectDirectoryAttributes:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                ev, rest = der_decoder(
+                    extn["extnValue"],
+                    asn1Spec=certificateExtensionsMap[extn["extnID"]],
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
 
                 for attr in ev:
-                    if attr['type'] == rfc5916.id_deviceOwner:
-                        self.assertEqual(dev_own_oid, attr['values'][0])
+                    if attr["type"] == rfc5916.id_deviceOwner:
+                        self.assertEqual(dev_own_oid, attr["values"][0])
                         found_dev_owner = True
 
         self.assertTrue(found_dev_owner)
@@ -100,6 +103,6 @@ pogu5Q9Vp28CMQC5YVF8dShC1tk9YImRftiVl8C6pbj//1K/+MwmR6nRk/WU+hKl
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

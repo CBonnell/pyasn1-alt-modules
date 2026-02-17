@@ -3,7 +3,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to add a map for use with opentypes.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # BinaryTime: An Alternate Format for Representing Date and Time
@@ -16,22 +16,24 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
-MAX = float('inf')
+MAX = float("inf")
 
 
-# BinaryTime: Represent date and time as an integer 
+# BinaryTime: Represent date and time as an integer
+
 
 class BinaryTime(univ.Integer):
     pass
 
-BinaryTime.subtypeSpec = constraint.ValueRangeConstraint(0, MAX)
 
+BinaryTime.subtypeSpec = constraint.ValueRangeConstraint(0, MAX)
 
 # CMS Attribute for representing signing time in BinaryTime
 
-id_aa_binarySigningTime = univ.ObjectIdentifier('1.2.840.113549.1.9.16.2.46')
+id_aa_binarySigningTime = univ.ObjectIdentifier("1.2.840.113549.1.9.16.2.46")
+
 
 class BinarySigningTime(BinaryTime):
     pass

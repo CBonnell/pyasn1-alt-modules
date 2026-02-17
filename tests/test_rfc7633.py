@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -56,17 +56,18 @@ AOQSxhs011emVxyBIXT0ZGbmBY8LFRh6eGIOCAJbkM5T
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         extn_list = []
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
-            if extn['extnID'] == rfc7633.id_pe_tlsfeature:
-                features, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
+            if extn["extnID"] == rfc7633.id_pe_tlsfeature:
+                features, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(features.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(features))
-                
+                self.assertEqual(extn["extnValue"], der_encoder(features))
+
                 self.assertEqual(1, len(features))
                 self.assertEqual(5, features[0])
 
@@ -75,6 +76,6 @@ AOQSxhs011emVxyBIXT0ZGbmBY8LFRh6eGIOCAJbkM5T
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

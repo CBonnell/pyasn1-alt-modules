@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2025, Vigil Security, LLC
+# Copyright (c) 2025-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # KEM-RSA Algorithm with CMS KEMRecipientInfo
@@ -18,8 +18,8 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc4055
 from pyasn1_alt_modules import rfc5990
 
-
 # Alias for Object Identifier
+
 
 class OID(univ.ObjectIdentifier):
     pass
@@ -31,11 +31,9 @@ AlgorithmIdentifier = rfc5280.AlgorithmIdentifier
 
 SubjectPublicKeyInfo = rfc5280.SubjectPublicKeyInfo
 
-
 # Imports from RFC 4055
 
 RSAPublicKey = rfc4055.RSAPublicKey
-
 
 # Imports from RFC 5990
 
@@ -100,27 +98,25 @@ id_aes256_wrap = rfc5990.id_aes256_Wrap
 id_alg_CMS3DESwrap = rfc5990.id_alg_CMS3DESwrap
 
 id_camellia128_wrap = rfc5990.id_camellia128_Wrap
-   
+
 id_camellia192_wrap = rfc5990.id_camellia192_Wrap
 
 id_camellia256_wrap = rfc5990.id_camellia256_Wrap
 
-
 # KEM-RSA Key Encapsulation Mechanism Algorithms
 
 kema_rsa_kem = AlgorithmIdentifier()
-kema_rsa_kem['algorithm'] = id_rsa_kem_spki
-kema_rsa_kem['parameters'] = GenericHybridParameters()
+kema_rsa_kem["algorithm"] = id_rsa_kem_spki
+kema_rsa_kem["parameters"] = GenericHybridParameters()
 
 kema_kem_rsa = AlgorithmIdentifier()
-kema_kem_rsa['algorithm'] = id_kem_rsa
-kema_kem_rsa['parameters'] = RsaKemParameters()
+kema_kem_rsa["algorithm"] = id_kem_rsa
+kema_kem_rsa["parameters"] = RsaKemParameters()
 
-
-# RSA Public Key for use only with the KEM-RSA Algorithm 
+# RSA Public Key for use only with the KEM-RSA Algorithm
 
 pk_rsa_kem = SubjectPublicKeyInfo()
-pk_rsa_kem['algorithm']['algorithm'] = id_rsa_kem_spki
+pk_rsa_kem["algorithm"]["algorithm"] = id_rsa_kem_spki
 # To limit the KDF or KWA choices, provide parameters:
 # pk_rsa_kem['algorithm']['parameters'] = GenericHybridParameters()
 # To provide the public key value:
@@ -134,65 +130,63 @@ pk_rsa_kem['algorithm']['algorithm'] = id_rsa_kem_spki
 # Key Derivation Functions
 
 kda_kdf2 = AlgorithmIdentifier()
-kda_kdf2['algorithm'] = id_kdf_kdf2
-kda_kdf2['parameters'] = KDF2_HashFunction()
+kda_kdf2["algorithm"] = id_kdf_kdf2
+kda_kdf2["parameters"] = KDF2_HashFunction()
 
 kda_kdf3 = AlgorithmIdentifier()
-kda_kdf3['algorithm'] = id_kdf_kdf3
-kda_kdf3['parameters'] = KDF3_HashFunction()
-
+kda_kdf3["algorithm"] = id_kdf_kdf3
+kda_kdf3["parameters"] = KDF3_HashFunction()
 
 # Hash Functions
 
 mda_sha1 = AlgorithmIdentifier()
-mda_sha1['algorithm'] = id_sha1
-mda_sha1['parameters'] = NullParms("")
+mda_sha1["algorithm"] = id_sha1
+mda_sha1["parameters"] = NullParms("")
 
 mda_sha224 = AlgorithmIdentifier()
-mda_sha224['algorithm'] = id_sha224
-mda_sha224['parameters'] = NullParms("")
+mda_sha224["algorithm"] = id_sha224
+mda_sha224["parameters"] = NullParms("")
 
 mda_sha256 = AlgorithmIdentifier()
-mda_sha256['algorithm'] = id_sha256
-mda_sha256['parameters'] = NullParms("")
+mda_sha256["algorithm"] = id_sha256
+mda_sha256["parameters"] = NullParms("")
 
 mda_sha384 = AlgorithmIdentifier()
-mda_sha384['algorithm'] = id_sha384
-mda_sha384['parameters'] = NullParms("")
+mda_sha384["algorithm"] = id_sha384
+mda_sha384["parameters"] = NullParms("")
 
 mda_sha512 = AlgorithmIdentifier()
-mda_sha512['algorithm'] = id_sha512
-mda_sha512['parameters'] = NullParms("")
-
+mda_sha512["algorithm"] = id_sha512
+mda_sha512["parameters"] = NullParms("")
 
 # Key Wrap Algorithms
 
 kwa_aes128_wrap = AlgorithmIdentifier()
-kwa_aes128_wrap['algorithm'] = id_aes128_wrap
+kwa_aes128_wrap["algorithm"] = id_aes128_wrap
 # kwa_aes128_wrap['parameters'] are absent
 
 kwa_aes192_wrap = AlgorithmIdentifier()
-kwa_aes192_wrap['algorithm'] = id_aes192_wrap
+kwa_aes192_wrap["algorithm"] = id_aes192_wrap
 # kwa_aes192_wrap['parameters'] are absent
 
 kwa_aes256_wrap = AlgorithmIdentifier()
-kwa_aes256_wrap['algorithm'] = id_aes256_wrap
+kwa_aes256_wrap["algorithm"] = id_aes256_wrap
 # kwa_aes256_wrap['parameters'] are absent
 
 kwa_3DESWrap = AlgorithmIdentifier()
-kwa_3DESWrap['algorithm'] = id_alg_CMS3DESwrap
-kwa_3DESWrap['parameters'] = NullParms("")
+kwa_3DESWrap["algorithm"] = id_alg_CMS3DESwrap
+kwa_3DESWrap["parameters"] = NullParms("")
 
 kwa_camellia128_wrap = AlgorithmIdentifier()
-kwa_camellia128_wrap['algorithm'] = id_camellia128_wrap
+kwa_camellia128_wrap["algorithm"] = id_camellia128_wrap
 # kwa_camellia128_wrap['parameters'] are absent
-   
+
 kwa_camellia192_wrap = AlgorithmIdentifier()
-kwa_camellia192_wrap['algorithm'] = id_camellia192_wrap
+kwa_camellia192_wrap["algorithm"] = id_camellia192_wrap
 # kwa_camellia192_wrap['parameters'] are absent
 
 kwa_camellia256_wrap = AlgorithmIdentifier()
-kwa_camellia256_wrap['algorithm'] = id_camellia256_wrap
+kwa_camellia256_wrap["algorithm"] = id_camellia256_wrap
 # kwa_camellia256_wrap['parameters'] are absent
 
 

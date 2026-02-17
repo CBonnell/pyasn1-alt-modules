@@ -4,7 +4,7 @@
 # Created by Russ Housley with some assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Authentication Context Certificate Extension
@@ -20,29 +20,29 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Authentication Context Extension
 
-e_legnamnden = univ.ObjectIdentifier('1.2.752.201')
+e_legnamnden = univ.ObjectIdentifier("1.2.752.201")
 
-id_eleg_ce = e_legnamnden + (5, )
+id_eleg_ce = e_legnamnden + (5,)
 
-id_ce_authContext = id_eleg_ce + (1, )
+id_ce_authContext = id_eleg_ce + (1,)
 
 
 class AuthenticationContext(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('contextType', char.UTF8String()),
-        namedtype.OptionalNamedType('contextInfo', char.UTF8String())
+        namedtype.NamedType("contextType", char.UTF8String()),
+        namedtype.OptionalNamedType("contextInfo", char.UTF8String()),
     )
+
 
 class AuthenticationContexts(univ.SequenceOf):
     componentType = AuthenticationContext()
-    subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+    subtypeSpec = constraint.ValueSizeConstraint(1, MAX)
 
 
 # Update the Certificate Extensions Map

@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # RPKI Ghostbusters Record
@@ -14,11 +14,9 @@
 
 from pyasn1.type import univ
 
-
 # Content Type for Ghostbusters Records
 
-id_ct_rpkiGhostbusters =univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.35')
-
+id_ct_rpkiGhostbusters = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.35")
 
 # There is no need for an entry in the CMS Content Type Map because
 # the vCard is carried directly in the CMS eContent OCTET STRING.

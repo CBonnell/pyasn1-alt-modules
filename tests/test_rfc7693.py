@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -35,10 +35,16 @@ AgUAMA0GCWCGSAFlAwQCAwUA
         self.asn1Spec = rfc5751.SMIMECapabilities()
 
     def testDerCodec(self):
-        blake_oids = [ rfc7693.id_blake2b160,  rfc7693.id_blake2b256,
-                       rfc7693.id_blake2b384,  rfc7693.id_blake2b512,
-                       rfc7693.id_blake2s128,  rfc7693.id_blake2s160,
-                       rfc7693.id_blake2s224,  rfc7693.id_blake2s256, ]
+        blake_oids = [
+            rfc7693.id_blake2b160,
+            rfc7693.id_blake2b256,
+            rfc7693.id_blake2b384,
+            rfc7693.id_blake2b512,
+            rfc7693.id_blake2s128,
+            rfc7693.id_blake2s160,
+            rfc7693.id_blake2s224,
+            rfc7693.id_blake2s256,
+        ]
 
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -47,17 +53,17 @@ AgUAMA0GCWCGSAFlAwQCAwUA
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+        algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
         for cap in asn1Object:
-            if cap['capabilityID'] in blake_oids:
+            if cap["capabilityID"] in blake_oids:
                 count += 1
-                self.assertIn(cap['capabilityID'], algorithmIdentifierMap)
+                self.assertIn(cap["capabilityID"], algorithmIdentifierMap)
 
         self.assertEqual(len(blake_oids), count)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

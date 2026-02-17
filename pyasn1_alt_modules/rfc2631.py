@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Diffie-Hellman Key Agreement
@@ -21,17 +21,29 @@ from pyasn1.type import univ
 
 class KeySpecificInfo(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('algorithm', univ.ObjectIdentifier()),
-        namedtype.NamedType('counter', univ.OctetString().subtype(
-            subtypeSpec=constraint.ValueSizeConstraint(4, 4)))
+        namedtype.NamedType("algorithm", univ.ObjectIdentifier()),
+        namedtype.NamedType(
+            "counter",
+            univ.OctetString().subtype(
+                subtypeSpec=constraint.ValueSizeConstraint(4, 4)
+            ),
+        ),
     )
 
 
 class OtherInfo(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('keyInfo', KeySpecificInfo()),
-        namedtype.OptionalNamedType('partyAInfo', univ.OctetString().subtype(
-            explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-        namedtype.NamedType('suppPubInfo', univ.OctetString().subtype(
-            explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)))
+        namedtype.NamedType("keyInfo", KeySpecificInfo()),
+        namedtype.OptionalNamedType(
+            "partyAInfo",
+            univ.OctetString().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "suppPubInfo",
+            univ.OctetString().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
     )

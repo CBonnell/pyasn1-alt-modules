@@ -4,7 +4,7 @@
 # Created by Russ Housley with some help from asn1ate v.0.6.0
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Evidence Record Syntax (ERS)
@@ -24,12 +24,11 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import opentypemap
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
-ersEncryptionInfoValuesMap = opentypemap.get('ersEncryptionInfoValuesMap')
+ersEncryptionInfoValuesMap = opentypemap.get("ersEncryptionInfoValuesMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Imports from RFC 5280 and RFC 5652
 
@@ -44,6 +43,7 @@ ContentInfo = rfc5652.ContentInfo
 
 # Evidence Record Syntax
 
+
 class PartialHashtree(univ.SequenceOf):
     componentType = univ.OctetString()
 
@@ -55,17 +55,25 @@ class Attributes(univ.SetOf):
 
 class ArchiveTimeStamp(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.OptionalNamedType('digestAlgorithm',
-            AlgorithmIdentifier().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 0))),
-        namedtype.OptionalNamedType('attributes',
-            Attributes().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 1))),
-        namedtype.OptionalNamedType('reducedHashtree',
+        namedtype.OptionalNamedType(
+            "digestAlgorithm",
+            AlgorithmIdentifier().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "attributes",
+            Attributes().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "reducedHashtree",
             univ.SequenceOf(componentType=PartialHashtree()).subtype(
-                implicitTag=tag.Tag(tag.tagClassContext,
-                    tag.tagFormatSimple, 2))),
-        namedtype.NamedType('timeStamp', ContentInfo())
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.NamedType("timeStamp", ContentInfo()),
     )
 
 
@@ -84,36 +92,46 @@ class CryptoInfos(univ.SequenceOf):
 
 class EncryptionInfo(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('encryptionInfoType', univ.ObjectIdentifier()),
-        namedtype.NamedType('encryptionInfoValue', univ.Any(),
-            openType=opentype.OpenType('encryptionInfoType',
-                ersEncryptionInfoValuesMap))
+        namedtype.NamedType("encryptionInfoType", univ.ObjectIdentifier()),
+        namedtype.NamedType(
+            "encryptionInfoValue",
+            univ.Any(),
+            openType=opentype.OpenType(
+                "encryptionInfoType", ersEncryptionInfoValuesMap
+            ),
+        ),
     )
 
 
 class EvidenceRecord(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('version',
-            univ.Integer(namedValues=namedval.NamedValues(('v1', 1)))),
-        namedtype.NamedType('digestAlgorithms',
-            univ.SequenceOf(componentType=AlgorithmIdentifier())),
-        namedtype.OptionalNamedType('cryptoInfos',
-            CryptoInfos().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 0))),
-        namedtype.OptionalNamedType('encryptionInfo',
-            EncryptionInfo().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 1))),
-        namedtype.NamedType('archiveTimeStampSequence',
-            ArchiveTimeStampSequence())
+        namedtype.NamedType(
+            "version", univ.Integer(namedValues=namedval.NamedValues(("v1", 1)))
+        ),
+        namedtype.NamedType(
+            "digestAlgorithms", univ.SequenceOf(componentType=AlgorithmIdentifier())
+        ),
+        namedtype.OptionalNamedType(
+            "cryptoInfos",
+            CryptoInfos().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "encryptionInfo",
+            EncryptionInfo().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+            ),
+        ),
+        namedtype.NamedType("archiveTimeStampSequence", ArchiveTimeStampSequence()),
     )
 
 
-ltans = univ.ObjectIdentifier('1.3.6.1.5.5.11')
+ltans = univ.ObjectIdentifier("1.3.6.1.5.5.11")
 
-id_aa_er_internal = univ.ObjectIdentifier('1.2.840.113549.1.9.16.2.49')
+id_aa_er_internal = univ.ObjectIdentifier("1.2.840.113549.1.9.16.2.49")
 
-id_aa_er_internal = univ.ObjectIdentifier('1.2.840.113549.1.9.16.2.50')
-
+id_aa_er_internal = univ.ObjectIdentifier("1.2.840.113549.1.9.16.2.50")
 
 # Update the CMS Attribute Map
 

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -50,24 +50,25 @@ LWIbHF0HSW/CxDQo22mHT+tMqd13NzlDN3HxurIEGU4fBjk/rMSxw/bAPf4O0QT3
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-           if extn['extnID'] == rfc8737.id_pe_acmeIdentifier:
-               self.assertTrue(extn['critical'])
-               self.assertIn(extn['extnID'], certificateExtensionsMap)
-               auth, rest = der_decoder(
-                   extn['extnValue'], asn1Spec=rfc8737.Authorization())
-               self.assertFalse(rest)
-               self.assertTrue(auth.prettyPrint())
-               self.assertEqual(extn['extnValue'], der_encoder(auth))
-               self.assertEqual(32, len(auth))
-               found = True
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc8737.id_pe_acmeIdentifier:
+                self.assertTrue(extn["critical"])
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                auth, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=rfc8737.Authorization()
+                )
+                self.assertFalse(rest)
+                self.assertTrue(auth.prettyPrint())
+                self.assertEqual(extn["extnValue"], der_encoder(auth))
+                self.assertEqual(32, len(auth))
+                found = True
 
         self.assertTrue(found)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

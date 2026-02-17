@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -140,39 +140,40 @@ uCAPQRFiQJ9Z529/FPoE2H5DiqwCxME=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['version'])
-        ts = asn1Object['archiveTimeStampSequence'][0][0]['timeStamp']
-        self.assertEqual(rfc5652.id_signedData, ts['contentType'])
+        self.assertEqual(1, asn1Object["version"])
+        ts = asn1Object["archiveTimeStampSequence"][0][0]["timeStamp"]
+        self.assertEqual(rfc5652.id_signedData, ts["contentType"])
 
-        sd, rest = der_decoder(ts['content'], asn1Spec=rfc5652.SignedData())
+        sd, rest = der_decoder(ts["content"], asn1Spec=rfc5652.SignedData())
         self.assertFalse(rest)
         self.assertTrue(sd.prettyPrint())
-        self.assertEqual(ts['content'], der_encoder(sd))
+        self.assertEqual(ts["content"], der_encoder(sd))
 
-        self.assertEqual(3, sd['version'])
-        ect = sd['encapContentInfo']['eContentType']
+        self.assertEqual(3, sd["version"])
+        ect = sd["encapContentInfo"]["eContentType"]
         self.assertEqual(rfc3161.id_ct_TSTInfo, ect)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['version'])
-        ts = asn1Object['archiveTimeStampSequence'][0][0]['timeStamp']
-        self.assertEqual(rfc5652.id_signedData, ts['contentType'])
+        self.assertEqual(1, asn1Object["version"])
+        ts = asn1Object["archiveTimeStampSequence"][0][0]["timeStamp"]
+        self.assertEqual(rfc5652.id_signedData, ts["contentType"])
 
-        sd = ts['content']
-        self.assertEqual(3, sd['version'])
-        ect = sd['encapContentInfo']['eContentType']
+        sd = ts["content"]
+        self.assertEqual(3, sd["version"])
+        ect = sd["encapContentInfo"]["eContentType"]
         self.assertEqual(rfc3161.id_ct_TSTInfo, ect)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

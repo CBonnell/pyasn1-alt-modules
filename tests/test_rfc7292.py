@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -73,8 +73,8 @@ rqr03dPnboinBBSU7mxdpB5LTCvorCI8Tk5OMiUzjgICB9A=
         self.asn1Spec = rfc7292.PFX()
 
     def testDerCodec(self):
-        cmsAttributesMap = opentypemap.get('cmsAttributesMap')
-        pkcs12BagTypeMap = opentypemap.get('pkcs12BagTypeMap')
+        cmsAttributesMap = opentypemap.get("cmsAttributesMap")
+        pkcs12BagTypeMap = opentypemap.get("pkcs12BagTypeMap")
 
         substrate = pem.readBase64fromText(self.pfx_pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -82,20 +82,20 @@ rqr03dPnboinBBSU7mxdpB5LTCvorCI8Tk5OMiUzjgICB9A=
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(3, asn1Object['version'])
+        self.assertEqual(3, asn1Object["version"])
 
-        oid = asn1Object['macData']['mac']['digestAlgorithm']['algorithm']
+        oid = asn1Object["macData"]["mac"]["digestAlgorithm"]["algorithm"]
 
-        self.assertEqual(univ.ObjectIdentifier('1.3.14.3.2.26'), oid)
+        self.assertEqual(univ.ObjectIdentifier("1.3.14.3.2.26"), oid)
 
-        md_hex = asn1Object['macData']['mac']['digest'].prettyPrint()
+        md_hex = asn1Object["macData"]["mac"]["digest"].prettyPrint()
 
-        self.assertEqual('0xa5608ffdf651d132b90701aeaaf4ddd3e76e88a7', md_hex)
-        self.assertEqual(
-            rfc5652.id_data, asn1Object['authSafe']['contentType'])
+        self.assertEqual("0xa5608ffdf651d132b90701aeaaf4ddd3e76e88a7", md_hex)
+        self.assertEqual(rfc5652.id_data, asn1Object["authSafe"]["contentType"])
 
         data, rest = der_decoder(
-            asn1Object['authSafe']['content'], asn1Spec=univ.OctetString())
+            asn1Object["authSafe"]["content"], asn1Spec=univ.OctetString()
+        )
 
         self.assertFalse(rest)
 
@@ -106,9 +106,9 @@ rqr03dPnboinBBSU7mxdpB5LTCvorCI8Tk5OMiUzjgICB9A=
         self.assertEqual(data, der_encoder(authsafe))
 
         for ci in authsafe:
-            self.assertEqual(rfc5652.id_data, ci['contentType'])
+            self.assertEqual(rfc5652.id_data, ci["contentType"])
 
-            data, rest = der_decoder(ci['content'], asn1Spec=univ.OctetString())
+            data, rest = der_decoder(ci["content"], asn1Spec=univ.OctetString())
 
             self.assertFalse(rest)
 
@@ -119,60 +119,65 @@ rqr03dPnboinBBSU7mxdpB5LTCvorCI8Tk5OMiUzjgICB9A=
             self.assertEqual(data, der_encoder(sc))
 
             for sb in sc:
-                if sb['bagId'] in pkcs12BagTypeMap:
-                    bv, rest = der_decoder(sb['bagValue'],
-                        asn1Spec=pkcs12BagTypeMap[sb['bagId']])
+                if sb["bagId"] in pkcs12BagTypeMap:
+                    bv, rest = der_decoder(
+                        sb["bagValue"], asn1Spec=pkcs12BagTypeMap[sb["bagId"]]
+                    )
                     self.assertFalse(rest)
                     self.assertTrue(bv.prettyPrint())
-                    self.assertEqual(sb['bagValue'], der_encoder(bv))
+                    self.assertEqual(sb["bagValue"], der_encoder(bv))
 
-                    for attr in sb['bagAttributes']:
-                        if attr['attrType'] in cmsAttributesMap:
-                            av, rest = der_decoder(attr['attrValues'][0],
-                                asn1Spec=cmsAttributesMap[attr['attrType']])
+                    for attr in sb["bagAttributes"]:
+                        if attr["attrType"] in cmsAttributesMap:
+                            av, rest = der_decoder(
+                                attr["attrValues"][0],
+                                asn1Spec=cmsAttributesMap[attr["attrType"]],
+                            )
                             self.assertFalse(rest)
                             self.assertTrue(av.prettyPrint())
-                            self.assertEqual(
-                                attr['attrValues'][0], der_encoder(av))
+                            self.assertEqual(attr["attrValues"][0], der_encoder(av))
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pfx_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        digest_alg = asn1Object['macData']['mac']['digestAlgorithm']
+        digest_alg = asn1Object["macData"]["mac"]["digestAlgorithm"]
 
-        self.assertFalse(digest_alg['parameters'].hasValue())
+        self.assertFalse(digest_alg["parameters"].hasValue())
 
-        authsafe, rest = der_decoder(asn1Object['authSafe']['content'],
-            asn1Spec=rfc7292.AuthenticatedSafe(), decodeOpenTypes=True)
+        authsafe, rest = der_decoder(
+            asn1Object["authSafe"]["content"],
+            asn1Spec=rfc7292.AuthenticatedSafe(),
+            decodeOpenTypes=True,
+        )
         self.assertFalse(rest)
         self.assertTrue(authsafe.prettyPrint())
-        self.assertEqual(
-            asn1Object['authSafe']['content'], der_encoder(authsafe))
+        self.assertEqual(asn1Object["authSafe"]["content"], der_encoder(authsafe))
 
         for ci in authsafe:
-            self.assertEqual(rfc5652.id_data, ci['contentType'])
-            sc, rest = der_decoder(ci['content'],
-                asn1Spec=rfc7292.SafeContents(), decodeOpenTypes=True)
+            self.assertEqual(rfc5652.id_data, ci["contentType"])
+            sc, rest = der_decoder(
+                ci["content"], asn1Spec=rfc7292.SafeContents(), decodeOpenTypes=True
+            )
             self.assertFalse(rest)
             self.assertTrue(sc.prettyPrint())
-            self.assertEqual(ci['content'], der_encoder(sc))
+            self.assertEqual(ci["content"], der_encoder(sc))
 
             for sb in sc:
-                if sb['bagId'] == rfc7292.id_pkcs8ShroudedKeyBag:
-                    bv = sb['bagValue']
-                    enc_alg = bv['encryptionAlgorithm']['algorithm']
-                    self.assertEqual(
-                        rfc7292.pbeWithSHAAnd3_KeyTripleDES_CBC, enc_alg)
-                    enc_alg_param = bv['encryptionAlgorithm']['parameters']
-                    self.assertEqual(2000, enc_alg_param['iterations'])
+                if sb["bagId"] == rfc7292.id_pkcs8ShroudedKeyBag:
+                    bv = sb["bagValue"]
+                    enc_alg = bv["encryptionAlgorithm"]["algorithm"]
+                    self.assertEqual(rfc7292.pbeWithSHAAnd3_KeyTripleDES_CBC, enc_alg)
+                    enc_alg_param = bv["encryptionAlgorithm"]["parameters"]
+                    self.assertEqual(2000, enc_alg_param["iterations"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

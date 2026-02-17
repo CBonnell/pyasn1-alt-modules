@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # GSS-API Tokens
@@ -20,7 +20,7 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-gssapiMechTypeMap = opentypemap.get('gssapiMechTypeMap')
+gssapiMechTypeMap = opentypemap.get("gssapiMechTypeMap")
 
 
 class PerMsgToken(univ.Any):
@@ -42,19 +42,21 @@ class MechType(univ.ObjectIdentifier):
 class InitialContextToken(univ.Sequence):
     pass
 
+
 InitialContextToken.tagSet = univ.Sequence.tagSet.tagImplicitly(
     tag.Tag(tag.tagClassApplication, tag.tagFormatConstructed, 0)
 )
 
 InitialContextToken.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('thisMech', MechType()),
-    namedtype.NamedType('innerContextToken', univ.Any(),
-        openType=opentype.OpenType('thisMech', gssapiMechTypeMap)
-    )
+    namedtype.NamedType("thisMech", MechType()),
+    namedtype.NamedType(
+        "innerContextToken",
+        univ.Any(),
+        openType=opentype.OpenType("thisMech", gssapiMechTypeMap),
+    ),
 )
-
 
 # For DASS (RFC 1507), the MechType is 1.3.12.2.1011.7.5.
 # For Kerberos V5 (RFC 1964), the MechType is 1.2.840.113554.1.2.2.
-# If modules are ever written for these RFCs, the module should add 
+# If modules are ever written for these RFCs, the module should add
 # entries for these object identifiers to gssapiMechTypeMap.

@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -54,17 +54,17 @@ V+vo2L72yerdbsP9xjqvhZrLKfsLZjYK4SdYYthi
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_certificatePolicies:
-                s = extn['extnValue']
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_certificatePolicies:
+                s = extn["extnValue"]
                 pseq, rest = der_decoder(s, rfc5280.CertificatePolicies())
-        
+
                 self.assertFalse(rest)
                 self.assertTrue(pseq.prettyPrint())
                 self.assertEqual(s, der_encoder(pseq))
 
                 for pi in pseq:
-                    if pi['policyIdentifier'] == rfc6484.id_cp_ipAddr_asNumber:
+                    if pi["policyIdentifier"] == rfc6484.id_cp_ipAddr_asNumber:
                         found = True
 
         self.assertTrue(found)
@@ -72,6 +72,6 @@ V+vo2L72yerdbsP9xjqvhZrLKfsLZjYK4SdYYthi
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

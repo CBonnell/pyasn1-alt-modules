@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2024-2025, Vigil Security, LLC
+# Copyright (c) 2024-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -58,24 +58,23 @@ NqelVbdJ/iA2SeNHU/65xf6dDE2zdHDfsw==
         substrate = pem.readBase64fromText(self.roa_pem_text)
 
         layers = {}
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers.update(opentypemap.get("cmsContentTypesMap"))
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
-            rfc9582.id_ct_routeOriginAuthz: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
+            rfc9582.id_ct_routeOriginAuthz: lambda x: None,
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
-            rfc9582.id_ct_routeOriginAuthz: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
+            rfc9582.id_ct_routeOriginAuthz: lambda x: None,
         }
 
         next_layer = rfc5652.id_ct_contentInfo
         while next_layer:
-            asn1Object, rest = der_decoder(
-                substrate, asn1Spec=layers[next_layer])
+            asn1Object, rest = der_decoder(substrate, asn1Spec=layers[next_layer])
             self.assertFalse(rest)
             self.assertTrue(asn1Object.prettyPrint())
             self.assertEqual(substrate, der_encoder(asn1Object))
@@ -83,35 +82,37 @@ NqelVbdJ/iA2SeNHU/65xf6dDE2zdHDfsw==
             substrate = getNextSubstrate[next_layer](asn1Object)
             next_layer = getNextLayer[next_layer](asn1Object)
 
-        self.assertEqual(0, asn1Object['version'])
-        self.assertEqual(15562, asn1Object['asID'])
+        self.assertEqual(0, asn1Object["version"])
+        self.assertEqual(15562, asn1Object["asID"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.roa_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True)
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        oid = asn1Object['content']['encapContentInfo']['eContentType']
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
+        oid = asn1Object["content"]["encapContentInfo"]["eContentType"]
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
 
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         self.assertIn(oid, cmsContentTypesMap)
 
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=cmsContentTypesMap[oid], decodeOpenTypes=True)
+            substrate, asn1Spec=cmsContentTypesMap[oid], decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(0, asn1Object['version'])
-        self.assertEqual(15562, asn1Object['asID'])
+        self.assertEqual(0, asn1Object["version"])
+        self.assertEqual(15562, asn1Object["asID"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

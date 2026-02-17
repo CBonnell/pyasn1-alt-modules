@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 
@@ -47,36 +47,34 @@ TPnJ5Wym0hv2fOpnPPsWTgqvLFYfX27GGTquuOd/6A==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        ai = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc2528.id_keyExchangeAlgorithm, ai['algorithm'])
+        ai = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc2528.id_keyExchangeAlgorithm, ai["algorithm"])
 
-        param, rest = der_decoder(
-            ai['parameters'], asn1Spec=rfc2528.KEA_Parms_Id())
+        param, rest = der_decoder(ai["parameters"], asn1Spec=rfc2528.KEA_Parms_Id())
         self.assertFalse(rest)
         self.assertTrue(param.prettyPrint())
-        self.assertEqual(ai['parameters'], der_encoder(param))
-        
-        self.assertEqual(
-            univ.OctetString(hexValue='5cf8f127e6569d6d88b3'), param)
+        self.assertEqual(ai["parameters"], der_encoder(param))
+
+        self.assertEqual(univ.OctetString(hexValue="5cf8f127e6569d6d88b3"), param)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.kea_cert_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        ai = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc2528.id_keyExchangeAlgorithm, ai['algorithm'])
+        ai = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc2528.id_keyExchangeAlgorithm, ai["algorithm"])
 
-        param = ai['parameters']
-        self.assertEqual(
-            univ.OctetString(hexValue='5cf8f127e6569d6d88b3'), param)
+        param = ai["parameters"]
+        self.assertEqual(univ.OctetString(hexValue="5cf8f127e6569d6d88b3"), param)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

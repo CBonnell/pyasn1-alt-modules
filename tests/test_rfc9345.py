@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -60,36 +60,38 @@ y5S4RfWHIIPjbw==
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc9345.id_pe_delegationUsage:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc9345.id_pe_delegationUsage:
                 found = True
-                self.assertEqual(b'\x05\x00', extn['extnValue'])
+                self.assertEqual(b"\x05\x00", extn["extnValue"])
 
         self.assertTrue(found)
 
     def testOpenTypes(self):
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc9345.id_pe_delegationUsage:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc9345.id_pe_delegationUsage:
                 found = True
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
         self.assertTrue(found)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

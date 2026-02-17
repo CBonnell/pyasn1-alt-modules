@@ -2,7 +2,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Algorithm Identifiers for Ed25519, Ed448, X25519, and X448
@@ -28,13 +28,13 @@ class CurvePrivateKey(univ.OctetString):
     pass
 
 
-id_X25519 = univ.ObjectIdentifier('1.3.101.110')
+id_X25519 = univ.ObjectIdentifier("1.3.101.110")
 
-id_X448 = univ.ObjectIdentifier('1.3.101.111')
+id_X448 = univ.ObjectIdentifier("1.3.101.111")
 
-id_Ed25519 = univ.ObjectIdentifier('1.3.101.112')
+id_Ed25519 = univ.ObjectIdentifier("1.3.101.112")
 
-id_Ed448 = univ.ObjectIdentifier('1.3.101.113')
+id_Ed448 = univ.ObjectIdentifier("1.3.101.113")
 
 id_sha512 = rfc4055.id_sha512
 

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -18,8 +18,8 @@ from pyasn1_alt_modules import rfc7914
 from pyasn1_alt_modules import rfc8018
 from pyasn1_alt_modules import opentypemap
 
-
 # From RFC 7914, Section 13
+
 
 class MultiprimeRSAPrivateKeyTestCase(unittest.TestCase):
     pem_text = """\
@@ -40,47 +40,49 @@ iBGY/Dls7B1TsWeGObE0sS1MXEpuREuloZjcsNVcNXWPlLdZtkSH6uwWzR0PyG/Z
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-        ea = asn1Object['encryptionAlgorithm']
-        self.assertEqual(rfc8018.id_PBES2, ea['algorithm'])
-        self.assertIn(ea['algorithm'], algorithmIdentifierMap)
+        algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
+        ea = asn1Object["encryptionAlgorithm"]
+        self.assertEqual(rfc8018.id_PBES2, ea["algorithm"])
+        self.assertIn(ea["algorithm"], algorithmIdentifierMap)
 
-        params, rest = der_decoder(ea['parameters'],
-            asn1Spec=algorithmIdentifierMap[ea['algorithm']])
+        params, rest = der_decoder(
+            ea["parameters"], asn1Spec=algorithmIdentifierMap[ea["algorithm"]]
+        )
         self.assertFalse(rest)
         self.assertTrue(params.prettyPrint())
-        self.assertEqual(ea['parameters'], der_encoder(params))
+        self.assertEqual(ea["parameters"], der_encoder(params))
 
-        kdf = params['keyDerivationFunc']
-        self.assertEqual(rfc7914.id_scrypt, kdf['algorithm'])
-        self.assertIn(kdf['algorithm'], algorithmIdentifierMap)
+        kdf = params["keyDerivationFunc"]
+        self.assertEqual(rfc7914.id_scrypt, kdf["algorithm"])
+        self.assertIn(kdf["algorithm"], algorithmIdentifierMap)
 
-        kdfp, rest = der_decoder(kdf['parameters'],
-            asn1Spec=algorithmIdentifierMap[kdf['algorithm']])
+        kdfp, rest = der_decoder(
+            kdf["parameters"], asn1Spec=algorithmIdentifierMap[kdf["algorithm"]]
+        )
         self.assertFalse(rest)
         self.assertTrue(kdfp.prettyPrint())
-        self.assertEqual(kdf['parameters'], der_encoder(kdfp))
-        self.assertEqual(1048576, kdfp['costParameter'])
+        self.assertEqual(kdf["parameters"], der_encoder(kdfp))
+        self.assertEqual(1048576, kdfp["costParameter"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        ea = asn1Object['encryptionAlgorithm']
-        self.assertEqual(rfc8018.id_PBES2, ea['algorithm'])
-        params = asn1Object['encryptionAlgorithm']['parameters']
-        self.assertEqual(
-            rfc7914.id_scrypt, params['keyDerivationFunc']['algorithm'])
-        kdfp = params['keyDerivationFunc']['parameters']
-        self.assertEqual(1048576, kdfp['costParameter'])
+        ea = asn1Object["encryptionAlgorithm"]
+        self.assertEqual(rfc8018.id_PBES2, ea["algorithm"])
+        params = asn1Object["encryptionAlgorithm"]["parameters"]
+        self.assertEqual(rfc7914.id_scrypt, params["keyDerivationFunc"]["algorithm"])
+        kdfp = params["keyDerivationFunc"]["parameters"]
+        self.assertEqual(1048576, kdfp["costParameter"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

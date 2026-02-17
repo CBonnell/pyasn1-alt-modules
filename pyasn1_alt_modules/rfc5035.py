@@ -5,7 +5,7 @@
 # Modified by Russ Housley to add a map for use with opentypes.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Update to Enhanced Security Services for S/MIME
@@ -25,10 +25,9 @@ from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
-
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
 # Imports from RFC 5280 and RFC 5652
 
@@ -46,12 +45,11 @@ GeneralNames = rfc5280.GeneralNames
 
 CertificateSerialNumber = rfc5280.CertificateSerialNumber
 
-
 # Signing Certificate Attribute V1 and V2
 
 id_aa_signingCertificate = rfc2634.id_aa_signingCertificate
 
-id_aa_signingCertificateV2 = univ.ObjectIdentifier('1.2.840.113549.1.9.16.2.47')
+id_aa_signingCertificateV2 = univ.ObjectIdentifier("1.2.840.113549.1.9.16.2.47")
 
 Hash = rfc2634.Hash
 
@@ -61,33 +59,33 @@ ESSCertID = rfc2634.ESSCertID
 
 SigningCertificate = rfc2634.SigningCertificate
 
-
 sha256AlgId = AlgorithmIdentifier()
-sha256AlgId['algorithm'] = rfc4055.id_sha256
+sha256AlgId["algorithm"] = rfc4055.id_sha256
 # A non-schema object for sha256AlgId['parameters'] as absent
-sha256AlgId['parameters'] = der_encode(univ.OctetString(''))
+sha256AlgId["parameters"] = der_encode(univ.OctetString(""))
 
 
 class ESSCertIDv2(univ.Sequence):
     pass
 
+
 ESSCertIDv2.componentType = namedtype.NamedTypes(
-    namedtype.DefaultedNamedType('hashAlgorithm', sha256AlgId),
-    namedtype.NamedType('certHash', Hash()),
-    namedtype.OptionalNamedType('issuerSerial', IssuerSerial())
+    namedtype.DefaultedNamedType("hashAlgorithm", sha256AlgId),
+    namedtype.NamedType("certHash", Hash()),
+    namedtype.OptionalNamedType("issuerSerial", IssuerSerial()),
 )
 
 
 class SigningCertificateV2(univ.Sequence):
     pass
 
-SigningCertificateV2.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('certs', univ.SequenceOf(
-        componentType=ESSCertIDv2())),
-    namedtype.OptionalNamedType('policies', univ.SequenceOf(
-        componentType=PolicyInformation()))
-)
 
+SigningCertificateV2.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("certs", univ.SequenceOf(componentType=ESSCertIDv2())),
+    namedtype.OptionalNamedType(
+        "policies", univ.SequenceOf(componentType=PolicyInformation())
+    ),
+)
 
 # Mail List Expansion History Attribute
 
@@ -102,7 +100,6 @@ MLReceiptPolicy = rfc2634.MLReceiptPolicy
 MLData = rfc2634.MLData
 
 MLExpansionHistory = rfc2634.MLExpansionHistory
-
 
 # ESS Security Label Attribute
 
@@ -126,13 +123,11 @@ SecurityCategories = rfc2634.SecurityCategories
 
 ESSSecurityLabel = rfc2634.ESSSecurityLabel
 
-
 # Equivalent Labels Attribute
 
 id_aa_equivalentLabels = rfc2634.id_aa_equivalentLabels
 
 EquivalentLabels = rfc2634.EquivalentLabels
-
 
 # Content Identifier Attribute
 
@@ -140,13 +135,11 @@ id_aa_contentIdentifier = rfc2634.id_aa_contentIdentifier
 
 ContentIdentifier = rfc2634.ContentIdentifier
 
-
 # Content Reference Attribute
 
 id_aa_contentReference = rfc2634.id_aa_contentReference
 
 ContentReference = rfc2634.ContentReference
-
 
 # Message Signature Digest Attribute
 
@@ -154,13 +147,11 @@ id_aa_msgSigDigest = rfc2634.id_aa_msgSigDigest
 
 MsgSigDigest = rfc2634.MsgSigDigest
 
-
 # Content Hints Attribute
 
 id_aa_contentHint = rfc2634.id_aa_contentHint
 
 ContentHints = rfc2634.ContentHints
-
 
 # Receipt Request Attribute
 
@@ -174,7 +165,6 @@ ub_receiptsTo = rfc2634.ub_receiptsTo
 
 ReceiptRequest = rfc2634.ReceiptRequest
 
-
 # Receipt Content Type
 
 ESSVersion = rfc2634.ESSVersion
@@ -187,7 +177,6 @@ ub_receiptsTo = rfc2634.ub_receiptsTo
 
 ReceiptRequest = rfc2634.ReceiptRequest
 
-
 # Update the CMS Attributes Map
 
 _cmsAttributesMapUpdate = {
@@ -195,7 +184,6 @@ _cmsAttributesMapUpdate = {
 }
 
 cmsAttributesMap.update(_cmsAttributesMapUpdate)
-
 
 # Update the CMS Content Types Map
 

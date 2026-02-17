@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -42,14 +42,16 @@ AAYJKoUDBwECBQEBMCAGByqFAwICDQEwFQQIAAAAAAAAAAAGCSqFAwcBAgUBAQ==
 
         count = 0
         for algid in asn1Object:
-            if algid['capabilityID'] in kw_oid_list:
-                kw_param, rest = der_decoder(algid['parameters'],
-                    asn1Spec=rfc4357.Gost28147_89_Parameters())
+            if algid["capabilityID"] in kw_oid_list:
+                kw_param, rest = der_decoder(
+                    algid["parameters"], asn1Spec=rfc4357.Gost28147_89_Parameters()
+                )
                 self.assertFalse(rest)
                 self.assertTrue(kw_param.prettyPrint())
-                self.assertEqual(algid['parameters'], der_encoder(kw_param))
-                self.assertEqual(rfc7836.id_tc26_gost_28147_param_Z,
-                    kw_param['encryptionParamSet'])
+                self.assertEqual(algid["parameters"], der_encoder(kw_param))
+                self.assertEqual(
+                    rfc7836.id_tc26_gost_28147_param_Z, kw_param["encryptionParamSet"]
+                )
             count += 1
 
         self.assertEqual(4, count)
@@ -57,5 +59,5 @@ AAYJKoUDBwECBQEBMCAGByqFAwICDQEwFQQIAAAAAAAAAAAGCSqFAwcBAgUBAQ==
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

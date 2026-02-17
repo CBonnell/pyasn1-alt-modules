@@ -5,7 +5,7 @@
 # Modified by Russ Housley to add a map for use with opentypes.
 # Updated by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # CMS Compressed Data Content Type
@@ -21,7 +21,7 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import opentypemap
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
 
 class CompressionAlgorithmIdentifier(rfc5280.AlgorithmIdentifier):
@@ -30,26 +30,27 @@ class CompressionAlgorithmIdentifier(rfc5280.AlgorithmIdentifier):
 
 # The CMS Compressed Data Content Type
 
-id_ct_compressedData = univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.9')
+id_ct_compressedData = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.9")
+
 
 class CompressedData(univ.Sequence):
     pass
 
-CompressedData.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('version', rfc5652.CMSVersion()), # Always set to 0
-    namedtype.NamedType('compressionAlgorithm', CompressionAlgorithmIdentifier()),
-    namedtype.NamedType('encapContentInfo', rfc5652.EncapsulatedContentInfo())
-)
 
+CompressedData.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("version", rfc5652.CMSVersion()),  # Always set to 0
+    namedtype.NamedType("compressionAlgorithm", CompressionAlgorithmIdentifier()),
+    namedtype.NamedType("encapContentInfo", rfc5652.EncapsulatedContentInfo()),
+)
 
 # Algorithm identifier for the zLib Compression Algorithm
 # This includes cpa_zlibCompress as defined in RFC 6268,
 # from https://www.rfc-editor.org/rfc/rfc6268.txt
 
-id_alg_zlibCompress = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.8')
+id_alg_zlibCompress = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.8")
 
 cpa_zlibCompress = rfc5280.AlgorithmIdentifier()
-cpa_zlibCompress['algorithm'] = id_alg_zlibCompress
+cpa_zlibCompress["algorithm"] = id_alg_zlibCompress
 # cpa_zlibCompress['parameters'] are absent
 
 

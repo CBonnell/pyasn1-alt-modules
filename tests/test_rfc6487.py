@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -66,14 +66,15 @@ HDFd3u1ztO8WGjH/LOehoO30xsm52kbxZjc4SJWubgBgxTMIWyjPHbKqCF44NwYev/6eFcOC
 
         count = 0
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_pe_subjectInfoAccess:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_pe_subjectInfoAccess:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'], asn1Spec=rfc5280.SubjectInfoAccessSyntax())
+                    extn["extnValue"], asn1Spec=rfc5280.SubjectInfoAccessSyntax()
+                )
                 for ad in extnValue:
-                    if ad['accessMethod'] in access_methods:
-                        uri = ad['accessLocation']['uniformResourceIdentifier']
-                        self.assertIn('rpki.apnic.net', uri)
+                    if ad["accessMethod"] in access_methods:
+                        uri = ad["accessLocation"]["uniformResourceIdentifier"]
+                        self.assertIn("rpki.apnic.net", uri)
                         count += 1
 
         self.assertEqual(1, count)
@@ -126,14 +127,15 @@ WYtY4rWNeHcfgNTz
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_pe_subjectInfoAccess:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_pe_subjectInfoAccess:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'], asn1Spec=rfc5280.SubjectInfoAccessSyntax())
+                    extn["extnValue"], asn1Spec=rfc5280.SubjectInfoAccessSyntax()
+                )
                 for ad in extnValue:
-                    if ad['accessMethod'] in access_methods:
-                        uri = ad['accessLocation']['uniformResourceIdentifier']
-                        self.assertIn('ca.rg.net', uri)
+                    if ad["accessMethod"] in access_methods:
+                        uri = ad["accessLocation"]["uniformResourceIdentifier"]
+                        self.assertIn("ca.rg.net", uri)
                         count += 1
 
         self.assertEqual(1, count)
@@ -141,6 +143,6 @@ WYtY4rWNeHcfgNTz
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

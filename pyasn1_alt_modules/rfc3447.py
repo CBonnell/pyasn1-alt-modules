@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Copyright (c) 2005-2020, Ilya Etingof <etingof@gmail.com>
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # PKCS#1 syntax
@@ -20,9 +20,9 @@ from pyasn1_alt_modules.rfc2437 import *
 
 class OtherPrimeInfo(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('prime', univ.Integer()),
-        namedtype.NamedType('exponent', univ.Integer()),
-        namedtype.NamedType('coefficient', univ.Integer())
+        namedtype.NamedType("prime", univ.Integer()),
+        namedtype.NamedType("exponent", univ.Integer()),
+        namedtype.NamedType("coefficient", univ.Integer()),
     )
 
 
@@ -33,14 +33,19 @@ class OtherPrimeInfos(univ.SequenceOf):
 
 class RSAPrivateKey(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('version', univ.Integer(namedValues=namedval.NamedValues(('two-prime', 0), ('multi', 1)))),
-        namedtype.NamedType('modulus', univ.Integer()),
-        namedtype.NamedType('publicExponent', univ.Integer()),
-        namedtype.NamedType('privateExponent', univ.Integer()),
-        namedtype.NamedType('prime1', univ.Integer()),
-        namedtype.NamedType('prime2', univ.Integer()),
-        namedtype.NamedType('exponent1', univ.Integer()),
-        namedtype.NamedType('exponent2', univ.Integer()),
-        namedtype.NamedType('coefficient', univ.Integer()),
-        namedtype.OptionalNamedType('otherPrimeInfos', OtherPrimeInfos())
+        namedtype.NamedType(
+            "version",
+            univ.Integer(
+                namedValues=namedval.NamedValues(("two-prime", 0), ("multi", 1))
+            ),
+        ),
+        namedtype.NamedType("modulus", univ.Integer()),
+        namedtype.NamedType("publicExponent", univ.Integer()),
+        namedtype.NamedType("privateExponent", univ.Integer()),
+        namedtype.NamedType("prime1", univ.Integer()),
+        namedtype.NamedType("prime2", univ.Integer()),
+        namedtype.NamedType("exponent1", univ.Integer()),
+        namedtype.NamedType("exponent2", univ.Integer()),
+        namedtype.NamedType("coefficient", univ.Integer()),
+        namedtype.OptionalNamedType("otherPrimeInfos", OtherPrimeInfos()),
     )

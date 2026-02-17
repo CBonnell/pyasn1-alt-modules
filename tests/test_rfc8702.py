@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -36,7 +36,7 @@ BQcGHzAKBggrBgEFBQcGIDAKBggrBgEFBQcGIQ==
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
+
         oid_list = (
             rfc8702.id_shake128,
             rfc8702.id_shake256,
@@ -47,7 +47,7 @@ BQcGHzAKBggrBgEFBQcGIDAKBggrBgEFBQcGIQ==
         )
 
         for algid in asn1Object:
-            self.assertIn(algid['algorithm'], oid_list)
+            self.assertIn(algid["algorithm"], oid_list)
 
 
 class AuthenticatedDataTestCase(unittest.TestCase):
@@ -83,45 +83,47 @@ DQEJNDEmMCQwCwYJYIZIAWUDBAILohUGCWCGSAFlAwQCEzAIBAZweWFzbjEEIBxm
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        self.assertEqual(rfc5652.id_ct_authData, asn1Object['contentType'])
+
+        self.assertEqual(rfc5652.id_ct_authData, asn1Object["contentType"])
         ad, rest = der_decoder(
-            asn1Object['content'], asn1Spec=rfc5652.AuthenticatedData())
+            asn1Object["content"], asn1Spec=rfc5652.AuthenticatedData()
+        )
 
         self.assertFalse(rest)
         self.assertTrue(ad.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ad))
+        self.assertEqual(asn1Object["content"], der_encoder(ad))
 
-        self.assertEqual(
-            rfc8702.id_shake128, ad['digestAlgorithm']['algorithm'])
+        self.assertEqual(rfc8702.id_shake128, ad["digestAlgorithm"]["algorithm"])
 
-        ad_mac = ad['macAlgorithm']
-        self.assertEqual(
-            rfc8702.id_KMACWithSHAKE128, ad_mac['algorithm'])
+        ad_mac = ad["macAlgorithm"]
+        self.assertEqual(rfc8702.id_KMACWithSHAKE128, ad_mac["algorithm"])
 
-        algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-        kmac128_p, rest = der_decoder(ad_mac['parameters'],
-            asn1Spec=algorithmIdentifierMap[ad_mac['algorithm']])
+        algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
+        kmac128_p, rest = der_decoder(
+            ad_mac["parameters"], asn1Spec=algorithmIdentifierMap[ad_mac["algorithm"]]
+        )
         self.assertFalse(rest)
         self.assertTrue(kmac128_p.prettyPrint())
-        self.assertEqual(ad_mac['parameters'], der_encoder(kmac128_p))
-        
-        self.assertEqual(
-            univ.OctetString("pyasn1"), kmac128_p['customizationString'])
+        self.assertEqual(ad_mac["parameters"], der_encoder(kmac128_p))
+
+        self.assertEqual(univ.OctetString("pyasn1"), kmac128_p["customizationString"])
 
         found_kmac128_params = False
-        for attr in ad['authAttrs']:
-            if attr['attrType'] == rfc6211.id_aa_cmsAlgorithmProtect:
-                av, rest = der_decoder(attr['attrValues'][0],
-                    asn1Spec=rfc6211.CMSAlgorithmProtection())
+        for attr in ad["authAttrs"]:
+            if attr["attrType"] == rfc6211.id_aa_cmsAlgorithmProtect:
+                av, rest = der_decoder(
+                    attr["attrValues"][0], asn1Spec=rfc6211.CMSAlgorithmProtection()
+                )
                 self.assertFalse(rest)
                 self.assertTrue(av.prettyPrint())
-                self.assertEqual(attr['attrValues'][0], der_encoder(av))
-        
+                self.assertEqual(attr["attrValues"][0], der_encoder(av))
+
                 self.assertEqual(
-                    rfc8702.id_shake128, av['digestAlgorithm']['algorithm'])
+                    rfc8702.id_shake128, av["digestAlgorithm"]["algorithm"]
+                )
                 self.assertEqual(
-                    rfc8702.id_KMACWithSHAKE128, av['macAlgorithm']['algorithm'])
+                    rfc8702.id_KMACWithSHAKE128, av["macAlgorithm"]["algorithm"]
+                )
                 found_kmac128_params = True
 
         self.assertTrue(found_kmac128_params)
@@ -129,7 +131,7 @@ DQEJNDEmMCQwCwYJYIZIAWUDBAILohUGCWCGSAFlAwQCEzAIBAZweWFzbjEEIBxm
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     result = unittest.TextTestRunner(verbosity=2).run(suite)

@@ -2,7 +2,7 @@
 #
 # Created by Russ Housley
 #
-# Copyright (c) 2024-2025, Vigil Security, LLC
+# Copyright (c) 2024-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # HSS/LMS Hash-based Signature Algorithm for CMS
@@ -12,13 +12,11 @@
 
 from pyasn1_alt_modules import rfc8708
 
-
 # Object Identifiers
 
 id_alg_hss_lms_hashsig = rfc8708.id_alg_hss_lms_hashsig
 
 id_alg_mts_hashsig = id_alg_hss_lms_hashsig
-
 
 # Signature Algorithm Identifier
 

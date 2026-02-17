@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Storing Validation Parameters in PKCS#8
@@ -19,25 +19,23 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import opentypemap
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
-
-id_attr_validation_parameters = univ.ObjectIdentifier('1.3.6.1.4.1.2312.18.8.1')
+id_attr_validation_parameters = univ.ObjectIdentifier("1.3.6.1.4.1.2312.18.8.1")
 
 
 class ValidationParams(univ.Sequence):
     pass
 
+
 ValidationParams.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('hashAlg', univ.ObjectIdentifier()),
-    namedtype.NamedType('seed', univ.OctetString())
+    namedtype.NamedType("hashAlg", univ.ObjectIdentifier()),
+    namedtype.NamedType("seed", univ.OctetString()),
 )
 
-
 at_validation_parameters = rfc5652.Attribute()
-at_validation_parameters['attrType'] = id_attr_validation_parameters
-at_validation_parameters['attrValues'][0] = ValidationParams()
-
+at_validation_parameters["attrType"] = id_attr_validation_parameters
+at_validation_parameters["attrValues"][0] = ValidationParams()
 
 # Update the CMS Attributes Map
 

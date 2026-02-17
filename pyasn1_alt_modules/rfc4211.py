@@ -8,7 +8,7 @@
 #   for AttributeTypeAndValue.
 #
 # Copyright (c) 2005-2020, Ilya Etingof <etingof@gmail.com>
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Internet X.509 Public Key Infrastructure Certificate Request
@@ -29,9 +29,9 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import opentypemap
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
-MAX = float('inf')
+MAX = float("inf")
 
 
 def _buildOid(*components):
@@ -57,9 +57,15 @@ class SinglePubInfo(univ.Sequence):
 
 
 SinglePubInfo.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('pubMethod', univ.Integer(
-        namedValues=namedval.NamedValues(('dontCare', 0), ('x500', 1), ('web', 2), ('ldap', 3)))),
-    namedtype.OptionalNamedType('pubLocation', rfc5280.GeneralName())
+    namedtype.NamedType(
+        "pubMethod",
+        univ.Integer(
+            namedValues=namedval.NamedValues(
+                ("dontCare", 0), ("x500", 1), ("web", 2), ("ldap", 3)
+            )
+        ),
+    ),
+    namedtype.OptionalNamedType("pubLocation", rfc5280.GeneralName()),
 )
 
 
@@ -72,8 +78,8 @@ class PKMACValue(univ.Sequence):
 
 
 PKMACValue.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('algId', rfc5280.AlgorithmIdentifier()),
-    namedtype.NamedType('value', univ.BitString())
+    namedtype.NamedType("algId", rfc5280.AlgorithmIdentifier()),
+    namedtype.NamedType("value", univ.BitString()),
 )
 
 
@@ -83,18 +89,22 @@ class POPOSigningKeyInput(univ.Sequence):
 
 POPOSigningKeyInput.componentType = namedtype.NamedTypes(
     namedtype.NamedType(
-        'authInfo', univ.Choice(
+        "authInfo",
+        univ.Choice(
             componentType=namedtype.NamedTypes(
                 namedtype.NamedType(
-                    'sender', rfc5280.GeneralName().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))
+                    "sender",
+                    rfc5280.GeneralName().subtype(
+                        implicitTag=tag.Tag(
+                            tag.tagClassContext, tag.tagFormatConstructed, 0
+                        )
+                    ),
                 ),
-                namedtype.NamedType(
-                    'publicKeyMAC', PKMACValue()
-                )
+                namedtype.NamedType("publicKeyMAC", PKMACValue()),
             )
-        )
+        ),
     ),
-    namedtype.NamedType('publicKey', rfc5280.SubjectPublicKeyInfo())
+    namedtype.NamedType("publicKey", rfc5280.SubjectPublicKeyInfo()),
 )
 
 
@@ -103,10 +113,14 @@ class POPOSigningKey(univ.Sequence):
 
 
 POPOSigningKey.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('poposkInput', POPOSigningKeyInput().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))),
-    namedtype.NamedType('algorithmIdentifier', rfc5280.AlgorithmIdentifier()),
-    namedtype.NamedType('signature', univ.BitString())
+    namedtype.OptionalNamedType(
+        "poposkInput",
+        POPOSigningKeyInput().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+        ),
+    ),
+    namedtype.NamedType("algorithmIdentifier", rfc5280.AlgorithmIdentifier()),
+    namedtype.NamedType("signature", univ.BitString()),
 )
 
 
@@ -122,11 +136,15 @@ class PrivateKeyInfo(univ.Sequence):
 
 
 PrivateKeyInfo.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('version', univ.Integer()),
-    namedtype.NamedType('privateKeyAlgorithm', rfc5280.AlgorithmIdentifier()),
-    namedtype.NamedType('privateKey', univ.OctetString()),
-    namedtype.OptionalNamedType('attributes',
-                                Attributes().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)))
+    namedtype.NamedType("version", univ.Integer()),
+    namedtype.NamedType("privateKeyAlgorithm", rfc5280.AlgorithmIdentifier()),
+    namedtype.NamedType("privateKey", univ.OctetString()),
+    namedtype.OptionalNamedType(
+        "attributes",
+        Attributes().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
 )
 
 
@@ -135,17 +153,37 @@ class EncryptedValue(univ.Sequence):
 
 
 EncryptedValue.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('intendedAlg', rfc5280.AlgorithmIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-    namedtype.OptionalNamedType('symmAlg', rfc5280.AlgorithmIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))),
-    namedtype.OptionalNamedType('encSymmKey', univ.BitString().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2))),
-    namedtype.OptionalNamedType('keyAlg', rfc5280.AlgorithmIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3))),
-    namedtype.OptionalNamedType('valueHint', univ.OctetString().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4))),
-    namedtype.NamedType('encValue', univ.BitString())
+    namedtype.OptionalNamedType(
+        "intendedAlg",
+        rfc5280.AlgorithmIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "symmAlg",
+        rfc5280.AlgorithmIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "encSymmKey",
+        univ.BitString().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "keyAlg",
+        rfc5280.AlgorithmIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "valueHint",
+        univ.OctetString().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+        ),
+    ),
+    namedtype.NamedType("encValue", univ.BitString()),
 )
 
 
@@ -154,9 +192,13 @@ class EncryptedKey(univ.Choice):
 
 
 EncryptedKey.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('encryptedValue', EncryptedValue()),
-    namedtype.NamedType('envelopedData', rfc5652.EnvelopedData().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)))
+    namedtype.NamedType("encryptedValue", EncryptedValue()),
+    namedtype.NamedType(
+        "envelopedData",
+        rfc5652.EnvelopedData().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
 )
 
 
@@ -169,12 +211,24 @@ class PKIArchiveOptions(univ.Choice):
 
 
 PKIArchiveOptions.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('encryptedPrivKey',
-                        EncryptedKey().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))),
-    namedtype.NamedType('keyGenParameters',
-                        KeyGenParameters().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))),
-    namedtype.NamedType('archiveRemGenPrivKey',
-                        univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)))
+    namedtype.NamedType(
+        "encryptedPrivKey",
+        EncryptedKey().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+        ),
+    ),
+    namedtype.NamedType(
+        "keyGenParameters",
+        KeyGenParameters().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+    namedtype.NamedType(
+        "archiveRemGenPrivKey",
+        univ.Boolean().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+        ),
+    ),
 )
 
 id_regCtrl_authenticator = _buildOid(id_regCtrl, 2)
@@ -197,8 +251,7 @@ class SubsequentMessage(univ.Integer):
 
 
 SubsequentMessage.namedValues = namedval.NamedValues(
-    ('encrCert', 0),
-    ('challengeResp', 1)
+    ("encrCert", 0), ("challengeResp", 1)
 )
 
 
@@ -207,9 +260,10 @@ class AttributeTypeAndValue(univ.Sequence):
 
 
 AttributeTypeAndValue.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('type', univ.ObjectIdentifier()),
-    namedtype.NamedType('value', univ.Any(),
-        openType=opentype.OpenType('type', cmsAttributesMap))
+    namedtype.NamedType("type", univ.ObjectIdentifier()),
+    namedtype.NamedType(
+        "value", univ.Any(), openType=opentype.OpenType("type", cmsAttributesMap)
+    ),
 )
 
 
@@ -218,16 +272,36 @@ class POPOPrivKey(univ.Choice):
 
 
 POPOPrivKey.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('thisMessage',
-                        univ.BitString().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-    namedtype.NamedType('subsequentMessage',
-                        SubsequentMessage().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))),
-    namedtype.NamedType('dhMAC',
-                        univ.BitString().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2))),
-    namedtype.NamedType('agreeMAC',
-                        PKMACValue().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3))),
-    namedtype.NamedType('encryptedKey', rfc5652.EnvelopedData().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)))
+    namedtype.NamedType(
+        "thisMessage",
+        univ.BitString().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
+    namedtype.NamedType(
+        "subsequentMessage",
+        SubsequentMessage().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+    namedtype.NamedType(
+        "dhMAC",
+        univ.BitString().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+        ),
+    ),
+    namedtype.NamedType(
+        "agreeMAC",
+        PKMACValue().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)
+        ),
+    ),
+    namedtype.NamedType(
+        "encryptedKey",
+        rfc5652.EnvelopedData().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+        ),
+    ),
 )
 
 
@@ -236,14 +310,30 @@ class ProofOfPossession(univ.Choice):
 
 
 ProofOfPossession.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('raVerified',
-                        univ.Null().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-    namedtype.NamedType('signature', POPOSigningKey().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1))),
-    namedtype.NamedType('keyEncipherment',
-                        POPOPrivKey().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 2))),
-    namedtype.NamedType('keyAgreement',
-                        POPOPrivKey().subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)))
+    namedtype.NamedType(
+        "raVerified",
+        univ.Null().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
+    namedtype.NamedType(
+        "signature",
+        POPOSigningKey().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+        ),
+    ),
+    namedtype.NamedType(
+        "keyEncipherment",
+        POPOPrivKey().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 2)
+        ),
+    ),
+    namedtype.NamedType(
+        "keyAgreement",
+        POPOPrivKey().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)
+        ),
+    ),
 )
 
 
@@ -252,10 +342,18 @@ class OptionalValidity(univ.Sequence):
 
 
 OptionalValidity.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('notBefore', rfc5280.Time().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))),
-    namedtype.OptionalNamedType('notAfter', rfc5280.Time().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)))
+    namedtype.OptionalNamedType(
+        "notBefore",
+        rfc5280.Time().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "notAfter",
+        rfc5280.Time().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+        ),
+    ),
 )
 
 
@@ -264,26 +362,66 @@ class CertTemplate(univ.Sequence):
 
 
 CertTemplate.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('version', rfc5280.Version().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-    namedtype.OptionalNamedType('serialNumber', univ.Integer().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))),
-    namedtype.OptionalNamedType('signingAlg', rfc5280.AlgorithmIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2))),
-    namedtype.OptionalNamedType('issuer', rfc5280.Name().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3))),
-    namedtype.OptionalNamedType('validity', OptionalValidity().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 4))),
-    namedtype.OptionalNamedType('subject', rfc5280.Name().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 5))),
-    namedtype.OptionalNamedType('publicKey', rfc5280.SubjectPublicKeyInfo().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6))),
-    namedtype.OptionalNamedType('issuerUID', rfc5280.UniqueIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7))),
-    namedtype.OptionalNamedType('subjectUID', rfc5280.UniqueIdentifier().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 8))),
-    namedtype.OptionalNamedType('extensions', rfc5280.Extensions().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 9)))
+    namedtype.OptionalNamedType(
+        "version",
+        rfc5280.Version().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "serialNumber",
+        univ.Integer().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "signingAlg",
+        rfc5280.AlgorithmIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "issuer",
+        rfc5280.Name().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "validity",
+        OptionalValidity().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 4)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "subject",
+        rfc5280.Name().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 5)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "publicKey",
+        rfc5280.SubjectPublicKeyInfo().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "issuerUID",
+        rfc5280.UniqueIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "subjectUID",
+        rfc5280.UniqueIdentifier().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 8)
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "extensions",
+        rfc5280.Extensions().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 9)
+        ),
+    ),
 )
 
 
@@ -300,9 +438,9 @@ class CertRequest(univ.Sequence):
 
 
 CertRequest.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('certReqId', univ.Integer()),
-    namedtype.NamedType('certTemplate', CertTemplate()),
-    namedtype.OptionalNamedType('controls', Controls())
+    namedtype.NamedType("certReqId", univ.Integer()),
+    namedtype.NamedType("certTemplate", CertTemplate()),
+    namedtype.OptionalNamedType("controls", Controls()),
 )
 
 
@@ -311,9 +449,11 @@ class CertReqMsg(univ.Sequence):
 
 
 CertReqMsg.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('certReq', CertRequest()),
-    namedtype.OptionalNamedType('popo', ProofOfPossession()),
-    namedtype.OptionalNamedType('regInfo', univ.SequenceOf(componentType=AttributeTypeAndValue()))
+    namedtype.NamedType("certReq", CertRequest()),
+    namedtype.OptionalNamedType("popo", ProofOfPossession()),
+    namedtype.OptionalNamedType(
+        "regInfo", univ.SequenceOf(componentType=AttributeTypeAndValue())
+    ),
 )
 
 
@@ -337,8 +477,8 @@ class CertId(univ.Sequence):
 
 
 CertId.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('issuer', rfc5280.GeneralName()),
-    namedtype.NamedType('serialNumber', univ.Integer())
+    namedtype.NamedType("issuer", rfc5280.GeneralName()),
+    namedtype.NamedType("serialNumber", univ.Integer()),
 )
 
 
@@ -351,9 +491,15 @@ class PKIPublicationInfo(univ.Sequence):
 
 
 PKIPublicationInfo.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('action',
-                        univ.Integer(namedValues=namedval.NamedValues(('dontPublish', 0), ('pleasePublish', 1)))),
-    namedtype.OptionalNamedType('pubInfos', univ.SequenceOf(componentType=SinglePubInfo()))
+    namedtype.NamedType(
+        "action",
+        univ.Integer(
+            namedValues=namedval.NamedValues(("dontPublish", 0), ("pleasePublish", 1))
+        ),
+    ),
+    namedtype.OptionalNamedType(
+        "pubInfos", univ.SequenceOf(componentType=SinglePubInfo())
+    ),
 )
 
 
@@ -362,15 +508,16 @@ class EncKeyWithID(univ.Sequence):
 
 
 EncKeyWithID.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('privateKey', PrivateKeyInfo()),
+    namedtype.NamedType("privateKey", PrivateKeyInfo()),
     namedtype.OptionalNamedType(
-        'identifier', univ.Choice(
+        "identifier",
+        univ.Choice(
             componentType=namedtype.NamedTypes(
-                namedtype.NamedType('string', char.UTF8String()),
-                namedtype.NamedType('generalName', rfc5280.GeneralName())
+                namedtype.NamedType("string", char.UTF8String()),
+                namedtype.NamedType("generalName", rfc5280.GeneralName()),
             )
-        )
-    )
+        ),
+    ),
 )
 
 id_regCtrl_protocolEncrKey = _buildOid(id_regCtrl, 6)
@@ -385,10 +532,10 @@ class PBMParameter(univ.Sequence):
 
 
 PBMParameter.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('salt', univ.OctetString()),
-    namedtype.NamedType('owf', rfc5280.AlgorithmIdentifier()),
-    namedtype.NamedType('iterationCount', univ.Integer()),
-    namedtype.NamedType('mac', rfc5280.AlgorithmIdentifier())
+    namedtype.NamedType("salt", univ.OctetString()),
+    namedtype.NamedType("owf", rfc5280.AlgorithmIdentifier()),
+    namedtype.NamedType("iterationCount", univ.Integer()),
+    namedtype.NamedType("mac", rfc5280.AlgorithmIdentifier()),
 )
 
 id_regCtrl_regToken = _buildOid(id_regCtrl, 1)

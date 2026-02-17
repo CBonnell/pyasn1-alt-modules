@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -39,39 +39,37 @@ hvcNAQEPBQAwDQYJKoZIhvcNAQEQBQA=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+        algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
         for cap in asn1Object:
-            self.assertIn(cap['algorithm'], algorithmIdentifierMap)
+            self.assertIn(cap["algorithm"], algorithmIdentifierMap)
 
-            if cap['parameters'].hasValue():
-                p, rest = der_decoder(cap['parameters'],
-                    asn1Spec=algorithmIdentifierMap[cap['algorithm']])
+            if cap["parameters"].hasValue():
+                p, rest = der_decoder(
+                    cap["parameters"], asn1Spec=algorithmIdentifierMap[cap["algorithm"]]
+                )
                 self.assertFalse(rest)
                 if not p == univ.Null(""):
                     self.assertTrue(p.prettyPrint())
-                self.assertEqual(cap['parameters'], der_encoder(p))
+                self.assertEqual(cap["parameters"], der_encoder(p))
 
-                if cap['algorithm'] == rfc8017.id_RSAES_OAEP:
-                    self.assertEqual(
-                        rfc8017.id_sha384, p['hashFunc']['algorithm'])
-                    self.assertEqual(
-                        rfc8017.id_mgf1, p['maskGenFunc']['algorithm'])
+                if cap["algorithm"] == rfc8017.id_RSAES_OAEP:
+                    self.assertEqual(rfc8017.id_sha384, p["hashFunc"]["algorithm"])
+                    self.assertEqual(rfc8017.id_mgf1, p["maskGenFunc"]["algorithm"])
 
     def OpenTypesCodec(self):
         substrate = pem.readBase64fromText(self.smime_capabilities_pem_text)
-        asn1Object, rest = der_decoder(substrate, 
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         for cap in asn1Object:
-            if cap['algorithm'] == rfc8017.id_RSAES_OAEP:
-                p = cap['parameters']
-                self.assertEqual(
-                    rfc8017.id_sha384, p['hashFunc']['algorithm'])
-                self.assertEqual(
-                    rfc8017.id_mgf1, p['maskGenFunc']['algorithm'])
+            if cap["algorithm"] == rfc8017.id_RSAES_OAEP:
+                p = cap["parameters"]
+                self.assertEqual(rfc8017.id_sha384, p["hashFunc"]["algorithm"])
+                self.assertEqual(rfc8017.id_mgf1, p["maskGenFunc"]["algorithm"])
 
 
 class MultiprimeRSAPrivateKeyTestCase(unittest.TestCase):
@@ -118,6 +116,6 @@ EeEs9dusHakg1ERXAg4Vo1YowPW8kuVbZ9faxeVrmuER5NcCuZzS5X/obGUw
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

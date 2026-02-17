@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -42,35 +42,33 @@ sCcfwCCC/m01jAM1KuSua1QLeCQjMDwGCSqGSIb3DQEHATAdBglghkgBZQMEAQIEEEgMyv
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(rfc5652.id_envelopedData, asn1Object['contentType'])
+        self.assertEqual(rfc5652.id_envelopedData, asn1Object["contentType"])
 
-        ed, rest = der_decoder(asn1Object['content'],
-            asn1Spec=rfc5652.EnvelopedData())
+        ed, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.EnvelopedData())
         self.assertFalse(rest)
         self.assertTrue(ed.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ed))
-        self.assertEqual(3, ed['version'])
+        self.assertEqual(asn1Object["content"], der_encoder(ed))
+        self.assertEqual(3, ed["version"])
 
-        ori = ed['recipientInfos'][0]['ori']
-        self.assertEqual(rfc9629.id_ori_kem, ori['oriType'])
-        kemri, rest = der_decoder(ori['oriValue'],
-            asn1Spec=rfc9629.KEMRecipientInfo())
+        ori = ed["recipientInfos"][0]["ori"]
+        self.assertEqual(rfc9629.id_ori_kem, ori["oriType"])
+        kemri, rest = der_decoder(ori["oriValue"], asn1Spec=rfc9629.KEMRecipientInfo())
         self.assertFalse(rest)
         self.assertTrue(kemri.prettyPrint())
-        self.assertEqual(ori['oriValue'], der_encoder(kemri))
-        self.assertEqual(0, kemri['version'])
-        self.assertEqual(16, kemri['kekLength'])
+        self.assertEqual(ori["oriValue"], der_encoder(kemri))
+        self.assertEqual(0, kemri["version"])
+        self.assertEqual(16, kemri["kekLength"])
 
 
 class ORIKEMRecipientInfoTestCase(unittest.TestCase):
 
     def testORIOpenTypeMap(self):
-        otherRecipientInfoMap = opentypemap.get('otherRecipientInfoMap')
+        otherRecipientInfoMap = opentypemap.get("otherRecipientInfoMap")
         self.assertIn(rfc9629.id_ori_kem, otherRecipientInfoMap)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

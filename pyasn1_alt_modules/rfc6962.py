@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Certificate Transparency
@@ -17,24 +17,20 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
 
 class SignedCertificateTimestampList(univ.OctetString):
     pass
 
 
-id_ce_embeddedSCT = univ.ObjectIdentifier('1.3.6.1.4.1.11129.2.4.2')
+id_ce_embeddedSCT = univ.ObjectIdentifier("1.3.6.1.4.1.11129.2.4.2")
 
+id_ce_criticalPoison = univ.ObjectIdentifier("1.3.6.1.4.1.11129.2.4.3")
 
-id_ce_criticalPoison = univ.ObjectIdentifier('1.3.6.1.4.1.11129.2.4.3')
+id_kp_precertificateSigning = univ.ObjectIdentifier("1.3.6.1.4.1.11129.2.4.4")
 
-
-id_kp_precertificateSigning = univ.ObjectIdentifier('1.3.6.1.4.1.11129.2.4.4')
-
-
-id_pkix_ocsp_SCT = univ.ObjectIdentifier('1.3.6.1.4.1.11129.2.4.5')
-
+id_pkix_ocsp_SCT = univ.ObjectIdentifier("1.3.6.1.4.1.11129.2.4.5")
 
 # Update the Certificate Extension Map
 #

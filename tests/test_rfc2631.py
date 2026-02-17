@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -30,12 +30,12 @@ class OtherInfoTestCase(unittest.TestCase):
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        hex1 = univ.OctetString(hexValue='00000001')
-        self.assertEqual(hex1, asn1Object['keyInfo']['counter'])
+        hex1 = univ.OctetString(hexValue="00000001")
+        self.assertEqual(hex1, asn1Object["keyInfo"]["counter"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

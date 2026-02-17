@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -23,7 +23,7 @@ class EAITestCase(unittest.TestCase):
         self.asn1Spec = rfc5280.GeneralName()
 
     def testDerCodec(self):
-        otherNamesMap = opentypemap.get('otherNamesMap')
+        otherNamesMap = opentypemap.get("otherNamesMap")
 
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
@@ -31,35 +31,40 @@ class EAITestCase(unittest.TestCase):
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertIn(asn1Object['otherName']['type-id'], otherNamesMap)
-        self.assertEqual(rfc8398.id_on_SmtpUTF8Mailbox,
-                         asn1Object['otherName']['type-id'])
+        self.assertIn(asn1Object["otherName"]["type-id"], otherNamesMap)
+        self.assertEqual(
+            rfc8398.id_on_SmtpUTF8Mailbox, asn1Object["otherName"]["type-id"]
+        )
 
-        eai, rest = der_decoder(asn1Object['otherName']['value'],
-            asn1Spec=otherNamesMap[asn1Object['otherName']['type-id']])
+        eai, rest = der_decoder(
+            asn1Object["otherName"]["value"],
+            asn1Spec=otherNamesMap[asn1Object["otherName"]["type-id"]],
+        )
         self.assertFalse(rest)
         self.assertTrue(eai.prettyPrint())
-        self.assertEqual(asn1Object['otherName']['value'], der_encoder(eai))
+        self.assertEqual(asn1Object["otherName"]["value"], der_encoder(eai))
 
-        self.assertEqual(u'\u8001', eai[0])
-        self.assertEqual(u'\u5E2B', eai[1])
+        self.assertEqual("\u8001", eai[0])
+        self.assertEqual("\u5e2b", eai[1])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc8398.id_on_SmtpUTF8Mailbox,
-                         asn1Object['otherName']['type-id'])
-        self.assertEqual(u'\u8001', asn1Object['otherName']['value'][0])
-        self.assertEqual(u'\u5E2B', asn1Object['otherName']['value'][1])
+        self.assertEqual(
+            rfc8398.id_on_SmtpUTF8Mailbox, asn1Object["otherName"]["type-id"]
+        )
+        self.assertEqual("\u8001", asn1Object["otherName"]["value"][0])
+        self.assertEqual("\u5e2b", asn1Object["otherName"]["value"][1])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

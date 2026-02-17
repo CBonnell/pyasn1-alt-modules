@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -51,10 +51,11 @@ voNP0ODFhhlpFo6lwVHd8Gu+6hShC2PKdAfs4QFDS9ZKgQeZ
 
         count = 0
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_extKeyUsage:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_extKeyUsage:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'], asn1Spec=rfc5280.ExtKeyUsageSyntax())
+                    extn["extnValue"], asn1Spec=rfc5280.ExtKeyUsageSyntax()
+                )
 
                 for oid in extnValue:
                     if oid in ssh_eku_oids:
@@ -65,6 +66,6 @@ voNP0ODFhhlpFo6lwVHd8Gu+6hShC2PKdAfs4QFDS9ZKgQeZ
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

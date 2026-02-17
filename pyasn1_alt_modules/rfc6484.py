@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # RPKI Certificate Policy Identifier
@@ -14,4 +14,4 @@
 
 from pyasn1.type import univ
 
-id_cp_ipAddr_asNumber = univ.ObjectIdentifier('1.3.6.1.5.5.7.14.2')
+id_cp_ipAddr_asNumber = univ.ObjectIdentifier("1.3.6.1.5.5.7.14.2")

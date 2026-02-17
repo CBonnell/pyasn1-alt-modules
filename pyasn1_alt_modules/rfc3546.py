@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # PkiPath as used in TLS Extensions
@@ -16,8 +16,8 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import rfc5280
 
-
 # PkiPath ::= SEQUENCE OF Certificate
+
 
 class PkiPath(univ.SequenceOf):
     componentType = rfc5280.Certificate()

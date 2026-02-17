@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -45,10 +45,12 @@ C9XZboSDJ3ucsf6MGikdqYiO7sPkhBqr1u5YVce01dDCioQwT1xIjm+/bNuPp/Sp
     def testDerCodec(self):
         # The id_ce_criticalPoison is not automatically added to the map.
         # Normally certificates that contiain it are rejected.
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
         self.assertNotIn(rfc6962.id_ce_criticalPoison, certificateExtensionsMap)
 
-        extn_map = { rfc6962.id_ce_criticalPoison: univ.Null(""), }
+        extn_map = {
+            rfc6962.id_ce_criticalPoison: univ.Null(""),
+        }
         extn_map.update(certificateExtensionsMap)
 
         substrate = pem.readBase64fromText(self.pem_text)
@@ -59,16 +61,16 @@ C9XZboSDJ3ucsf6MGikdqYiO7sPkhBqr1u5YVce01dDCioQwT1xIjm+/bNuPp/Sp
 
         extn_list = []
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
-            ev, rest = der_decoder(extn['extnValue'],
-                asn1Spec=extn_map[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
+            ev, rest = der_decoder(extn["extnValue"], asn1Spec=extn_map[extn["extnID"]])
             self.assertFalse(rest)
             if not ev == univ.Null(""):
                 self.assertTrue(ev.prettyPrint())
-            self.assertEqual(extn['extnValue'], der_encoder(ev))
+            self.assertEqual(extn["extnValue"], der_encoder(ev))
 
         self.assertIn(rfc6962.id_ce_criticalPoison, extn_list)
+
 
 class EmbededSCTCertificateTestCase(unittest.TestCase):
     pem_text = """\
@@ -102,23 +104,24 @@ oR58h8S3foDw6XkDUmjyfKIOFmgErlVvMWmB+Wo5Srer/T4lWsAERRP+dlcMZ5Wr
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
         extn_list = []
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
-            ev, rest = der_decoder(extn['extnValue'],
-                asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
+            ev, rest = der_decoder(
+                extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+            )
             self.assertFalse(rest)
             if not ev == univ.Null(""):
                 self.assertTrue(ev.prettyPrint())
-            self.assertEqual(extn['extnValue'], der_encoder(ev))
+            self.assertEqual(extn["extnValue"], der_encoder(ev))
 
         self.assertIn(rfc6962.id_ce_embeddedSCT, extn_list)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2025, Vigil Security, LLC
+# Copyright (c) 2025-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -48,13 +48,14 @@ lJ0=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_extKeyUsage:
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_extKeyUsage:
                 extnValue, rest = der_decoder(
-                    extn['extnValue'], asn1Spec=rfc5280.ExtKeyUsageSyntax())
+                    extn["extnValue"], asn1Spec=rfc5280.ExtKeyUsageSyntax()
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
                 for eku in extnValue:
                     if eku == rfc9734.id_kp_imUri:
@@ -64,22 +65,25 @@ lJ0=
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc5280.id_ce_extKeyUsage:
-                extnValue, rest = der_decoder(extn['extnValue'],
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc5280.id_ce_extKeyUsage:
+                extnValue, rest = der_decoder(
+                    extn["extnValue"],
                     asn1Spec=rfc5280.ExtKeyUsageSyntax(),
-                    decodeOpenTypes=True)
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(extnValue.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
                 for eku in extnValue:
                     if eku == rfc9734.id_kp_imUri:
@@ -90,6 +94,6 @@ lJ0=
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

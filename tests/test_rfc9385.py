@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -28,9 +28,8 @@ class GostR34102012256OIDTestCase(unittest.TestCase):
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        self.assertEqual(
-            rfc9385.id_tc26_signwithdigest_gost3410_12_256, asn1Object)
+
+        self.assertEqual(rfc9385.id_tc26_signwithdigest_gost3410_12_256, asn1Object)
 
 
 class GostR34102012512OIDTestCase(unittest.TestCase):
@@ -45,13 +44,12 @@ class GostR34102012512OIDTestCase(unittest.TestCase):
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        self.assertEqual(
-            rfc9385.id_tc26_signwithdigest_gost3410_12_512, asn1Object)
+
+        self.assertEqual(rfc9385.id_tc26_signwithdigest_gost3410_12_512, asn1Object)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

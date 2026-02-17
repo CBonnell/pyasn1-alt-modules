@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 
@@ -83,51 +83,57 @@ z10epK+S
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc5652.id_envelopedData, asn1Object['contentType']) 
-        ed, rest = der_decoder(
-            asn1Object['content'], asn1Spec=rfc5652.EnvelopedData())
+        self.assertEqual(rfc5652.id_envelopedData, asn1Object["contentType"])
+        ed, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.EnvelopedData())
         self.assertFalse(rest)
         self.assertTrue(ed.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ed))
+        self.assertEqual(asn1Object["content"], der_encoder(ed))
 
-        kari_kea = ed['recipientInfos'][0]['kari']['keyEncryptionAlgorithm']
-        self.assertEqual(rfc2876.id_kEAKeyEncryptionAlgorithm, kari_kea['algorithm'])
+        kari_kea = ed["recipientInfos"][0]["kari"]["keyEncryptionAlgorithm"]
+        self.assertEqual(rfc2876.id_kEAKeyEncryptionAlgorithm, kari_kea["algorithm"])
         kwa, rest = der_decoder(
-            kari_kea['parameters'], asn1Spec=rfc5280.AlgorithmIdentifier())
+            kari_kea["parameters"], asn1Spec=rfc5280.AlgorithmIdentifier()
+        )
         self.assertFalse(rest)
         self.assertTrue(kwa.prettyPrint())
-        self.assertEqual(kari_kea['parameters'], der_encoder(kwa))
-        self.assertEqual(rfc2876.id_fortezzaWrap80, kwa['algorithm'])
+        self.assertEqual(kari_kea["parameters"], der_encoder(kwa))
+        self.assertEqual(rfc2876.id_fortezzaWrap80, kwa["algorithm"])
 
-        cea = ed['encryptedContentInfo']['contentEncryptionAlgorithm']
-        self.assertEqual(rfc2876.id_fortezzaConfidentialityAlgorithm, cea['algorithm'])
-        param, rest = der_decoder(cea['parameters'], rfc2876.Skipjack_Parm())
+        cea = ed["encryptedContentInfo"]["contentEncryptionAlgorithm"]
+        self.assertEqual(rfc2876.id_fortezzaConfidentialityAlgorithm, cea["algorithm"])
+        param, rest = der_decoder(cea["parameters"], rfc2876.Skipjack_Parm())
         self.assertFalse(rest)
         self.assertTrue(param.prettyPrint())
-        self.assertEqual(cea['parameters'], der_encoder(param))
+        self.assertEqual(cea["parameters"], der_encoder(param))
 
-        iv = univ.OctetString(hexValue='424f4755535f4956')
-        self.assertEqual(iv, param['initialization-vector'])
+        iv = univ.OctetString(hexValue="424f4755535f4956")
+        self.assertEqual(iv, param["initialization-vector"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.env_data_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
-        self.assertIn(asn1Object['contentType'], cmsContentTypesMap)
-        kari_kea = asn1Object['content']['recipientInfos'][0]['kari']['keyEncryptionAlgorithm']
-        self.assertEqual(rfc2876.id_kEAKeyEncryptionAlgorithm, kari_kea['algorithm'])
-        self.assertEqual(rfc2876.id_fortezzaWrap80, kari_kea['parameters']['algorithm'])
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
+        self.assertIn(asn1Object["contentType"], cmsContentTypesMap)
+        kari_kea = asn1Object["content"]["recipientInfos"][0]["kari"][
+            "keyEncryptionAlgorithm"
+        ]
+        self.assertEqual(rfc2876.id_kEAKeyEncryptionAlgorithm, kari_kea["algorithm"])
+        self.assertEqual(rfc2876.id_fortezzaWrap80, kari_kea["parameters"]["algorithm"])
 
-        cea = asn1Object['content']['encryptedContentInfo']['contentEncryptionAlgorithm']
-        self.assertEqual(rfc2876.id_fortezzaConfidentialityAlgorithm, cea['algorithm'])
+        cea = asn1Object["content"]["encryptedContentInfo"][
+            "contentEncryptionAlgorithm"
+        ]
+        self.assertEqual(rfc2876.id_fortezzaConfidentialityAlgorithm, cea["algorithm"])
 
-        iv = univ.OctetString(hexValue='424f4755535f4956')
-        self.assertEqual(iv, cea['parameters']['initialization-vector'])
+        iv = univ.OctetString(hexValue="424f4755535f4956")
+        self.assertEqual(iv, cea["parameters"]["initialization-vector"])
+
 
 class SMIMECapabilitiesTestCase(unittest.TestCase):
     smime_capabilities_pem_text = "\
@@ -143,20 +149,21 @@ MCcwGAYJYIZIAWUCAQEYMAsGCWCGSAFlAgEBFzALBglghkgBZQIBAQQ="
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
+        smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
         found_wrap_alg = False
         for cap in asn1Object:
-            if cap['capabilityID'] in smimeCapabilityMap:
-                if cap['parameters'].hasValue():
+            if cap["capabilityID"] in smimeCapabilityMap:
+                if cap["parameters"].hasValue():
                     param, rest = der_decoder(
-                        cap['parameters'],
-                        asn1Spec=smimeCapabilityMap[cap['capabilityID']])
+                        cap["parameters"],
+                        asn1Spec=smimeCapabilityMap[cap["capabilityID"]],
+                    )
                     self.assertFalse(rest)
                     self.assertTrue(param.prettyPrint())
-                    self.assertEqual(cap['parameters'], der_encoder(param))
+                    self.assertEqual(cap["parameters"], der_encoder(param))
 
-                    if cap['capabilityID'] == rfc2876.id_kEAKeyEncryptionAlgorithm:
-                        self.assertEqual(rfc2876.id_fortezzaWrap80, param['algorithm'])
+                    if cap["capabilityID"] == rfc2876.id_kEAKeyEncryptionAlgorithm:
+                        self.assertEqual(rfc2876.id_fortezzaWrap80, param["algorithm"])
                         found_wrap_alg = True
 
         self.assertTrue(found_wrap_alg)
@@ -164,15 +171,18 @@ MCcwGAYJYIZIAWUCAQEYMAsGCWCGSAFlAgEBFzALBglghkgBZQIBAQQ="
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.smime_capabilities_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_wrap_alg = False
         for cap in asn1Object:
-            if cap['capabilityID'] == rfc2876.id_kEAKeyEncryptionAlgorithm:
-                self.assertEqual(rfc2876.id_fortezzaWrap80, cap['parameters']['algorithm'])
+            if cap["capabilityID"] == rfc2876.id_kEAKeyEncryptionAlgorithm:
+                self.assertEqual(
+                    rfc2876.id_fortezzaWrap80, cap["parameters"]["algorithm"]
+                )
                 found_wrap_alg = True
 
         self.assertTrue(found_wrap_alg)
@@ -180,5 +190,5 @@ MCcwGAYJYIZIAWUCAQEYMAsGCWCGSAFlAgEBFzALBglghkgBZQIBAQQ="
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

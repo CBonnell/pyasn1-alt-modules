@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2024-2025, Vigil Security, LLC
+# Copyright (c) 2024-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -88,42 +88,46 @@ ADAMBggqhkiG9w0CCQUABCB6pW2FOdcCNj87zS64NUXG36K5aXDnFHctIk5Bf4kG
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(3, asn1Object['version'])
+        self.assertEqual(3, asn1Object["version"])
 
-        oid = asn1Object['macData']['mac']['digestAlgorithm']['algorithm']
+        oid = asn1Object["macData"]["mac"]["digestAlgorithm"]["algorithm"]
         self.assertEqual(rfc9579.id_PBMAC1, oid)
 
         params, rest = der_decoder(
-            asn1Object['macData']['mac']['digestAlgorithm']['parameters'],
-            asn1Spec=rfc9579.PBMAC1_params())
+            asn1Object["macData"]["mac"]["digestAlgorithm"]["parameters"],
+            asn1Spec=rfc9579.PBMAC1_params(),
+        )
         self.assertFalse(rest)
         self.assertTrue(params.prettyPrint())
         self.assertEqual(
-            asn1Object['macData']['mac']['digestAlgorithm']['parameters'],
-            der_encoder(params))
+            asn1Object["macData"]["mac"]["digestAlgorithm"]["parameters"],
+            der_encoder(params),
+        )
 
         self.assertEqual(
-            rfc9579.id_hmacWithSHA256,
-            params['messageAuthScheme']['algorithm'])
+            rfc9579.id_hmacWithSHA256, params["messageAuthScheme"]["algorithm"]
+        )
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pfx_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        digest_alg = asn1Object['macData']['mac']['digestAlgorithm']
-        self.assertEqual(rfc9579.id_PBMAC1, digest_alg['algorithm'])
-        self.assertTrue(digest_alg['parameters'].hasValue())
+        digest_alg = asn1Object["macData"]["mac"]["digestAlgorithm"]
+        self.assertEqual(rfc9579.id_PBMAC1, digest_alg["algorithm"])
+        self.assertTrue(digest_alg["parameters"].hasValue())
 
         self.assertEqual(
             rfc9579.id_hmacWithSHA256,
-            digest_alg['parameters']['messageAuthScheme']['algorithm'])
+            digest_alg["parameters"]["messageAuthScheme"]["algorithm"],
+        )
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

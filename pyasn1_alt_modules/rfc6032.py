@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # CMS Encrypted Key Package Content Type
@@ -21,38 +21,47 @@ from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import rfc5083
 from pyasn1_alt_modules import opentypemap
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
-cmsAttributesMap = opentypemap.get('cmsAttributesMap')
-
+cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
 # Content Decryption Key Identifier attribute
 
-id_aa_KP_contentDecryptKeyID = univ.ObjectIdentifier('2.16.840.1.101.2.1.5.66')
+id_aa_KP_contentDecryptKeyID = univ.ObjectIdentifier("2.16.840.1.101.2.1.5.66")
+
 
 class ContentDecryptKeyID(univ.OctetString):
     pass
 
-aa_content_decrypt_key_identifier = rfc5652.Attribute()
-aa_content_decrypt_key_identifier['attrType'] = id_aa_KP_contentDecryptKeyID
-aa_content_decrypt_key_identifier['attrValues'][0] = ContentDecryptKeyID()
 
+aa_content_decrypt_key_identifier = rfc5652.Attribute()
+aa_content_decrypt_key_identifier["attrType"] = id_aa_KP_contentDecryptKeyID
+aa_content_decrypt_key_identifier["attrValues"][0] = ContentDecryptKeyID()
 
 # Encrypted Key Package Content Type
 
-id_ct_KP_encryptedKeyPkg = univ.ObjectIdentifier('2.16.840.1.101.2.1.2.78.2')
+id_ct_KP_encryptedKeyPkg = univ.ObjectIdentifier("2.16.840.1.101.2.1.2.78.2")
+
 
 class EncryptedKeyPackage(univ.Choice):
     pass
 
-EncryptedKeyPackage.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('encrypted', rfc5652.EncryptedData()),
-    namedtype.NamedType('enveloped', rfc5652.EnvelopedData().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
-    namedtype.NamedType('authEnveloped', rfc5083.AuthEnvelopedData().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)))
-)
 
+EncryptedKeyPackage.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("encrypted", rfc5652.EncryptedData()),
+    namedtype.NamedType(
+        "enveloped",
+        rfc5652.EnvelopedData().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
+    namedtype.NamedType(
+        "authEnveloped",
+        rfc5083.AuthEnvelopedData().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+)
 
 # Update the CMS Attributes Map
 
@@ -61,7 +70,6 @@ _cmsAttributesMapUpdate = {
 }
 
 cmsAttributesMap.update(_cmsAttributesMapUpdate)
-
 
 # Update the CMS Content Types Map
 _cmsContentTypesMapUpdate = {

@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Authority Clearance Constraints Certificate Extension
@@ -20,21 +20,20 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5755
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Authority Clearance Constraints Certificate Extension
 
-id_pe_clearanceConstraints = univ.ObjectIdentifier('1.3.6.1.5.5.7.1.21')
+id_pe_clearanceConstraints = univ.ObjectIdentifier("1.3.6.1.5.5.7.1.21")
 
 id_pe_authorityClearanceConstraints = id_pe_clearanceConstraints
 
 
 class AuthorityClearanceConstraints(univ.SequenceOf):
     componentType = rfc5755.Clearance()
-    subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+    subtypeSpec = constraint.ValueSizeConstraint(1, MAX)
 
 
 # Update the Certificate Extensions Map

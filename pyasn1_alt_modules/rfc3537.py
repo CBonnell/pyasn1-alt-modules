@@ -5,7 +5,7 @@
 # Modified by Russ Housley to include the opentypemap manager and
 #   update the S/MIME Capability Map.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Wrapping a Hashed Message Authentication Code (HMAC) key
@@ -20,17 +20,15 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
-smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
-
+smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
 
 # Object Identifiers
 
-id_alg_HMACwith3DESwrap = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.11')
-   
-id_alg_HMACwithAESwrap = univ.ObjectIdentifier('1.2.840.113549.1.9.16.3.12')
+id_alg_HMACwith3DESwrap = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.11")
 
+id_alg_HMACwithAESwrap = univ.ObjectIdentifier("1.2.840.113549.1.9.16.3.12")
 
 # Update the Algorithm Identifiers Map and S/MIME Capability Map
 

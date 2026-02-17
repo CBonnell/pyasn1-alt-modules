@@ -1,3 +1,43 @@
+Revision 0.4.9, released 13-FEB-2026
+------------------------------------
+- Added RFC9935 for Algorithm Identifiers for ML-KEM in Certificates
+- Added RFC9936 for Algorithm Identifiers for ML-KEM in CMS KEMRecipientInfo
+- Corrected problems in rfc9480.py identified by Guiliano Lehmann
+- Corrected problems in rfc9810.py identified by Guiliano Lehmann
+- Added RFC9925 for Unsigned X.509 Certificates
+
+Revision 0.4.8, released 04-FEB-2026
+------------------------------------
+- Update the copyright comment lines for 2026
+- Fix RFC9881 from CBonnell; see https://www.rfc-editor.org/errata/eid8699
+
+Revision 0.4.7, released 22-DEC-2025
+------------------------------------
+- Cleanup setup.cfg and setup.py
+- Added RFC9763 for Related Certificates for Use in Multiple Authentications
+  within a Protocol
+- Add RFC5794 providing the ARIA Encryption Algorithm, which is possible
+  since pyasn1 0.6.0 and later includes support for univ.RelativeOID
+- Add RFC8295 providing Enrollment over Secure Transport (EST) Extensions
+- Add RFC4212 providing Alternative Certificate Formats for the PKIX
+  Certificate Management Protocols
+- Add RFC9802 providing HSS/LMS, XMSS, and XMSS^MT Hash-based Signature
+  Algorithms for X.509
+- Add RFC9810 providing Certificate Management Protocol (CMP)
+- Add RFC9814 providing SLH-DSA Signature Algorithm for the CMS
+- Add RFC9809 providing X.509 Certificate Extended Key Usage (EKU) values
+  for configuration, updates, and safety communication
+- Added RFC9879 for Use of PBMAC1 in the PKCS #12 Syntax, which updates RFC9579
+- Added RFC9881 for Algorithm Identifiers for ML-DSA in Certificates and CRLs
+- Dropped support for EOL Python 3.8, and 3.9; added support for Python 3.14
+- Added RFC9882 for Algorithm Identifiers for ML-DSA in CMS
+- Added RFC9883 for An Attribute for Statement of Possession of a Private Key
+- Updated the link to the pyasn1 project in README.md
+- Correct the URL to the license file in rfc8295.py
+- Add RFC9632 providing CMS Content Type for Geofeed Data (replaces RFC9092)
+- Add RFC9908 providing Clarification of RFC7030 CSR Attributes definition
+- Add RFC9909 providing SLH-DSA Signature Algorithm for Certificates
+
 Revision 0.4.6, released 25-MAR-2025
 ------------------------------------
 - Added RFC9688 for SHA3 One-way Hash Functions in the CMS

@@ -5,7 +5,7 @@
 # Modified by Russ Housley to include the opentypemap manager and
 #   update the S/MIME Capabilities map.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # PKCS #5: Password-Based Cryptography Specification, Version 2.1
@@ -23,11 +23,12 @@ from pyasn1_alt_modules import rfc3565
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
-smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
+smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
 
-MAX = float('inf')
+MAX = float("inf")
+
 
 def _OID(*components):
     output = []
@@ -44,11 +45,9 @@ def _OID(*components):
 
 AES_IV = rfc3565.AES_IV
 
-
 # Import from RFC 5280
 
 AlgorithmIdentifier = rfc5280.AlgorithmIdentifier
-
 
 # Basic object identifiers
 
@@ -68,8 +67,6 @@ encryptionAlgorithm = _OID(rsadsi, 3)
 
 pkcs_5 = _OID(pkcs, 5)
 
-
-
 # HMAC object identifiers
 
 id_hmacWithSHA1 = _OID(digestAlgorithm, 7)
@@ -86,7 +83,6 @@ id_hmacWithSHA512_224 = _OID(digestAlgorithm, 12)
 
 id_hmacWithSHA512_256 = _OID(digestAlgorithm, 13)
 
-
 # PBES1 object identifiers
 
 pbeWithMD2AndDES_CBC = _OID(pkcs_5, 1)
@@ -100,7 +96,6 @@ pbeWithMD5AndRC2_CBC = _OID(pkcs_5, 6)
 pbeWithSHA1AndDES_CBC = _OID(pkcs_5, 10)
 
 pbeWithSHA1AndRC2_CBC = _OID(pkcs_5, 11)
-
 
 # Supporting techniques object identifiers
 
@@ -121,15 +116,18 @@ aes256_CBC_PAD = _OID(aes, 42)
 
 # PBES1
 
+
 class PBEParameter(univ.Sequence):
     pass
 
-PBEParameter.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('salt', univ.OctetString().subtype(
-        subtypeSpec=constraint.ValueSizeConstraint(8, 8))),
-    namedtype.NamedType('iterationCount', univ.Integer())
-)
 
+PBEParameter.componentType = namedtype.NamedTypes(
+    namedtype.NamedType(
+        "salt",
+        univ.OctetString().subtype(subtypeSpec=constraint.ValueSizeConstraint(8, 8)),
+    ),
+    namedtype.NamedType("iterationCount", univ.Integer()),
+)
 
 # PBES2
 
@@ -139,11 +137,11 @@ id_PBES2 = _OID(pkcs_5, 13)
 class PBES2_params(univ.Sequence):
     pass
 
-PBES2_params.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('keyDerivationFunc', AlgorithmIdentifier()),
-    namedtype.NamedType('encryptionScheme', AlgorithmIdentifier())
-)
 
+PBES2_params.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("keyDerivationFunc", AlgorithmIdentifier()),
+    namedtype.NamedType("encryptionScheme", AlgorithmIdentifier()),
+)
 
 # PBMAC1
 
@@ -153,82 +151,107 @@ id_PBMAC1 = _OID(pkcs_5, 14)
 class PBMAC1_params(univ.Sequence):
     pass
 
-PBMAC1_params.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('keyDerivationFunc', AlgorithmIdentifier()),
-    namedtype.NamedType('messageAuthScheme', AlgorithmIdentifier())
-)
 
+PBMAC1_params.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("keyDerivationFunc", AlgorithmIdentifier()),
+    namedtype.NamedType("messageAuthScheme", AlgorithmIdentifier()),
+)
 
 # PBKDF2
 
 id_PBKDF2 = _OID(pkcs_5, 12)
 
-
 algid_hmacWithSHA1 = AlgorithmIdentifier()
-algid_hmacWithSHA1['algorithm'] = id_hmacWithSHA1
-algid_hmacWithSHA1['parameters'] = univ.Null("")
+algid_hmacWithSHA1["algorithm"] = id_hmacWithSHA1
+algid_hmacWithSHA1["parameters"] = univ.Null("")
 
 
 class PBKDF2_params(univ.Sequence):
     pass
 
+
 PBKDF2_params.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('salt', univ.Choice(componentType=namedtype.NamedTypes(
-        namedtype.NamedType('specified', univ.OctetString()),
-        namedtype.NamedType('otherSource', AlgorithmIdentifier())
-    ))),
-    namedtype.NamedType('iterationCount', univ.Integer().subtype(
-        subtypeSpec=constraint.ValueRangeConstraint(1, MAX))),
-    namedtype.OptionalNamedType('keyLength', univ.Integer().subtype(
-        subtypeSpec=constraint.ValueRangeConstraint(1, MAX))),
-    namedtype.DefaultedNamedType('prf', algid_hmacWithSHA1)
+    namedtype.NamedType(
+        "salt",
+        univ.Choice(
+            componentType=namedtype.NamedTypes(
+                namedtype.NamedType("specified", univ.OctetString()),
+                namedtype.NamedType("otherSource", AlgorithmIdentifier()),
+            )
+        ),
+    ),
+    namedtype.NamedType(
+        "iterationCount",
+        univ.Integer().subtype(subtypeSpec=constraint.ValueRangeConstraint(1, MAX)),
+    ),
+    namedtype.OptionalNamedType(
+        "keyLength",
+        univ.Integer().subtype(subtypeSpec=constraint.ValueRangeConstraint(1, MAX)),
+    ),
+    namedtype.DefaultedNamedType("prf", algid_hmacWithSHA1),
 )
 
 
 # RC2 CBC algorithm parameter
 
+
 class RC2_CBC_Parameter(univ.Sequence):
     pass
 
+
 RC2_CBC_Parameter.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('rc2ParameterVersion', univ.Integer()),
-    namedtype.NamedType('iv', univ.OctetString().subtype(
-        subtypeSpec=constraint.ValueSizeConstraint(8, 8)))
+    namedtype.OptionalNamedType("rc2ParameterVersion", univ.Integer()),
+    namedtype.NamedType(
+        "iv",
+        univ.OctetString().subtype(subtypeSpec=constraint.ValueSizeConstraint(8, 8)),
+    ),
 )
 
 
 # RC5 CBC algorithm parameter
 
+
 class RC5_CBC_Parameters(univ.Sequence):
     pass
 
+
 RC5_CBC_Parameters.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('version',
-        univ.Integer(namedValues=namedval.NamedValues(('v1_0', 16))).subtype(
-            subtypeSpec=constraint.SingleValueConstraint(16))),
-    namedtype.NamedType('rounds',
-        univ.Integer().subtype(subtypeSpec=constraint.ValueRangeConstraint(8, 127))),
-    namedtype.NamedType('blockSizeInBits',
-        univ.Integer().subtype(subtypeSpec=constraint.SingleValueConstraint(64, 128))),
-    namedtype.OptionalNamedType('iv', univ.OctetString())
+    namedtype.NamedType(
+        "version",
+        univ.Integer(namedValues=namedval.NamedValues(("v1_0", 16))).subtype(
+            subtypeSpec=constraint.SingleValueConstraint(16)
+        ),
+    ),
+    namedtype.NamedType(
+        "rounds",
+        univ.Integer().subtype(subtypeSpec=constraint.ValueRangeConstraint(8, 127)),
+    ),
+    namedtype.NamedType(
+        "blockSizeInBits",
+        univ.Integer().subtype(subtypeSpec=constraint.SingleValueConstraint(64, 128)),
+    ),
+    namedtype.OptionalNamedType("iv", univ.OctetString()),
 )
 
 
 # Initialization Vector for AES: OCTET STRING (SIZE(16))
 
+
 class AES_IV(univ.OctetString):
     pass
+
 
 AES_IV.subtypeSpec = constraint.ValueSizeConstraint(16, 16)
 
 
 # Initialization Vector for DES: OCTET STRING (SIZE(8))
 
+
 class DES_IV(univ.OctetString):
     pass
 
-DES_IV.subtypeSpec = constraint.ValueSizeConstraint(8, 8)
 
+DES_IV.subtypeSpec = constraint.ValueSizeConstraint(8, 8)
 
 # Update the Algorithm Identifier map
 

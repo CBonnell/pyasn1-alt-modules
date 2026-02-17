@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -17,12 +17,11 @@ from pyasn1_alt_modules import pem
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import rfc9323
 
+
 class BadFileNameTestCase(unittest.TestCase):
     def testRaisesValueConstraintError(self):
-        self.assertRaises(
-            error.ValueConstraintError,
-            rfc9323.PortableFilename, 'abc+'
-        )
+        self.assertRaises(error.ValueConstraintError, rfc9323.PortableFilename, "abc+")
+
 
 class RPKISignedChecklistTestCase(unittest.TestCase):
     pem_text = """\
@@ -66,19 +65,19 @@ lj/4
 
     def testDerCodec(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        
-        layers = { }
+
+        layers = {}
         layers.update(rfc5652.cmsContentTypesMap)
         self.assertIn(rfc9323.id_ct_signedChecklist, layers)
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
         }
 
         layer = rfc5652.id_ct_contentInfo
@@ -93,50 +92,53 @@ lj/4
 
         self.assertEqual(rfc9323.id_ct_signedChecklist, layer)
 
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=rfc9323.RpkiSignedChecklist())
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc9323.RpkiSignedChecklist()
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        filenames = [ ]
-        for fnah in asn1Object['checkList']:
+        filenames = []
+        for fnah in asn1Object["checkList"]:
             count += 1
-            if fnah['fileName'].hasValue():
-                filenames.append(fnah['fileName'])
+            if fnah["fileName"].hasValue():
+                filenames.append(fnah["fileName"])
 
         self.assertEqual(2, count)
-        self.assertIn('b42_ipv6_loa.png', filenames)
+        self.assertIn("b42_ipv6_loa.png", filenames)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
 
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=rfc9323.RpkiSignedChecklist(), decodeOpenTypes=True)
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc9323.RpkiSignedChecklist(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         count = 0
-        filenames = [ ]
-        for fnah in asn1Object['checkList']:
+        filenames = []
+        for fnah in asn1Object["checkList"]:
             count += 1
-            if fnah['fileName'].hasValue():
-                filenames.append(fnah['fileName'])
+            if fnah["fileName"].hasValue():
+                filenames.append(fnah["fileName"])
 
         self.assertEqual(2, count)
-        self.assertIn('b42_ipv6_loa.png', filenames)
+        self.assertIn("b42_ipv6_loa.png", filenames)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

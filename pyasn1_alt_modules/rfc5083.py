@@ -5,7 +5,7 @@
 #   simplify the code for the object identifier assignment.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2018-2025, Vigil Security, LLC
+# Copyright (c) 2018-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 #  Authenticated-Enveloped-Data for the Cryptographic Message Syntax (CMS)
@@ -20,31 +20,43 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import opentypemap
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # CMS Authenticated-Enveloped-Data Content Type
 
-id_ct_authEnvelopedData = univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.23')
+id_ct_authEnvelopedData = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.23")
+
 
 class AuthEnvelopedData(univ.Sequence):
     pass
 
-AuthEnvelopedData.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('version', rfc5652.CMSVersion()),
-    namedtype.OptionalNamedType('originatorInfo', rfc5652.OriginatorInfo().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0))),
-    namedtype.NamedType('recipientInfos', rfc5652.RecipientInfos()),
-    namedtype.NamedType('authEncryptedContentInfo', rfc5652.EncryptedContentInfo()),
-    namedtype.OptionalNamedType('authAttrs', rfc5652.AuthAttributes().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))),
-    namedtype.NamedType('mac', rfc5652.MessageAuthenticationCode()),
-    namedtype.OptionalNamedType('unauthAttrs', rfc5652.UnauthAttributes().subtype(
-        implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)))
-)
 
+AuthEnvelopedData.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("version", rfc5652.CMSVersion()),
+    namedtype.OptionalNamedType(
+        "originatorInfo",
+        rfc5652.OriginatorInfo().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+        ),
+    ),
+    namedtype.NamedType("recipientInfos", rfc5652.RecipientInfos()),
+    namedtype.NamedType("authEncryptedContentInfo", rfc5652.EncryptedContentInfo()),
+    namedtype.OptionalNamedType(
+        "authAttrs",
+        rfc5652.AuthAttributes().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+        ),
+    ),
+    namedtype.NamedType("mac", rfc5652.MessageAuthenticationCode()),
+    namedtype.OptionalNamedType(
+        "unauthAttrs",
+        rfc5652.UnauthAttributes().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+        ),
+    ),
+)
 
 # Update the CMS Content Types Map
 

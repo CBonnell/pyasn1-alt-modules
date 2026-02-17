@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -67,28 +67,28 @@ O8PDTxTfIYwAnBjRBKAqAZ7yX5xHfm58jUXsZJ7Ileq1S7G6Kk=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        assert asn1Object['contentType'] == rfc5652.id_signedData
-        sd, rest = der_decoder(asn1Object['content'],
-            asn1Spec=rfc5652.SignedData())
+        assert asn1Object["contentType"] == rfc5652.id_signedData
+        sd, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.SignedData())
         self.assertFalse(rest)
         self.assertTrue(sd.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(sd))
+        self.assertEqual(asn1Object["content"], der_encoder(sd))
 
         found = False
-        for sa in sd['signerInfos'][0]['signedAttrs']:
-            if sa['attrType'] == rfc5652.id_contentType:
-                 ct, rest = der_decoder(sa['attrValues'][0],
-                     asn1Spec=rfc5652.ContentType())
-                 self.assertFalse(rest)
-                 self.assertTrue(ct.prettyPrint())
-                 self.assertEqual(sa['attrValues'][0], der_encoder(ct))
-                 self.assertEqual(rfc9092.id_ct_geofeedCSVwithCRLF, ct)
-                 found = True
+        for sa in sd["signerInfos"][0]["signedAttrs"]:
+            if sa["attrType"] == rfc5652.id_contentType:
+                ct, rest = der_decoder(
+                    sa["attrValues"][0], asn1Spec=rfc5652.ContentType()
+                )
+                self.assertFalse(rest)
+                self.assertTrue(ct.prettyPrint())
+                self.assertEqual(sa["attrValues"][0], der_encoder(ct))
+                self.assertEqual(rfc9092.id_ct_geofeedCSVwithCRLF, ct)
+                found = True
 
         assert found
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

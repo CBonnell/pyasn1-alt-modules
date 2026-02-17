@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Identifiers for SHA-224
@@ -15,11 +15,9 @@
 
 from pyasn1_alt_modules import rfc5990
 
-
 # Import from RFC 4055
 
 id_sha224 = rfc5990.id_sha224
-
 
 # The Algorithm Identifier map is updated by importing rfc5990.
 # To save looking it up, the map is updated with this entry:

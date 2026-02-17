@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # S/MIME Capabilities Certificate Extension
@@ -16,8 +16,7 @@
 from pyasn1_alt_modules import rfc5751
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
 # Imports from RFC 5751
 
@@ -26,7 +25,6 @@ smimeCapabilities = rfc5751.smimeCapabilities
 SMIMECapabilities = rfc5751.SMIMECapabilities
 
 SMIMECapability = rfc5751.SMIMECapability
-
 
 # Update the Certificate Extensions Map
 

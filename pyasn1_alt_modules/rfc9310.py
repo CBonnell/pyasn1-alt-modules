@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Certificate Extension for 5G Network Function Types
@@ -18,12 +18,13 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-MAX = float('inf')
+MAX = float("inf")
 
 
 # NFTypes Certificate Extension
+
 
 class NFType(char.IA5String):
     subtypeSpec = constraint.ValueSizeConstraint(1, 32)
@@ -35,7 +36,6 @@ class NFTypes(univ.SequenceOf):
 
 
 id_pe_nftype = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 1, 34))
-
 
 # Add to the map of Certificate Extensions
 

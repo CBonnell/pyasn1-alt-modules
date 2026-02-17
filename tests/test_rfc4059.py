@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -41,7 +41,7 @@ SNZvBmsBe5D+PlZZF/XpJ21bf6HPAGkBMMDNPdTdKXk=
         self.asn1Spec = rfc5280.Certificate()
 
     def testDerCodec(self):
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
         self.assertFalse(rest)
@@ -49,15 +49,16 @@ SNZvBmsBe5D+PlZZF/XpJ21bf6HPAGkBMMDNPdTdKXk=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] == rfc4059.id_pe_warranty_extn:
-                self.assertIn(extn['extnID'], certificateExtensionsMap)
-                ev, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc4059.id_pe_warranty_extn:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                ev, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(ev.prettyPrint())
-                self.assertEqual(extn['extnValue'], der_encoder(ev))
-                self.assertEqual(840, ev['wData']['base']['amount']['currency'])
+                self.assertEqual(extn["extnValue"], der_encoder(ev))
+                self.assertEqual(840, ev["wData"]["base"]["amount"]["currency"])
                 found = True
 
         self.assertTrue(found)
@@ -65,6 +66,6 @@ SNZvBmsBe5D+PlZZF/XpJ21bf6HPAGkBMMDNPdTdKXk=
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

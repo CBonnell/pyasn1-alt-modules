@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # GOST R 34.10-2012 Algorithm for IKEv2
@@ -14,9 +14,12 @@
 
 from pyasn1_alt_modules import rfc9215
 
-
 # Imports from RFC 9215
 
-id_tc26_signwithdigest_gost3410_12_256 = rfc9215.id_tc26_signwithdigest_gost3410_2012_256
+id_tc26_signwithdigest_gost3410_12_256 = (
+    rfc9215.id_tc26_signwithdigest_gost3410_2012_256
+)
 
-id_tc26_signwithdigest_gost3410_12_512 = rfc9215.id_tc26_signwithdigest_gost3410_2012_512
+id_tc26_signwithdigest_gost3410_12_512 = (
+    rfc9215.id_tc26_signwithdigest_gost3410_2012_512
+)

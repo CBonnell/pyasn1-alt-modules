@@ -2,8 +2,8 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# 
-# Copyright (c) 2021-2025, Vigil Security, LLC
+#
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -51,15 +51,15 @@ AQUFBxMBohWGE1VSTjpWU1NBUEk6SE9TVE5BTUU=
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
         }
 
         substrate = pem.readBase64fromText(self.cvrequest_pem_text)
@@ -79,18 +79,20 @@ AQUFBxMBohWGE1VSTjpWU1NBUEk6SE9TVE5BTUU=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertIn(rfc5276.id_swb_ers_all, asn1Object['query']['wantBack'])
+        self.assertIn(rfc5276.id_swb_ers_all, asn1Object["query"]["wantBack"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cvrequest_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        wantback = asn1Object['content']['query']['wantBack']
+        wantback = asn1Object["content"]["query"]["wantBack"]
         self.assertIn(rfc5276.id_swb_ers_all, wantback)
+
 
 class SCVPERSCVResponseTestCase(unittest.TestCase):
     cvresponse_pem_text = """\
@@ -426,17 +428,17 @@ pX8NnUZvO0AM2bFoLSbILjWc0Q6/54y3pSifLYUVcEgRzrO8w1I/
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testDerCodec(self):
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
         }
 
         swbList = [
@@ -448,7 +450,7 @@ pX8NnUZvO0AM2bFoLSbILjWc0Q6/54y3pSifLYUVcEgRzrO8w1I/
             rfc5276.id_swb_ers_all,
         ]
 
-        scvpWantBackMap = opentypemap.get('scvpWantBackMap')
+        scvpWantBackMap = opentypemap.get("scvpWantBackMap")
         for swb in swbList:
             self.assertIn(swb, scvpWantBackMap)
 
@@ -469,67 +471,72 @@ pX8NnUZvO0AM2bFoLSbILjWc0Q6/54y3pSifLYUVcEgRzrO8w1I/
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['cvResponseVersion'])
+        self.assertEqual(1, asn1Object["cvResponseVersion"])
 
         found = False
-        for rwb in asn1Object['replyObjects'][0]['replyWantBacks']:
-            if rwb['wb'] in scvpWantBackMap:
-                wbv, rest = der_decoder(rwb['value'], 
-                    asn1Spec=scvpWantBackMap[rwb['wb']])
+        for rwb in asn1Object["replyObjects"][0]["replyWantBacks"]:
+            if rwb["wb"] in scvpWantBackMap:
+                wbv, rest = der_decoder(
+                    rwb["value"], asn1Spec=scvpWantBackMap[rwb["wb"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(wbv.prettyPrint())
-                self.assertEqual(rwb['value'], der_encoder(wbv))
-        
-                if rwb['wb'] == rfc5276.id_swb_ers_all:
+                self.assertEqual(rwb["value"], der_encoder(wbv))
+
+                if rwb["wb"] == rfc5276.id_swb_ers_all:
                     for erwb in wbv:
-                       twb = erwb['targetWantBack']
-                       if twb == rfc5276.id_swb_ers_pkc_cert:
-                           found = True
+                        twb = erwb["targetWantBack"]
+                        if twb == rfc5276.id_swb_ers_pkc_cert:
+                            found = True
 
         self.assertTrue(found)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.cvresponse_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
-        oid = asn1Object['content']['encapContentInfo']['eContentType']
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
+        oid = asn1Object["content"]["encapContentInfo"]["eContentType"]
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         asn1Spec = cmsContentTypesMap[oid]
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(1, asn1Object['cvResponseVersion'])
+        self.assertEqual(1, asn1Object["cvResponseVersion"])
 
         found = False
-        scvpWantBackMap = opentypemap.get('scvpWantBackMap')
-        for rwb in asn1Object['replyObjects'][0]['replyWantBacks']:
-            if rwb['wb'] in scvpWantBackMap:
-                wbv, rest = der_decoder(rwb['value'], 
-                    asn1Spec=scvpWantBackMap[rwb['wb']],
-                    decodeOpenTypes=True)
+        scvpWantBackMap = opentypemap.get("scvpWantBackMap")
+        for rwb in asn1Object["replyObjects"][0]["replyWantBacks"]:
+            if rwb["wb"] in scvpWantBackMap:
+                wbv, rest = der_decoder(
+                    rwb["value"],
+                    asn1Spec=scvpWantBackMap[rwb["wb"]],
+                    decodeOpenTypes=True,
+                )
                 self.assertFalse(rest)
                 self.assertTrue(wbv.prettyPrint())
-                self.assertEqual(rwb['value'], der_encoder(wbv))
-            
-                if rwb['wb'] == rfc5276.id_swb_ers_all:
+                self.assertEqual(rwb["value"], der_encoder(wbv))
+
+                if rwb["wb"] == rfc5276.id_swb_ers_all:
                     for erwb in wbv:
-                       twb = erwb['targetWantBack']
-                       if twb == rfc5276.id_swb_ers_pkc_cert:
-                           found = True
+                        twb = erwb["targetWantBack"]
+                        if twb == rfc5276.id_swb_ers_pkc_cert:
+                            found = True
 
         self.assertTrue(found)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

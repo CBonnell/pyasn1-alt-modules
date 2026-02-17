@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # SEED Encryption Algorithm in CMS
@@ -18,11 +18,9 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import rfc5751
 
+id_seedCBC = univ.ObjectIdentifier("1.2.410.200004.1.4")
 
-id_seedCBC = univ.ObjectIdentifier('1.2.410.200004.1.4')
-
-
-id_npki_app_cmsSeed_wrap = univ.ObjectIdentifier('1.2.410.200004.7.1.1.1')
+id_npki_app_cmsSeed_wrap = univ.ObjectIdentifier("1.2.410.200004.7.1.1.1")
 
 
 class SeedIV(univ.OctetString):
@@ -46,13 +44,11 @@ _algorithmIdentifierMapUpdate = {
 
 rfc5280.algorithmIdentifierMap.update(_algorithmIdentifierMapUpdate)
 
-
 # Update the SMIMECapabilities Attribute map in rfc5751.py
 
 _smimeCapabilityMapUpdate = {
     id_seedCBC: SeedSMimeCapability(),
     id_npki_app_cmsSeed_wrap: SeedSMimeCapability(),
-
 }
 
 rfc5751.smimeCapabilityMap.update(_smimeCapabilityMapUpdate)

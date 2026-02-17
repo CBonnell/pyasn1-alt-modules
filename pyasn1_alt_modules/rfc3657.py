@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Camellia Algorithm in CMS
@@ -18,22 +18,21 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
-smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
+smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
 
+id_camellia128_cbc = univ.ObjectIdentifier("1.2.392.200011.61.1.1.1.2")
 
-id_camellia128_cbc = univ.ObjectIdentifier('1.2.392.200011.61.1.1.1.2')
+id_camellia192_cbc = univ.ObjectIdentifier("1.2.392.200011.61.1.1.1.3")
 
-id_camellia192_cbc = univ.ObjectIdentifier('1.2.392.200011.61.1.1.1.3')
+id_camellia256_cbc = univ.ObjectIdentifier("1.2.392.200011.61.1.1.1.4")
 
-id_camellia256_cbc = univ.ObjectIdentifier('1.2.392.200011.61.1.1.1.4')
+id_camellia128_wrap = univ.ObjectIdentifier("1.2.392.200011.61.1.1.3.2")
 
-id_camellia128_wrap = univ.ObjectIdentifier('1.2.392.200011.61.1.1.3.2')
+id_camellia192_wrap = univ.ObjectIdentifier("1.2.392.200011.61.1.1.3.3")
 
-id_camellia192_wrap = univ.ObjectIdentifier('1.2.392.200011.61.1.1.3.3')
-
-id_camellia256_wrap = univ.ObjectIdentifier('1.2.392.200011.61.1.1.3.4')
+id_camellia256_wrap = univ.ObjectIdentifier("1.2.392.200011.61.1.1.3.4")
 
 
 class Camellia_IV(univ.OctetString):
@@ -53,7 +52,6 @@ _algorithmIdentifierMapUpdate = {
 }
 
 algorithmIdentifierMap.update(_algorithmIdentifierMapUpdate)
-
 
 # Update the S/MIME Capability Map
 

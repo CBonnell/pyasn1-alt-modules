@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -64,21 +64,21 @@ Xr/lyFgYttd5n6E/AOW9cVjQojBhn6gYMzeciPTiEU9LLYKbTWO+qihZKmJYHxO1
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-           if extn['extnID'] == rfc4262.smimeCapabilities:
-               self.assertIn(extn['extnID'], certificateExtensionsMap)
-               scap, rest = der_decoder(extn['extnValue'],
-                   asn1Spec=certificateExtensionsMap[extn['extnID']])
-               self.assertFalse(rest)
-               self.assertTrue(scap.prettyPrint())
-               self.assertEqual(extn['extnValue'], der_encoder(scap))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] == rfc4262.smimeCapabilities:
+                self.assertIn(extn["extnID"], certificateExtensionsMap)
+                scap, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertFalse(rest)
+                self.assertTrue(scap.prettyPrint())
+                self.assertEqual(extn["extnValue"], der_encoder(scap))
 
-               for cap in scap:
-                    if cap['capabilityID'] == rfc5480.id_sha256:
-                        self.assertTrue(cap['parameters'].hasValue())
-                        self.assertEqual(der_encoder(univ.Null("")),
-                            cap['parameters'])
+                for cap in scap:
+                    if cap["capabilityID"] == rfc5480.id_sha256:
+                        self.assertTrue(cap["parameters"].hasValue())
+                        self.assertEqual(der_encoder(univ.Null("")), cap["parameters"])
                         found = True
 
         self.assertTrue(found)
@@ -86,5 +86,5 @@ Xr/lyFgYttd5n6E/AOW9cVjQojBhn6gYMzeciPTiEU9LLYKbTWO+qihZKmJYHxO1
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

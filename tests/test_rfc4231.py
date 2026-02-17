@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -41,38 +41,39 @@ SKsIer5tGtrwyn32lCEg+97txfgu+ZVVfpyZm74euek=
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         ad, rest = der_decoder(
-            asn1Object['content'],
-            asn1Spec=rfc5652.AuthenticatedData())
+            asn1Object["content"], asn1Spec=rfc5652.AuthenticatedData()
+        )
 
         self.assertFalse(rest)
         self.assertTrue(ad.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ad))
+        self.assertEqual(asn1Object["content"], der_encoder(ad))
 
-        self.assertEqual(0, ad['version'])
-        mac_alg = ad['macAlgorithm']
-        self.assertEqual(rfc4231.id_hmacWithSHA256, mac_alg['algorithm'])
+        self.assertEqual(0, ad["version"])
+        mac_alg = ad["macAlgorithm"]
+        self.assertEqual(rfc4231.id_hmacWithSHA256, mac_alg["algorithm"])
 
-        param, rest = der_decoder(mac_alg['parameters'], asn1Spec=univ.Null())
+        param, rest = der_decoder(mac_alg["parameters"], asn1Spec=univ.Null())
         assert not rest
-        assert der_encoder(param) == mac_alg['parameters']
+        assert der_encoder(param) == mac_alg["parameters"]
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-                               asn1Spec=self.asn1Spec,
-                               decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        ad = asn1Object['content']
-        self.assertEqual(0, ad['version'])
-        mac_alg = ad['macAlgorithm']
-        self.assertEqual(rfc4231.id_hmacWithSHA256, mac_alg['algorithm'])
-        self.assertEqual(univ.Null(""), mac_alg['parameters'])
+        ad = asn1Object["content"]
+        self.assertEqual(0, ad["version"])
+        mac_alg = ad["macAlgorithm"]
+        self.assertEqual(rfc4231.id_hmacWithSHA256, mac_alg["algorithm"])
+        self.assertEqual(univ.Null(""), mac_alg["parameters"])
+
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

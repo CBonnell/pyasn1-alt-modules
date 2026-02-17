@@ -4,7 +4,7 @@
 # Created by Russ Housley.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # A Protocol for Provisioning Resource Certificates
@@ -17,16 +17,16 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
-
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
 # Content Type for Provisioning Resource Certificates
 
-id_smime = univ.ObjectIdentifier('1.2.840.113549.1.9.16')
+id_smime = univ.ObjectIdentifier("1.2.840.113549.1.9.16")
 
 id_ct = id_smime + (1,)
 
 id_ct_xml = id_ct + (28,)
+
 
 class RPKIXMLProtocolObject(univ.OctetString):
     pass

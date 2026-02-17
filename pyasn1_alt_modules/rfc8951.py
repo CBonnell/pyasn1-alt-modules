@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Enrollment over Secure Transport (EST) Clarifications
@@ -15,11 +15,9 @@
 from pyasn1_alt_modules import rfc5652
 from pyasn1_alt_modules import rfc7030
 
-
 # Imports from RFC 5652
 
 Attribute = rfc5652.Attribute
-
 
 # Imports from RFC 7030
 
@@ -31,12 +29,10 @@ AttrOrOID = rfc7030.AttrOrOID
 
 CsrAttrs = rfc7030.CsrAttrs
 
-
 # Asymmetric Decrypt Key Identifier Attribute
 
 aa_asymmDecryptKeyID = Attribute()
-aa_asymmDecryptKeyID['attrType'] = id_aa_asymmDecryptKeyID
-aa_asymmDecryptKeyID['attrValues'][0] = AsymmetricDecryptKeyIdentifier()
-
+aa_asymmDecryptKeyID["attrType"] = id_aa_asymmDecryptKeyID
+aa_asymmDecryptKeyID["attrValues"][0] = AsymmetricDecryptKeyIdentifier()
 
 # Note that the update CMS Attribute Map is handled by importing rfc7030

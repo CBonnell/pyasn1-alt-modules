@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -14,8 +14,8 @@ from pyasn1.codec.der.encoder import encode as der_encoder
 from pyasn1_alt_modules import pem
 from pyasn1_alt_modules import rfc3447
 
+# openssl genrsa -primes 3 -f4 -out multiprime.key
 
-# openssl genrsa -primes 3 -f4 -out multiprime.key 
 
 class MultiprimeRSAPrivateKeyTestCase(unittest.TestCase):
     pem_text = """\
@@ -61,6 +61,6 @@ EeEs9dusHakg1ERXAg4Vo1YowPW8kuVbZ9faxeVrmuER5NcCuZzS5X/obGUw
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

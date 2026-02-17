@@ -7,7 +7,7 @@
 #   definitions from rfc5280 so that the same maps are used.
 #
 # Copyright (c) 2005-2020, Ilya Etingof <etingof@gmail.com>
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # PKCS #10: Certification Request Syntax Specification
@@ -21,8 +21,7 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import rfc5280
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 AttributeType = rfc5280.AttributeType
 
@@ -55,13 +54,15 @@ class CertificationRequestInfo(univ.Sequence):
 
 
 CertificationRequestInfo.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('version', univ.Integer()),
-    namedtype.NamedType('subject', Name()),
-    namedtype.NamedType('subjectPKInfo', SubjectPublicKeyInfo()),
-    namedtype.NamedType('attributes',
-                        Attributes().subtype(implicitTag=tag.Tag(
-                            tag.tagClassContext, tag.tagFormatSimple, 0))
-    )
+    namedtype.NamedType("version", univ.Integer()),
+    namedtype.NamedType("subject", Name()),
+    namedtype.NamedType("subjectPKInfo", SubjectPublicKeyInfo()),
+    namedtype.NamedType(
+        "attributes",
+        Attributes().subtype(
+            implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+        ),
+    ),
 )
 
 
@@ -70,7 +71,7 @@ class CertificationRequest(univ.Sequence):
 
 
 CertificationRequest.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('certificationRequestInfo', CertificationRequestInfo()),
-    namedtype.NamedType('signatureAlgorithm', AlgorithmIdentifier()),
-    namedtype.NamedType('signature', univ.BitString())
+    namedtype.NamedType("certificationRequestInfo", CertificationRequestInfo()),
+    namedtype.NamedType("signatureAlgorithm", AlgorithmIdentifier()),
+    namedtype.NamedType("signature", univ.BitString()),
 )

@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2025, Vigil Security, LLC
+# Copyright (c) 2025-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -35,51 +35,57 @@ YIZIAWUDBAIBAgEQMAsGCWCGSAFlAwQBBQ==
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(rfc9690.id_rsa_kem, asn1Object['algorithm'])
+        self.assertEqual(rfc9690.id_rsa_kem, asn1Object["algorithm"])
 
-        algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-        rsa_kem_p, rest = der_decoder(asn1Object['parameters'],
-            asn1Spec=algorithmIdentifierMap[rfc9690.id_rsa_kem])
+        algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
+        rsa_kem_p, rest = der_decoder(
+            asn1Object["parameters"],
+            asn1Spec=algorithmIdentifierMap[rfc9690.id_rsa_kem],
+        )
 
         self.assertFalse(rest)
         self.assertTrue(rsa_kem_p.prettyPrint())
-        self.assertEqual(asn1Object['parameters'], der_encoder(rsa_kem_p))
-        self.assertEqual(rfc9690.id_kem_rsa, rsa_kem_p['kem']['algorithm'])
+        self.assertEqual(asn1Object["parameters"], der_encoder(rsa_kem_p))
+        self.assertEqual(rfc9690.id_kem_rsa, rsa_kem_p["kem"]["algorithm"])
 
-        kem_rsa_p, rest = der_decoder(rsa_kem_p['kem']['parameters'],
-            asn1Spec=algorithmIdentifierMap[rfc9690.id_kem_rsa])
+        kem_rsa_p, rest = der_decoder(
+            rsa_kem_p["kem"]["parameters"],
+            asn1Spec=algorithmIdentifierMap[rfc9690.id_kem_rsa],
+        )
 
         self.assertFalse(rest)
         self.assertTrue(kem_rsa_p.prettyPrint())
+        self.assertEqual(rsa_kem_p["kem"]["parameters"], der_encoder(kem_rsa_p))
+        self.assertEqual(16, kem_rsa_p["keyLength"])
         self.assertEqual(
-            rsa_kem_p['kem']['parameters'], der_encoder(kem_rsa_p))
-        self.assertEqual(16, kem_rsa_p['keyLength'])
-        self.assertEqual(rfc9690.id_kdf_kdf3,
-            kem_rsa_p['keyDerivationFunction']['algorithm'])
+            rfc9690.id_kdf_kdf3, kem_rsa_p["keyDerivationFunction"]["algorithm"]
+        )
 
         kdf_p, rest = der_decoder(
-            kem_rsa_p['keyDerivationFunction']['parameters'],
-            asn1Spec=algorithmIdentifierMap[rfc9690.id_kdf_kdf3])
+            kem_rsa_p["keyDerivationFunction"]["parameters"],
+            asn1Spec=algorithmIdentifierMap[rfc9690.id_kdf_kdf3],
+        )
 
         self.assertFalse(rest)
         self.assertTrue(kdf_p.prettyPrint())
         self.assertEqual(
-            kem_rsa_p['keyDerivationFunction']['parameters'],
-            der_encoder(kdf_p))
+            kem_rsa_p["keyDerivationFunction"]["parameters"], der_encoder(kdf_p)
+        )
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(rfc9690.id_rsa_kem, asn1Object['algorithm'])
-        self.assertEqual(rfc9690.id_kem_rsa,
-            asn1Object['parameters']['kem']['algorithm'])
-        self.assertEqual(16, 
-            asn1Object['parameters']['kem']['parameters']['keyLength'])
+        self.assertEqual(rfc9690.id_rsa_kem, asn1Object["algorithm"])
+        self.assertEqual(
+            rfc9690.id_kem_rsa, asn1Object["parameters"]["kem"]["algorithm"]
+        )
+        self.assertEqual(16, asn1Object["parameters"]["kem"]["parameters"]["keyLength"])
 
 
 class EnveopedDataRSAKEMTestCase(unittest.TestCase):
@@ -106,30 +112,28 @@ sCcfwCCC/m01jAM1KuSua1QLeCQjMDwGCSqGSIb3DQEHATAdBglghkgBZQMEAQIEEEgMyv
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(rfc5652.id_envelopedData, asn1Object['contentType'])
+        self.assertEqual(rfc5652.id_envelopedData, asn1Object["contentType"])
 
-        ed, rest = der_decoder(asn1Object['content'],
-            asn1Spec=rfc5652.EnvelopedData())
+        ed, rest = der_decoder(asn1Object["content"], asn1Spec=rfc5652.EnvelopedData())
         self.assertFalse(rest)
         self.assertTrue(ed.prettyPrint())
-        self.assertEqual(asn1Object['content'], der_encoder(ed))
-        self.assertEqual(3, ed['version'])
+        self.assertEqual(asn1Object["content"], der_encoder(ed))
+        self.assertEqual(3, ed["version"])
 
-        ori = ed['recipientInfos'][0]['ori']
-        self.assertEqual(rfc9629.id_ori_kem, ori['oriType'])
-        kemri, rest = der_decoder(ori['oriValue'],
-            asn1Spec=rfc9629.KEMRecipientInfo())
+        ori = ed["recipientInfos"][0]["ori"]
+        self.assertEqual(rfc9629.id_ori_kem, ori["oriType"])
+        kemri, rest = der_decoder(ori["oriValue"], asn1Spec=rfc9629.KEMRecipientInfo())
         self.assertFalse(rest)
         self.assertTrue(kemri.prettyPrint())
-        self.assertEqual(ori['oriValue'], der_encoder(kemri))
-        self.assertEqual(0, kemri['version'])
-        self.assertEqual(16, kemri['kekLength'])
-        self.assertEqual(rfc9690.id_kem_rsa, kemri['kem']['algorithm'])
-        self.assertEqual(rfc9690.id_aes128_wrap, kemri['wrap']['algorithm'])
+        self.assertEqual(ori["oriValue"], der_encoder(kemri))
+        self.assertEqual(0, kemri["version"])
+        self.assertEqual(16, kemri["kekLength"])
+        self.assertEqual(rfc9690.id_kem_rsa, kemri["kem"]["algorithm"])
+        self.assertEqual(rfc9690.id_aes128_wrap, kemri["wrap"]["algorithm"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

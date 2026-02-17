@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Identifiers for the Key Exchange Algorithm (KEA)
@@ -15,16 +15,13 @@
 
 from pyasn1_alt_modules import rfc3279
 
-
 # The KEA object identifier is defined in RFC 3279
 
 id_keyExchangeAlgorithm = rfc3279.id_keyExchangeAlgorithm
 
-
 # The KEA parameters structure is defined in RFC 3279
 
 KEA_Parms_Id = rfc3279.KEA_Parms_Id
-
 
 # The Algorithm Identifier map is updated by importing rfc3279.
 # To save looking it up, the map is updated with this entry:

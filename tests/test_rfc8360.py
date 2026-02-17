@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -436,8 +436,8 @@ AgMA++8wCgIDAwAAAgMDNZs=
         self.asn1Spec = rfc5280.Extensions()
 
     def testDerCodec(self):
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+
         substrate = pem.readBase64fromText(self.extns_pem_text)
         asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec)
         self.assertFalse(rest)
@@ -446,12 +446,13 @@ AgMA++8wCgIDAwAAAgMDNZs=
 
         oids = []
         for extn in asn1Object:
-            oids.append(extn['extnID'])
-            extn_value, rest = der_decoder(extn['extnValue'],
-                asn1Spec=certificateExtensionsMap[extn['extnID']])
+            oids.append(extn["extnID"])
+            extn_value, rest = der_decoder(
+                extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+            )
             self.assertFalse(rest)
             self.assertTrue(extn_value.prettyPrint())
-            self.assertEqual(extn['extnValue'], der_encoder(extn_value))
+            self.assertEqual(extn["extnValue"], der_encoder(extn_value))
 
         self.assertIn(rfc8360.id_pe_ipAddrBlocks_v2, oids)
         self.assertIn(rfc8360.id_pe_autonomousSysIds_v2, oids)
@@ -459,6 +460,6 @@ AgMA++8wCgIDAwAAAgMDNZs=
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

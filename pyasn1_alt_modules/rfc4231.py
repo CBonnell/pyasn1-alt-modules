@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Identifiers for HMAC-SHA-224, HMAC-SHA-256, HMAC-SHA-384,
@@ -16,7 +16,6 @@
 
 from pyasn1_alt_modules import rfc8018
 
-
 # The HMAC object identifiers are already defined in RFC 8018
 
 id_hmacWithSHA224 = rfc8018.id_hmacWithSHA224
@@ -26,7 +25,6 @@ id_hmacWithSHA256 = rfc8018.id_hmacWithSHA256
 id_hmacWithSHA384 = rfc8018.id_hmacWithSHA384
 
 id_hmacWithSHA512 = rfc8018.id_hmacWithSHA512
-
 
 # The Algorithm Identifiers Map is updated by importing rfc8018.
 # To save looking it up, the map is updated with these entries:

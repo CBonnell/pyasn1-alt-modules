@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -38,37 +38,42 @@ GXQFNVSkJ2e4OtBD/TncBJM=
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a['algorithm'])
 
-        spki_a_p, rest = der_decoder(spki_a['parameters'],
-            asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters())
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a["algorithm"])
+
+        spki_a_p, rest = der_decoder(
+            spki_a["parameters"], asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters()
+        )
         self.assertFalse(rest)
         self.assertTrue(spki_a_p.prettyPrint())
-        self.assertEqual(spki_a['parameters'], der_encoder(spki_a_p))
-        
-        self.assertEqual(rfc4357.id_GostR3410_2001_TestParamSet,
-            spki_a_p['publicKeyParamSet'])
-        self.assertEqual(rfc9215.id_tc26_gost3411_12_256,
-            spki_a_p['digestParamSet'])
+        self.assertEqual(spki_a["parameters"], der_encoder(spki_a_p))
+
+        self.assertEqual(
+            rfc4357.id_GostR3410_2001_TestParamSet, spki_a_p["publicKeyParamSet"]
+        )
+        self.assertEqual(rfc9215.id_tc26_gost3411_12_256, spki_a_p["digestParamSet"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.gostR3410_2001_256_pem_text)
-        asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec,
-            openTypes=opentypemap.get('algorithmIdentifierMap'),
-            decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate,
+            asn1Spec=self.asn1Spec,
+            openTypes=opentypemap.get("algorithmIdentifierMap"),
+            decodeOpenTypes=True,
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a['algorithm'])
-        spki_a_p = spki_a['parameters']
-        self.assertEqual(rfc4357.id_GostR3410_2001_TestParamSet,
-            spki_a_p['publicKeyParamSet'])
-        self.assertEqual(rfc9215.id_tc26_gost3411_12_256,
-            spki_a_p['digestParamSet'])
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a["algorithm"])
+        spki_a_p = spki_a["parameters"]
+        self.assertEqual(
+            rfc4357.id_GostR3410_2001_TestParamSet, spki_a_p["publicKeyParamSet"]
+        )
+        self.assertEqual(rfc9215.id_tc26_gost3411_12_256, spki_a_p["digestParamSet"])
+
 
 class GostR34102012256CertificateTestCase(unittest.TestCase):
     gostR3410_2012_256_pem_text = """\
@@ -91,32 +96,39 @@ DglzGOeubudp
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a['algorithm'])
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a["algorithm"])
 
-        spki_a_p, rest = der_decoder(spki_a['parameters'],
-            asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters())
+        spki_a_p, rest = der_decoder(
+            spki_a["parameters"], asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters()
+        )
         self.assertFalse(rest)
         self.assertTrue(spki_a_p.prettyPrint())
-        self.assertEqual(spki_a['parameters'], der_encoder(spki_a_p))
-        
-        self.assertEqual(rfc9215.id_tc26_gost_3410_2012_256_paramSetA,
-            spki_a_p['publicKeyParamSet'])
+        self.assertEqual(spki_a["parameters"], der_encoder(spki_a_p))
+
+        self.assertEqual(
+            rfc9215.id_tc26_gost_3410_2012_256_paramSetA, spki_a_p["publicKeyParamSet"]
+        )
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.gostR3410_2012_256_pem_text)
-        asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec,
-            openTypes=opentypemap.get('algorithmIdentifierMap'),
-            decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate,
+            asn1Spec=self.asn1Spec,
+            openTypes=opentypemap.get("algorithmIdentifierMap"),
+            decodeOpenTypes=True,
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a['algorithm'])
-        spki_a_p = spki_a['parameters']
-        self.assertEqual(rfc9215.id_tc26_gost_3410_2012_256_paramSetA,
-            spki_a_p['publicKeyParamSet'])
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_256, spki_a["algorithm"])
+        spki_a_p = spki_a["parameters"]
+        self.assertEqual(
+            rfc9215.id_tc26_gost_3410_2012_256_paramSetA, spki_a_p["publicKeyParamSet"]
+        )
+
 
 class GostR34102012512CertificateTestCase(unittest.TestCase):
     gostR3410_2012_512_pem_text = """\
@@ -141,36 +153,44 @@ o8gu4NzCZDx47qj8rNNUklWEhrIPHJ7Bl8kGmYUCYMk7y82cXDMX4ZNE4XOuNg==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_512, spki_a['algorithm'])
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_512, spki_a["algorithm"])
 
-        spki_a_p, rest = der_decoder(spki_a['parameters'],
-            asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters())
+        spki_a_p, rest = der_decoder(
+            spki_a["parameters"], asn1Spec=rfc9215.GostR3410_2012_PublicKeyParameters()
+        )
         self.assertFalse(rest)
         self.assertTrue(spki_a_p.prettyPrint())
-        self.assertEqual(spki_a['parameters'], der_encoder(spki_a_p))
-        
-        self.assertEqual(rfc9215.id_tc26_gost_3410_2012_512_paramSetTest,
-            spki_a_p['publicKeyParamSet'])
+        self.assertEqual(spki_a["parameters"], der_encoder(spki_a_p))
+
+        self.assertEqual(
+            rfc9215.id_tc26_gost_3410_2012_512_paramSetTest,
+            spki_a_p["publicKeyParamSet"],
+        )
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.gostR3410_2012_512_pem_text)
-        asn1Object, rest = der_decoder(substrate, asn1Spec=self.asn1Spec,
-            openTypes=opentypemap.get('algorithmIdentifierMap'),
-            decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate,
+            asn1Spec=self.asn1Spec,
+            openTypes=opentypemap.get("algorithmIdentifierMap"),
+            decodeOpenTypes=True,
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        spki_a = asn1Object['tbsCertificate']['subjectPublicKeyInfo']['algorithm']
-        self.assertEqual(rfc9215.id_tc26_gost3410_2012_512, spki_a['algorithm'])
-        spki_a_p = spki_a['parameters']
-        self.assertEqual(rfc9215.id_tc26_gost_3410_2012_512_paramSetTest,
-            spki_a_p['publicKeyParamSet'])
+        spki_a = asn1Object["tbsCertificate"]["subjectPublicKeyInfo"]["algorithm"]
+        self.assertEqual(rfc9215.id_tc26_gost3410_2012_512, spki_a["algorithm"])
+        spki_a_p = spki_a["parameters"]
+        self.assertEqual(
+            rfc9215.id_tc26_gost_3410_2012_512_paramSetTest,
+            spki_a_p["publicKeyParamSet"],
+        )
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

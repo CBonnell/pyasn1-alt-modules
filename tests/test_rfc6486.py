@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -58,18 +58,18 @@ C9ijmXiajracUe+7eCluqgXRE8yRtnscWoA/9fVFz1lPwgEeNHLoaK7Sqew=
     def testDerCodec(self):
         substrate = pem.readBase64fromText(self.manifest_pem_text)
 
-        layers = opentypemap.get('cmsContentTypesMap').copy()
+        layers = opentypemap.get("cmsContentTypesMap").copy()
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
-            rfc6486.id_ct_rpkiManifest: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
+            rfc6486.id_ct_rpkiManifest: lambda x: None,
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
-            rfc6486.id_ct_rpkiManifest: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
+            rfc6486.id_ct_rpkiManifest: lambda x: None,
         }
 
         next_layer = rfc5652.id_ct_contentInfo
@@ -83,46 +83,48 @@ C9ijmXiajracUe+7eCluqgXRE8yRtnscWoA/9fVFz1lPwgEeNHLoaK7Sqew=
             substrate = getNextSubstrate[next_layer](asn1Object)
             next_layer = getNextLayer[next_layer](asn1Object)
 
-        self.assertEqual(0, asn1Object['version'])
+        self.assertEqual(0, asn1Object["version"])
 
         counter = 0
-        for f in asn1Object['fileList']:
-            self.assertEqual('ZXSGBDBkL82TFGHuE4VOYtJP-E4.crl', f['file'])
+        for f in asn1Object["fileList"]:
+            self.assertEqual("ZXSGBDBkL82TFGHuE4VOYtJP-E4.crl", f["file"])
             counter += 1
-    
+
         self.assertEqual(1, counter)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.manifest_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        oid = asn1Object['content']['encapContentInfo']['eContentType']
-        substrate = asn1Object['content']['encapContentInfo']['eContent']
+        oid = asn1Object["content"]["encapContentInfo"]["eContentType"]
+        substrate = asn1Object["content"]["encapContentInfo"]["eContent"]
 
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         self.assertIn(oid, cmsContentTypesMap)
 
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=cmsContentTypesMap[oid], decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=cmsContentTypesMap[oid], decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        self.assertEqual(0, asn1Object['version'])
+        self.assertEqual(0, asn1Object["version"])
 
         counter = 0
-        for f in asn1Object['fileList']:
-            self.assertEqual('ZXSGBDBkL82TFGHuE4VOYtJP-E4.crl', f['file'])
+        for f in asn1Object["fileList"]:
+            self.assertEqual("ZXSGBDBkL82TFGHuE4VOYtJP-E4.crl", f["file"])
             counter += 1
-    
+
         self.assertEqual(1, counter)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

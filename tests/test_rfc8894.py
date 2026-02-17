@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2020-2025, Vigil Security, LLC
+# Copyright (c) 2020-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -37,33 +37,34 @@ bGljZTEgMB4GCSqGSIb3DQEJARYRYWxpY2VAZXhhbXBsZS5jb20=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        emailAttr = asn1Object['subject']['rdnSequence'][5][0]
-        oid = univ.ObjectIdentifier('1.2.840.113549.1.9.1')
-        self.assertEqual(oid, emailAttr['type'])
+        emailAttr = asn1Object["subject"]["rdnSequence"][5][0]
+        oid = univ.ObjectIdentifier("1.2.840.113549.1.9.1")
+        self.assertEqual(oid, emailAttr["type"])
 
-        email, rest = der_decoder(emailAttr['value'], asn1Spec=char.IA5String())
+        email, rest = der_decoder(emailAttr["value"], asn1Spec=char.IA5String())
         self.assertFalse(rest)
         self.assertTrue(email.prettyPrint())
-        self.assertEqual(emailAttr['value'], der_encoder(email))
+        self.assertEqual(emailAttr["value"], der_encoder(email))
 
-        self.assertEqual('alice@example.com', email)
+        self.assertEqual("alice@example.com", email)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
 
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        emailAttr = asn1Object['subject']['rdnSequence'][5][0]
-        oid = univ.ObjectIdentifier('1.2.840.113549.1.9.1')
-        self.assertEqual(oid, emailAttr['type'])
-        self.assertEqual('alice@example.com', emailAttr['value'])
+        emailAttr = asn1Object["subject"]["rdnSequence"][5][0]
+        oid = univ.ObjectIdentifier("1.2.840.113549.1.9.1")
+        self.assertEqual(oid, emailAttr["type"])
+        self.assertEqual("alice@example.com", emailAttr["value"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.TextTestRunner(verbosity=2).run(suite)

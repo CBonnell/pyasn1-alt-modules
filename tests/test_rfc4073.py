@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -72,26 +72,26 @@ buWO3egPDL8Kf7tBhzjIKLw=
             self.assertEqual(substrate, der_encoder(asn1Object))
 
             if content_type == rfc4073.id_ct_contentWithAttrs:
-                for attr in asn1Object['attrs']:
-                    self.assertIn(attr['attrType'], attrMap)
-    
+                for attr in asn1Object["attrs"]:
+                    self.assertIn(attr["attrType"], attrMap)
+
             return asn1Object
 
-        attrMap = opentypemap.get('cmsAttributesMap')
+        attrMap = opentypemap.get("cmsAttributesMap")
 
-        layers = opentypemap.get('cmsContentTypesMap')
+        layers = opentypemap.get("cmsContentTypesMap")
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc4073.id_ct_contentCollection: lambda x: x[0]['contentType'],
-            rfc4073.id_ct_contentWithAttrs: lambda x: x['content']['contentType'],
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc4073.id_ct_contentCollection: lambda x: x[0]["contentType"],
+            rfc4073.id_ct_contentWithAttrs: lambda x: x["content"]["contentType"],
             rfc5652.id_data: lambda x: None,
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc4073.id_ct_contentCollection: lambda x: x[0]['content'],
-            rfc4073.id_ct_contentWithAttrs: lambda x: x['content']['content'],
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc4073.id_ct_contentCollection: lambda x: x[0]["content"],
+            rfc4073.id_ct_contentWithAttrs: lambda x: x["content"]["content"],
             rfc5652.id_data: lambda x: None,
         }
 
@@ -103,8 +103,8 @@ buWO3egPDL8Kf7tBhzjIKLw=
             if this_layer == rfc4073.id_ct_contentCollection:
                 asn1Object = test_layer(substrate, this_layer, attrMap)
                 for ci in asn1Object:
-                    substrate = ci['content']
-                    this_layer = ci['contentType']
+                    substrate = ci["content"]
+                    this_layer = ci["contentType"]
                     while this_layer != rfc5652.id_data:
                         asn1Object = test_layer(substrate, this_layer, attrMap)
                         substrate = getNextSubstrate[this_layer](asn1Object)
@@ -115,37 +115,39 @@ buWO3egPDL8Kf7tBhzjIKLw=
                 this_layer = getNextLayer[this_layer](asn1Object)
 
     def testOpenTypes(self):
-        cmsAttributesMap = opentypemap.get('cmsAttributesMap')
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsAttributesMap = opentypemap.get("cmsAttributesMap")
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
         substrate = pem.readBase64fromText(self.pem_text)
-        asn1Object, rest = der_decoder(substrate,
-                                       asn1Spec=rfc5652.ContentInfo(),
-                                       decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc4073.id_ct_contentCollection, asn1Object['contentType'])
+        self.assertEqual(rfc4073.id_ct_contentCollection, asn1Object["contentType"])
 
-        for ci in asn1Object['content']:
-            self.assertIn(ci['contentType'], cmsContentTypesMap)
-            self.assertEqual(rfc4073.id_ct_contentWithAttrs, ci['contentType'])
+        for ci in asn1Object["content"]:
+            self.assertIn(ci["contentType"], cmsContentTypesMap)
+            self.assertEqual(rfc4073.id_ct_contentWithAttrs, ci["contentType"])
 
-            next_ci = ci['content']['content']
+            next_ci = ci["content"]["content"]
 
-            self.assertIn(next_ci['contentType'], cmsContentTypesMap)
-            self.assertEqual(rfc5652.id_data, next_ci['contentType'])
-            self.assertIn(b'Content-Type: text', next_ci['content'])
+            self.assertIn(next_ci["contentType"], cmsContentTypesMap)
+            self.assertEqual(rfc5652.id_data, next_ci["contentType"])
+            self.assertIn(b"Content-Type: text", next_ci["content"])
 
-            for attr in ci['content']['attrs']:
-                self.assertIn(attr['attrType'], cmsAttributesMap)
-                if attr['attrType'] == rfc2634.id_aa_contentHint:
-                    self.assertIn('RFC 4073', attr['attrValues'][0]['contentDescription'])
+            for attr in ci["content"]["attrs"]:
+                self.assertIn(attr["attrType"], cmsAttributesMap)
+                if attr["attrType"] == rfc2634.id_aa_contentHint:
+                    self.assertIn(
+                        "RFC 4073", attr["attrValues"][0]["contentDescription"]
+                    )
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

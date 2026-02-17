@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # PkiPath for the pkix-pkipath media type
@@ -17,7 +17,7 @@ from pyasn1_alt_modules import rfc5280
 from pyasn1.type import constraint
 from pyasn1.type import univ
 
-MAX = float('inf')
+MAX = float("inf")
 
 
 class PkiPath(univ.SequenceOf):

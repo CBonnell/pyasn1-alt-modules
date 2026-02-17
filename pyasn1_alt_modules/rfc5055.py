@@ -4,7 +4,7 @@
 # Created by Russ Housley with some help from asn1ate v.0.6.0
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Server-Based Certificate Validation Protocol (SCVP)
@@ -29,18 +29,17 @@ from pyasn1_alt_modules import rfc6960
 from pyasn1_alt_modules import rfc3281
 from pyasn1_alt_modules import opentypemap
 
-cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
 
-otherRevInfoFormatMap = opentypemap.get('otherRevInfoFormatMap')
+otherRevInfoFormatMap = opentypemap.get("otherRevInfoFormatMap")
 
-scvpValidationPolMap = opentypemap.get('scvpValidationPolMap')
+scvpValidationPolMap = opentypemap.get("scvpValidationPolMap")
 
-scvpValidationAlgMap = opentypemap.get('scvpValidationAlgMap')
+scvpValidationAlgMap = opentypemap.get("scvpValidationAlgMap")
 
-scvpWantBackMap = opentypemap.get('scvpWantBackMap')
+scvpWantBackMap = opentypemap.get("scvpWantBackMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Imports from RFC 5280
 
@@ -66,54 +65,56 @@ KeyPurposeId = rfc5280.KeyPurposeId
 
 SubjectPublicKeyInfo = rfc5280.SubjectPublicKeyInfo
 
-
 # Imports from RFC 3281
 
 AttributeCertificate = rfc3281.AttributeCertificate
-
 
 # Imports from RFC 6960
 
 OCSPResponse = rfc6960.OCSPResponse
 
-
 # Imports from RFC 5652
 
 ContentInfo = rfc5652.ContentInfo
-
 
 # Server-Based Certificate Validation Protocol
 
 sha_1 = univ.ObjectIdentifier((1, 3, 14, 3, 2, 26))
 
 algid_SHA1 = AlgorithmIdentifier()
-algid_SHA1['algorithm'] = sha_1
-algid_SHA1['parameters'] = "\x05\x00"
+algid_SHA1["algorithm"] = sha_1
+algid_SHA1["parameters"] = "\x05\x00"
 
 
 class SCVPIssuerSerial(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('issuer', GeneralNames()),
-        namedtype.NamedType('serialNumber', CertificateSerialNumber())
+        namedtype.NamedType("issuer", GeneralNames()),
+        namedtype.NamedType("serialNumber", CertificateSerialNumber()),
     )
 
 
 class SCVPCertID(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('certHash', univ.OctetString()),
-        namedtype.NamedType('issuerSerial', SCVPIssuerSerial()),
-        namedtype.DefaultedNamedType('hashAlgorithm', algid_SHA1)
+        namedtype.NamedType("certHash", univ.OctetString()),
+        namedtype.NamedType("issuerSerial", SCVPIssuerSerial()),
+        namedtype.DefaultedNamedType("hashAlgorithm", algid_SHA1),
     )
 
 
 class ACReference(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('attrCert', AttributeCertificate().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 2))),
-        namedtype.NamedType('acRef', SCVPCertID().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 3)))
+        namedtype.NamedType(
+            "attrCert",
+            AttributeCertificate().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.NamedType(
+            "acRef",
+            SCVPCertID().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)
+            ),
+        ),
     )
 
 
@@ -123,20 +124,29 @@ class AuthPolicy(univ.ObjectIdentifier):
 
 class ValidationPolRef(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('valPolId', univ.ObjectIdentifier()),
-        namedtype.OptionalNamedType('valPolParams', univ.Any(),
-            openType=opentype.OpenType('valPolId', scvpValidationPolMap))
+        namedtype.NamedType("valPolId", univ.ObjectIdentifier()),
+        namedtype.OptionalNamedType(
+            "valPolParams",
+            univ.Any(),
+            openType=opentype.OpenType("valPolId", scvpValidationPolMap),
+        ),
     )
 
 
 class PKCReference(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('cert', Certificate().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 0))),
-        namedtype.NamedType('pkcRef', SCVPCertID().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 1)))
+        namedtype.NamedType(
+            "cert",
+            Certificate().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "pkcRef",
+            SCVPCertID().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+            ),
+        ),
     )
 
 
@@ -147,47 +157,72 @@ class TrustAnchors(univ.SequenceOf):
 
 class ValidationAlg(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('valAlgId', univ.ObjectIdentifier()),
-        namedtype.OptionalNamedType('parameters', univ.Any(),
-            openType=opentype.OpenType('valPolId', scvpValidationAlgMap))
+        namedtype.NamedType("valAlgId", univ.ObjectIdentifier()),
+        namedtype.OptionalNamedType(
+            "parameters",
+            univ.Any(),
+            openType=opentype.OpenType("valPolId", scvpValidationAlgMap),
+        ),
     )
 
 
 class ValidationPolicy(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('validationPolRef', ValidationPolRef()),
-        namedtype.OptionalNamedType('validationAlg',
-            ValidationAlg().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 0))),
-        namedtype.OptionalNamedType('userPolicySet',
-            univ.SequenceOf(componentType=univ.ObjectIdentifier()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 1))),
-        namedtype.OptionalNamedType('inhibitPolicyMapping',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 2))),
-        namedtype.OptionalNamedType('requireExplicitPolicy',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 3))),
-        namedtype.OptionalNamedType('inhibitAnyPolicy',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 4))),
-        namedtype.OptionalNamedType('trustAnchors',
-            TrustAnchors().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 5))),
-        namedtype.OptionalNamedType('keyUsages',
+        namedtype.NamedType("validationPolRef", ValidationPolRef()),
+        namedtype.OptionalNamedType(
+            "validationAlg",
+            ValidationAlg().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "userPolicySet",
+            univ.SequenceOf(componentType=univ.ObjectIdentifier())
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, MAX))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)),
+        ),
+        namedtype.OptionalNamedType(
+            "inhibitPolicyMapping",
+            univ.Boolean().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requireExplicitPolicy",
+            univ.Boolean().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "inhibitAnyPolicy",
+            univ.Boolean().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "trustAnchors",
+            TrustAnchors().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 5)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "keyUsages",
             univ.SequenceOf(componentType=KeyUsage()).subtype(
-                implicitTag=tag.Tag(tag.tagClassContext,
-                    tag.tagFormatSimple, 6))),
-        namedtype.OptionalNamedType('extendedKeyUsages',
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "extendedKeyUsages",
             univ.SequenceOf(componentType=KeyPurposeId()).subtype(
-                implicitTag=tag.Tag(tag.tagClassContext,
-                    tag.tagFormatSimple, 7))),
-        namedtype.OptionalNamedType('specifiedKeyUsages',
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "specifiedKeyUsages",
             univ.SequenceOf(componentType=KeyPurposeId()).subtype(
-                implicitTag=tag.Tag(tag.tagClassContext,
-                    tag.tagFormatSimple, 8)))
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 8)
+            ),
+        ),
     )
 
 
@@ -198,18 +233,30 @@ class CertChecks(univ.SequenceOf):
 
 class ResponseFlags(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('fullRequestInResponse',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 0)).subtype(value=0)),
-        namedtype.DefaultedNamedType('responseValidationPolByRef',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 1)).subtype(value=1)),
-        namedtype.DefaultedNamedType('protectResponse',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 2)).subtype(value=1)),
-        namedtype.DefaultedNamedType('cachedResponse',
-            univ.Boolean().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 3)).subtype(value=1))
+        namedtype.DefaultedNamedType(
+            "fullRequestInResponse",
+            univ.Boolean()
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))
+            .subtype(value=0),
+        ),
+        namedtype.DefaultedNamedType(
+            "responseValidationPolByRef",
+            univ.Boolean()
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1))
+            .subtype(value=1),
+        ),
+        namedtype.DefaultedNamedType(
+            "protectResponse",
+            univ.Boolean()
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2))
+            .subtype(value=1),
+        ),
+        namedtype.DefaultedNamedType(
+            "cachedResponse",
+            univ.Boolean()
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3))
+            .subtype(value=1),
+        ),
     )
 
 
@@ -220,26 +267,41 @@ class CertBundle(univ.SequenceOf):
 
 class OtherRevInfo(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('riType', univ.ObjectIdentifier()),
-        namedtype.NamedType('riValue', univ.Any(),
-            openType=opentype.OpenType('riType', otherRevInfoFormatMap))
+        namedtype.NamedType("riType", univ.ObjectIdentifier()),
+        namedtype.NamedType(
+            "riValue",
+            univ.Any(),
+            openType=opentype.OpenType("riType", otherRevInfoFormatMap),
+        ),
     )
 
 
 class RevocationInfo(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('crl', CertificateList().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 0))),
-        namedtype.NamedType('delta-crl', CertificateList().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 1))),
-        namedtype.NamedType('ocsp', OCSPResponse().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 2))),
-        namedtype.NamedType('other', OtherRevInfo().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 3)))
+        namedtype.NamedType(
+            "crl",
+            CertificateList().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "delta-crl",
+            CertificateList().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.NamedType(
+            "ocsp",
+            OCSPResponse().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.NamedType(
+            "other",
+            OtherRevInfo().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 3)
+            ),
+        ),
     )
 
 
@@ -250,16 +312,18 @@ class RevocationInfos(univ.SequenceOf):
 
 class CertReferences(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('pkcRefs', univ.SequenceOf(
-            componentType=PKCReference()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 0))),
-        namedtype.NamedType('acRefs', univ.SequenceOf(
-            componentType=ACReference()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 1)))
+        namedtype.NamedType(
+            "pkcRefs",
+            univ.SequenceOf(componentType=PKCReference())
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, MAX))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)),
+        ),
+        namedtype.NamedType(
+            "acRefs",
+            univ.SequenceOf(componentType=ACReference())
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, MAX))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)),
+        ),
     )
 
 
@@ -270,66 +334,109 @@ class WantBack(univ.SequenceOf):
 
 class Query(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('queriedCerts', CertReferences()),
-        namedtype.NamedType('checks', CertChecks()),
-        namedtype.OptionalNamedType('wantBack',
-            WantBack().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 1))),
-        namedtype.NamedType('validationPolicy', ValidationPolicy()),
-        namedtype.OptionalNamedType('responseFlags', ResponseFlags()),
-        namedtype.OptionalNamedType('serverContextInfo',
-            univ.OctetString().subtype(implicitTag=tag.Tag(
-                 tag.tagClassContext, tag.tagFormatSimple, 2))),
-        namedtype.OptionalNamedType('validationTime',
-            useful.GeneralizedTime().subtype(implicitTag=tag.Tag(
-                 tag.tagClassContext, tag.tagFormatSimple, 3))),
-        namedtype.OptionalNamedType('intermediateCerts',
-            CertBundle().subtype(implicitTag=tag.Tag(
-                 tag.tagClassContext, tag.tagFormatSimple, 4))),
-        namedtype.OptionalNamedType('revInfos',
-            RevocationInfos().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 5))),
-        namedtype.OptionalNamedType('producedAt',
-            useful.GeneralizedTime().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 6))),
-        namedtype.OptionalNamedType('queryExtensions',
-            Extensions().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 7)))
+        namedtype.NamedType("queriedCerts", CertReferences()),
+        namedtype.NamedType("checks", CertChecks()),
+        namedtype.OptionalNamedType(
+            "wantBack",
+            WantBack().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.NamedType("validationPolicy", ValidationPolicy()),
+        namedtype.OptionalNamedType("responseFlags", ResponseFlags()),
+        namedtype.OptionalNamedType(
+            "serverContextInfo",
+            univ.OctetString().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "validationTime",
+            useful.GeneralizedTime().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "intermediateCerts",
+            CertBundle().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "revInfos",
+            RevocationInfos().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 5)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "producedAt",
+            useful.GeneralizedTime().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "queryExtensions",
+            Extensions().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
+            ),
+        ),
     )
-
 
 
 class CVRequest(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('cvRequestVersion',
-            univ.Integer().subtype(value=1)),
-        namedtype.NamedType('query', Query()),
-        namedtype.OptionalNamedType('requestorRef',
-            GeneralNames().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 0))),
-        namedtype.OptionalNamedType('requestNonce',
-            univ.OctetString().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 1))),
-        namedtype.OptionalNamedType('requestorName',
-            GeneralName().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 2))),
-        namedtype.OptionalNamedType('responderName',
-            GeneralName().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 3))),
-        namedtype.OptionalNamedType('requestExtensions',
-            Extensions().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 4))),
-        namedtype.OptionalNamedType('signatureAlg',
-            AlgorithmIdentifier().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 5))),
-        namedtype.OptionalNamedType('hashAlg',
-            univ.ObjectIdentifier().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 6))),
-        namedtype.OptionalNamedType('requestorText',
-            char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 256)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 7)))
+        namedtype.DefaultedNamedType(
+            "cvRequestVersion", univ.Integer().subtype(value=1)
+        ),
+        namedtype.NamedType("query", Query()),
+        namedtype.OptionalNamedType(
+            "requestorRef",
+            GeneralNames().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestNonce",
+            univ.OctetString().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestorName",
+            GeneralName().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "responderName",
+            GeneralName().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestExtensions",
+            Extensions().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "signatureAlg",
+            AlgorithmIdentifier().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 5)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "hashAlg",
+            univ.ObjectIdentifier().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestorText",
+            char.UTF8String()
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, 256))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)),
+        ),
     )
 
 
@@ -339,29 +446,29 @@ class RespValidationPolicy(ValidationPolicy):
 
 class CertReference(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('pkc', PKCReference()),
-        namedtype.NamedType('ac', ACReference())
+        namedtype.NamedType("pkc", PKCReference()),
+        namedtype.NamedType("ac", ACReference()),
     )
 
 
 class ReplyStatus(univ.Enumerated):
     namedValues = namedval.NamedValues(
-        ('success', 0),
-        ('malformedPKC', 1),
-        ('malformedAC', 2),
-        ('unavailableValidationTime', 3),
-        ('referenceCertHashFail', 4),
-        ('certPathConstructFail', 5),
-        ('certPathNotValid', 6),
-        ('certPathNotValidNow', 7),
-        ('wantBackUnsatisfied', 8)
+        ("success", 0),
+        ("malformedPKC", 1),
+        ("malformedAC", 2),
+        ("unavailableValidationTime", 3),
+        ("referenceCertHashFail", 4),
+        ("certPathConstructFail", 5),
+        ("certPathNotValid", 6),
+        ("certPathNotValidNow", 7),
+        ("wantBackUnsatisfied", 8),
     )
 
 
 class ReplyCheck(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('check', univ.ObjectIdentifier()),
-        namedtype.DefaultedNamedType('status', univ.Integer().subtype(value=0))
+        namedtype.NamedType("check", univ.ObjectIdentifier()),
+        namedtype.DefaultedNamedType("status", univ.Integer().subtype(value=0)),
     )
 
 
@@ -371,8 +478,8 @@ class ReplyChecks(univ.SequenceOf):
 
 class ReplyWantBack(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('wb', univ.ObjectIdentifier()),
-        namedtype.NamedType('value', univ.OctetString())
+        namedtype.NamedType("wb", univ.ObjectIdentifier()),
+        namedtype.NamedType("value", univ.OctetString()),
     )
 
 
@@ -382,23 +489,31 @@ class ReplyWantBacks(univ.SequenceOf):
 
 class CertReply(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('cert', CertReference()),
-        namedtype.DefaultedNamedType('replyStatus',
-            ReplyStatus().subtype(value='success')),
-        namedtype.NamedType('replyValTime', useful.GeneralizedTime()),
-        namedtype.NamedType('replyChecks', ReplyChecks()),
-        namedtype.NamedType('replyWantBacks', ReplyWantBacks()),
-        namedtype.OptionalNamedType('validationErrors',
-            univ.SequenceOf(componentType=univ.ObjectIdentifier()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 0))),
-        namedtype.OptionalNamedType('nextUpdate',
-            useful.GeneralizedTime().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 1))),
-        namedtype.OptionalNamedType('certReplyExtensions',
-            Extensions().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 2)))
+        namedtype.NamedType("cert", CertReference()),
+        namedtype.DefaultedNamedType(
+            "replyStatus", ReplyStatus().subtype(value="success")
+        ),
+        namedtype.NamedType("replyValTime", useful.GeneralizedTime()),
+        namedtype.NamedType("replyChecks", ReplyChecks()),
+        namedtype.NamedType("replyWantBacks", ReplyWantBacks()),
+        namedtype.OptionalNamedType(
+            "validationErrors",
+            univ.SequenceOf(componentType=univ.ObjectIdentifier())
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, MAX))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)),
+        ),
+        namedtype.OptionalNamedType(
+            "nextUpdate",
+            useful.GeneralizedTime().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "certReplyExtensions",
+            Extensions().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
     )
 
 
@@ -409,100 +524,131 @@ class ReplyObjects(univ.SequenceOf):
 
 class HashValue(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('algorithm', algid_SHA1),
-        namedtype.NamedType('value', univ.OctetString())
+        namedtype.DefaultedNamedType("algorithm", algid_SHA1),
+        namedtype.NamedType("value", univ.OctetString()),
     )
 
 
 class RequestReference(univ.Choice):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('requestHash',
-            HashValue().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 0))),
-        namedtype.NamedType('fullRequest',
-            CVRequest().subtype(implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatConstructed, 1)))
+        namedtype.NamedType(
+            "requestHash",
+            HashValue().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
+        namedtype.NamedType(
+            "fullRequest",
+            CVRequest().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+            ),
+        ),
     )
 
 
 class CVStatusCode(univ.Enumerated):
     namedValues = namedval.NamedValues(
-        ('okay', 0),
-        ('skipUnrecognizedItems', 1),
-        ('tooBusy', 10),
-        ('invalidRequest', 11),
-        ('internalError', 12),
-        ('badStructure', 20),
-        ('unsupportedVersion', 21),
-        ('abortUnrecognizedItems', 22),
-        ('unrecognizedSigKey', 23),
-        ('badSignatureOrMAC', 24),
-        ('unableToDecode', 25),
-        ('notAuthorized', 26),
-        ('unsupportedChecks', 27),
-        ('unsupportedWantBacks', 28),
-        ('unsupportedSignatureOrMAC', 29),
-        ('invalidSignatureOrMAC', 30),
-        ('protectedResponseUnsupported', 31),
-        ('unrecognizedResponderName', 32),
-        ('relayingLoop', 40),
-        ('unrecognizedValPol', 50),
-        ('unrecognizedValAlg', 51),
-        ('fullRequestInResponseUnsupported', 52),
-        ('fullPolResponseUnsupported', 53),
-        ('inhibitPolicyMappingUnsupported', 54),
-        ('requireExplicitPolicyUnsupported', 55),
-        ('inhibitAnyPolicyUnsupported', 56),
-        ('validationTimeUnsupported', 57),
-        ('unrecognizedCritQueryExt', 63),
-        ('unrecognizedCritRequestExt', 64)
+        ("okay", 0),
+        ("skipUnrecognizedItems", 1),
+        ("tooBusy", 10),
+        ("invalidRequest", 11),
+        ("internalError", 12),
+        ("badStructure", 20),
+        ("unsupportedVersion", 21),
+        ("abortUnrecognizedItems", 22),
+        ("unrecognizedSigKey", 23),
+        ("badSignatureOrMAC", 24),
+        ("unableToDecode", 25),
+        ("notAuthorized", 26),
+        ("unsupportedChecks", 27),
+        ("unsupportedWantBacks", 28),
+        ("unsupportedSignatureOrMAC", 29),
+        ("invalidSignatureOrMAC", 30),
+        ("protectedResponseUnsupported", 31),
+        ("unrecognizedResponderName", 32),
+        ("relayingLoop", 40),
+        ("unrecognizedValPol", 50),
+        ("unrecognizedValAlg", 51),
+        ("fullRequestInResponseUnsupported", 52),
+        ("fullPolResponseUnsupported", 53),
+        ("inhibitPolicyMappingUnsupported", 54),
+        ("requireExplicitPolicyUnsupported", 55),
+        ("inhibitAnyPolicyUnsupported", 56),
+        ("validationTimeUnsupported", 57),
+        ("unrecognizedCritQueryExt", 63),
+        ("unrecognizedCritRequestExt", 64),
     )
 
 
 class ResponseStatus(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('statusCode',
-            CVStatusCode().subtype(value='okay')),
-        namedtype.OptionalNamedType('errorMessage',
-            char.UTF8String())
+        namedtype.DefaultedNamedType(
+            "statusCode", CVStatusCode().subtype(value="okay")
+        ),
+        namedtype.OptionalNamedType("errorMessage", char.UTF8String()),
     )
 
 
 class CVResponse(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('cvResponseVersion', univ.Integer()),
-        namedtype.NamedType('serverConfigurationID', univ.Integer()),
-        namedtype.NamedType('producedAt', useful.GeneralizedTime()),
-        namedtype.NamedType('responseStatus', ResponseStatus()),
-        namedtype.OptionalNamedType('respValidationPolicy',
-            RespValidationPolicy().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 0))),
-        namedtype.OptionalNamedType('requestRef',
-            RequestReference().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatConstructed, 1))),
-        namedtype.OptionalNamedType('requestorRef',
-            GeneralNames().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 2))),
-        namedtype.OptionalNamedType('requestorName',
-            GeneralNames().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 3))),
-        namedtype.OptionalNamedType('replyObjects',
-            ReplyObjects().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 4))),
-        namedtype.OptionalNamedType('respNonce',
-            univ.OctetString().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 5))),
-        namedtype.OptionalNamedType('serverContextInfo',
-            univ.OctetString().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 6))),
-        namedtype.OptionalNamedType('cvResponseExtensions',
-            Extensions().subtype(implicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 7))),
-        namedtype.OptionalNamedType('requestorText',
-            char.UTF8String().subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, 256)).subtype(
-                    implicitTag=tag.Tag(tag.tagClassContext,
-                        tag.tagFormatSimple, 8)))
+        namedtype.NamedType("cvResponseVersion", univ.Integer()),
+        namedtype.NamedType("serverConfigurationID", univ.Integer()),
+        namedtype.NamedType("producedAt", useful.GeneralizedTime()),
+        namedtype.NamedType("responseStatus", ResponseStatus()),
+        namedtype.OptionalNamedType(
+            "respValidationPolicy",
+            RespValidationPolicy().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestRef",
+            RequestReference().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatConstructed, 1)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestorRef",
+            GeneralNames().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestorName",
+            GeneralNames().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 3)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "replyObjects",
+            ReplyObjects().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 4)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "respNonce",
+            univ.OctetString().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 5)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "serverContextInfo",
+            univ.OctetString().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 6)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "cvResponseExtensions",
+            Extensions().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 7)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "requestorText",
+            char.UTF8String()
+            .subtype(subtypeSpec=constraint.ValueSizeConstraint(1, 256))
+            .subtype(implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 8)),
+        ),
     )
 
 
@@ -513,40 +659,36 @@ class CertBundles(univ.SequenceOf):
 
 class KeyAgreePublicKey(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('algorithm', AlgorithmIdentifier()),
-        namedtype.NamedType('publicKey', univ.BitString()),
-        namedtype.NamedType('macAlgorithm', AlgorithmIdentifier()),
-        namedtype.OptionalNamedType('kDF', AlgorithmIdentifier())
+        namedtype.NamedType("algorithm", AlgorithmIdentifier()),
+        namedtype.NamedType("publicKey", univ.BitString()),
+        namedtype.NamedType("macAlgorithm", AlgorithmIdentifier()),
+        namedtype.OptionalNamedType("kDF", AlgorithmIdentifier()),
     )
 
 
 class NameValidationAlgParms(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('nameCompAlgId', univ.ObjectIdentifier()),
-        namedtype.NamedType('validationNames', GeneralNames())
+        namedtype.NamedType("nameCompAlgId", univ.ObjectIdentifier()),
+        namedtype.NamedType("validationNames", GeneralNames()),
     )
+
 
 class ResponseTypes(univ.Enumerated):
     namedValues = namedval.NamedValues(
-        ('cached-only', 0),
-        ('non-cached-only', 1),
-        ('cached-and-non-cached', 2)
+        ("cached-only", 0), ("non-cached-only", 1), ("cached-and-non-cached", 2)
     )
 
 
 class RevInfoWantBack(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('revocationInfo', RevocationInfos()),
-        namedtype.OptionalNamedType('extraCerts', CertBundle())
+        namedtype.NamedType("revocationInfo", RevocationInfos()),
+        namedtype.OptionalNamedType("extraCerts", CertBundle()),
     )
 
 
 class RevocationInfoTypes(univ.BitString):
     namedValues = namedval.NamedValues(
-        ('fullCRLs', 0),
-        ('deltaCRLs', 1),
-        ('indirectCRLs', 2),
-        ('oCSPResponses', 3)
+        ("fullCRLs", 0), ("deltaCRLs", 1), ("indirectCRLs", 2), ("oCSPResponses", 3)
     )
 
 
@@ -556,43 +698,53 @@ class SCVPResponses(univ.SequenceOf):
 
 class ValPolRequest(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.DefaultedNamedType('vpRequestVersion',
-            univ.Integer().subtype(value=1)),
-        namedtype.NamedType('requestNonce', univ.OctetString())
+        namedtype.DefaultedNamedType(
+            "vpRequestVersion", univ.Integer().subtype(value=1)
+        ),
+        namedtype.NamedType("requestNonce", univ.OctetString()),
     )
 
 
 class ValPolResponse(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('vpResponseVersion', univ.Integer()),
-        namedtype.NamedType('maxCVRequestVersion', univ.Integer()),
-        namedtype.NamedType('maxVPRequestVersion', univ.Integer()),
-        namedtype.NamedType('serverConfigurationID', univ.Integer()),
-        namedtype.NamedType('thisUpdate', useful.GeneralizedTime()),
-        namedtype.OptionalNamedType('nextUpdate', useful.GeneralizedTime()),
-        namedtype.NamedType('supportedChecks', CertChecks()),
-        namedtype.NamedType('supportedWantBacks', WantBack()),
-        namedtype.NamedType('validationPolicies',
-            univ.SequenceOf(componentType=univ.ObjectIdentifier())),
-        namedtype.NamedType('validationAlgs',
-            univ.SequenceOf(componentType=univ.ObjectIdentifier())),
-        namedtype.NamedType('authPolicies',
-            univ.SequenceOf(componentType=AuthPolicy())),
-        namedtype.NamedType('responseTypes', ResponseTypes()),
-        namedtype.NamedType('defaultPolicyValues', RespValidationPolicy()),
-        namedtype.NamedType('revocationInfoTypes', RevocationInfoTypes()),
-        namedtype.NamedType('signatureGeneration',
-            univ.SequenceOf(componentType=AlgorithmIdentifier())),
-        namedtype.NamedType('signatureVerification',
-            univ.SequenceOf(componentType=AlgorithmIdentifier())),
-        namedtype.NamedType('hashAlgorithms',
+        namedtype.NamedType("vpResponseVersion", univ.Integer()),
+        namedtype.NamedType("maxCVRequestVersion", univ.Integer()),
+        namedtype.NamedType("maxVPRequestVersion", univ.Integer()),
+        namedtype.NamedType("serverConfigurationID", univ.Integer()),
+        namedtype.NamedType("thisUpdate", useful.GeneralizedTime()),
+        namedtype.OptionalNamedType("nextUpdate", useful.GeneralizedTime()),
+        namedtype.NamedType("supportedChecks", CertChecks()),
+        namedtype.NamedType("supportedWantBacks", WantBack()),
+        namedtype.NamedType(
+            "validationPolicies", univ.SequenceOf(componentType=univ.ObjectIdentifier())
+        ),
+        namedtype.NamedType(
+            "validationAlgs", univ.SequenceOf(componentType=univ.ObjectIdentifier())
+        ),
+        namedtype.NamedType(
+            "authPolicies", univ.SequenceOf(componentType=AuthPolicy())
+        ),
+        namedtype.NamedType("responseTypes", ResponseTypes()),
+        namedtype.NamedType("defaultPolicyValues", RespValidationPolicy()),
+        namedtype.NamedType("revocationInfoTypes", RevocationInfoTypes()),
+        namedtype.NamedType(
+            "signatureGeneration", univ.SequenceOf(componentType=AlgorithmIdentifier())
+        ),
+        namedtype.NamedType(
+            "signatureVerification",
+            univ.SequenceOf(componentType=AlgorithmIdentifier()),
+        ),
+        namedtype.NamedType(
+            "hashAlgorithms",
             univ.SequenceOf(componentType=univ.ObjectIdentifier()).subtype(
-                subtypeSpec=constraint.ValueSizeConstraint(1, MAX))),
-        namedtype.OptionalNamedType('serverPublicKeys',
-            univ.SequenceOf(componentType=KeyAgreePublicKey())),
-        namedtype.DefaultedNamedType('clockSkew',
-            univ.Integer().subtype(value=10)),
-        namedtype.OptionalNamedType('requestNonce', univ.OctetString())
+                subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "serverPublicKeys", univ.SequenceOf(componentType=KeyAgreePublicKey())
+        ),
+        namedtype.DefaultedNamedType("clockSkew", univ.Integer().subtype(value=10)),
+        namedtype.OptionalNamedType("requestNonce", univ.OctetString()),
     )
 
 
@@ -613,7 +765,6 @@ id_stc_build_valid_aa_path = id_stc + (5,)
 id_stc_build_status_checked_aa_path = id_stc + (6,)
 
 id_stc_status_check_ac_and_build_status_checked_aa_path = id_stc + (7,)
-
 
 # SCVP WantBack Identifiers
 
@@ -643,7 +794,6 @@ id_swb_pkc_ee_revocation_info = id_swb + (13,)
 
 id_swb_pkc_CAs_revocation_info = id_swb + (14,)
 
-
 # SCVP Validation Policy and Algorithm Identifiers
 
 id_svp = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 19))
@@ -655,7 +805,6 @@ id_svp_nameValAlg = id_svp + (2,)
 id_svp_basicValAlg = id_svp + (3,)
 
 id_nva_dnCompAlg = id_svp + (4,)
-
 
 # SCVP Basic Validation Algorithm Errors
 
@@ -677,7 +826,6 @@ id_bvae_invalidKeyUsage = id_bvae + (10,)
 
 id_bvae_invalidCertPolicy = id_bvae + (11,)
 
-
 # SCVP Name Validation Algorithm Errors
 
 id_nvae = univ.ObjectIdentifier(id_svp_nameValAlg)
@@ -694,7 +842,6 @@ id_nvae_bad_name_type = id_nvae + (5,)
 
 id_nvae_mixed_names = id_nvae + (6,)
 
-
 # SCVP Extended Key Usage Key Purpose Identifiers
 
 id_kp = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 3))
@@ -702,7 +849,6 @@ id_kp = univ.ObjectIdentifier((1, 3, 6, 1, 5, 5, 7, 3))
 id_kp_scvpServer = id_kp + (15,)
 
 id_kp_scvpClient = id_kp + (16,)
-
 
 # CMS Content Types
 
@@ -716,7 +862,6 @@ id_ct_scvp_valPolRequest = id_ct + (12,)
 
 id_ct_scvp_valPolResponse = id_ct + (13,)
 
-
 # Update the Content Types Map
 
 _cmsContentTypesMapUpdate = {
@@ -727,7 +872,6 @@ _cmsContentTypesMapUpdate = {
 }
 
 cmsContentTypesMap.update(_cmsContentTypesMapUpdate)
-
 
 # id_svp_defaultValPolicy: parameters MUST be absent
 # so there is nothing to add to scvpValidationPolMap
@@ -741,7 +885,6 @@ _scvpValidationAlgMapUpdate = {
 }
 
 scvpValidationAlgMap.update(_scvpValidationAlgMapUpdate)
-
 
 # Update the SCVP Want Back Map
 

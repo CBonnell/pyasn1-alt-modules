@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -48,22 +48,22 @@ Pj22pmfmQi5w21UljqoTj/+lQLkU3wfy5BdVKBwI0GfEA+YL3ctSzPNqAA==
 
         extn_list = []
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
 
-            if extn['extnID'] == rfc9399.id_pe_logotype:
-                s = extn['extnValue']
+            if extn["extnID"] == rfc9399.id_pe_logotype:
+                s = extn["extnValue"]
                 logotype, rest = der_decoder(s, rfc9399.LogotypeExtn())
                 self.assertFalse(rest)
                 self.assertTrue(logotype.prettyPrint())
                 self.assertEqual(s, der_encoder(logotype))
 
-                im0 = logotype['subjectLogo']['direct']['image'][0]
-                mt = im0['imageDetails']['mediaType']
-                self.assertEqual( "image/png", mt)
+                im0 = logotype["subjectLogo"]["direct"]["image"][0]
+                mt = im0["imageDetails"]["mediaType"]
+                self.assertEqual("image/png", mt)
 
-                expected = 'http://www.vigilsec.com/vigilsec_logo.png'
-                url = im0['imageDetails']['logotypeURI'][0]
+                expected = "http://www.vigilsec.com/vigilsec_logo.png"
+                url = im0["imageDetails"]["logotypeURI"][0]
                 self.assertEqual(expected, url)
 
         self.assertIn(rfc9399.id_pe_logotype, extn_list)
@@ -75,12 +75,13 @@ Pj22pmfmQi5w21UljqoTj/+lQLkU3wfy5BdVKBwI0GfEA+YL3ctSzPNqAA==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] in certificateExtensionsMap:
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] in certificateExtensionsMap:
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
 
 class CertificateLogotypeDataTestCase(unittest.TestCase):
@@ -148,22 +149,22 @@ kbpmR6cDliloU808Bi/erMkrfUHRoZ2d586lkmwkLcoDkJ/yPD+Jhw==
 
         extn_list = []
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
 
-            if extn['extnID'] == rfc9399.id_pe_logotype:
-                s = extn['extnValue']
+            if extn["extnID"] == rfc9399.id_pe_logotype:
+                s = extn["extnValue"]
                 logotype, rest = der_decoder(s, rfc9399.LogotypeExtn())
                 self.assertFalse(rest)
                 self.assertTrue(logotype.prettyPrint())
                 self.assertEqual(s, der_encoder(logotype))
 
-                im0 = logotype['subjectLogo']['direct']['image'][0]
-                mt = im0['imageDetails']['mediaType']
+                im0 = logotype["subjectLogo"]["direct"]["image"][0]
+                mt = im0["imageDetails"]["mediaType"]
                 self.assertEqual("image/svg+xml", mt)
 
-                expected = 'data:image/svg+xml;base64'
-                url25 = im0['imageDetails']['logotypeURI'][0][0:25]
+                expected = "data:image/svg+xml;base64"
+                url25 = im0["imageDetails"]["logotypeURI"][0][0:25]
                 self.assertEqual(expected, url25)
 
         self.assertIn(rfc9399.id_pe_logotype, extn_list)
@@ -176,12 +177,13 @@ kbpmR6cDliloU808Bi/erMkrfUHRoZ2d586lkmwkLcoDkJ/yPD+Jhw==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] in certificateExtensionsMap:
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] in certificateExtensionsMap:
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
 
 class CertificateLogotypeMultipleTestCase(unittest.TestCase):
@@ -232,28 +234,28 @@ tu39FvbV0uKJ
 
         extn_list = []
 
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
 
-            if extn['extnID'] == rfc9399.id_pe_logotype:
-                s = extn['extnValue']
+            if extn["extnID"] == rfc9399.id_pe_logotype:
+                s = extn["extnValue"]
                 logotype, rest = der_decoder(s, rfc9399.LogotypeExtn())
                 self.assertFalse(rest)
                 self.assertTrue(logotype.prettyPrint())
                 self.assertEqual(s, der_encoder(logotype))
 
-                self.assertTrue(logotype['communityLogos'].hasValue())
-                self.assertEqual(2, len(logotype['communityLogos']))
-                for clti in logotype['communityLogos']:
-                    clti_id = clti['direct']['image'][0]['imageDetails']
-                    url19 = clti_id['logotypeURI'][0][0:19]
-                    self.assertEqual('http://www.example.', url19)
+                self.assertTrue(logotype["communityLogos"].hasValue())
+                self.assertEqual(2, len(logotype["communityLogos"]))
+                for clti in logotype["communityLogos"]:
+                    clti_id = clti["direct"]["image"][0]["imageDetails"]
+                    url19 = clti_id["logotypeURI"][0][0:19]
+                    self.assertEqual("http://www.example.", url19)
 
-                self.assertTrue(logotype['subjectLogo'].hasValue())
-                self.assertEqual(2, len(logotype['subjectLogo']['direct']['image']))
-                for slti in logotype['subjectLogo']['direct']['image']:
-                    url29 = slti['imageDetails']['logotypeURI'][0][0:29]
-                    self.assertEqual('http://www.smime.example/logo', url29)
+                self.assertTrue(logotype["subjectLogo"].hasValue())
+                self.assertEqual(2, len(logotype["subjectLogo"]["direct"]["image"]))
+                for slti in logotype["subjectLogo"]["direct"]["image"]:
+                    url29 = slti["imageDetails"]["logotypeURI"][0][0:29]
+                    self.assertEqual("http://www.smime.example/logo", url29)
 
         self.assertIn(rfc9399.id_pe_logotype, extn_list)
 
@@ -265,12 +267,13 @@ tu39FvbV0uKJ
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if extn['extnID'] in certificateExtensionsMap:
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if extn["extnID"] in certificateExtensionsMap:
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
 
 class ExtnLogotypeOtherDataTestCase(unittest.TestCase):
@@ -349,21 +352,21 @@ N09qZmZRL0hlVjBYOEJvcG9Ea0dFa0FBQT0=
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc9399.id_pe_logotype, asn1Object['extnID'])
+        self.assertEqual(rfc9399.id_pe_logotype, asn1Object["extnID"])
 
-        s = asn1Object['extnValue']
+        s = asn1Object["extnValue"]
         logotype, rest = der_decoder(s, asn1Spec=rfc9399.LogotypeExtn())
         self.assertFalse(rest)
         self.assertTrue(logotype.prettyPrint())
         self.assertEqual(s, der_encoder(logotype))
 
-        self.assertTrue(logotype['otherLogos'].hasValue())
-        self.assertEqual(1, len(logotype['otherLogos']))
-        oltt = logotype['otherLogos'][0]['logotypeType']
+        self.assertTrue(logotype["otherLogos"].hasValue())
+        self.assertEqual(1, len(logotype["otherLogos"]))
+        oltt = logotype["otherLogos"][0]["logotypeType"]
         self.assertEqual(rfc9399.id_logo_certImage, oltt)
-        olti = logotype['otherLogos'][0]['info']['direct']['image'][0]
-        url31 = olti['imageDetails']['logotypeURI'][0][0:31]
-        self.assertEqual('data:image/svg+xml+gzip;base64,', url31)
+        olti = logotype["otherLogos"][0]["info"]["direct"]["image"][0]
+        url31 = olti["imageDetails"]["logotypeURI"][0][0:31]
+        self.assertEqual("data:image/svg+xml+gzip;base64,", url31)
 
 
 class ExtnLogotyeDataTestCase(unittest.TestCase):
@@ -426,19 +429,19 @@ VzUxV3Bxd2dvc3I1STkyN2F3NjQwMStZZndEcmlhNFdvUXdBQUE9PQ==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc9399.id_pe_logotype, asn1Object['extnID'])
+        self.assertEqual(rfc9399.id_pe_logotype, asn1Object["extnID"])
 
-        s = asn1Object['extnValue']
+        s = asn1Object["extnValue"]
         logotype, rest = der_decoder(s, asn1Spec=rfc9399.LogotypeExtn())
         self.assertFalse(rest)
         self.assertTrue(logotype.prettyPrint())
         self.assertEqual(s, der_encoder(logotype))
 
-        self.assertTrue(logotype['subjectLogo'].hasValue())
-        self.assertEqual(1, len(logotype['subjectLogo']['direct']['image']))
-        slti = logotype['subjectLogo']['direct']['image'][0]
-        url31 = slti['imageDetails']['logotypeURI'][0][0:31]
-        self.assertEqual('data:image/svg+xml+gzip;base64,', url31)
+        self.assertTrue(logotype["subjectLogo"].hasValue())
+        self.assertEqual(1, len(logotype["subjectLogo"]["direct"]["image"]))
+        slti = logotype["subjectLogo"]["direct"]["image"][0]
+        url31 = slti["imageDetails"]["logotypeURI"][0][0:31]
+        self.assertEqual("data:image/svg+xml+gzip;base64,", url31)
 
 
 class ExtnLogotyeIssuerJPEGTestCase(unittest.TestCase):
@@ -459,19 +462,19 @@ cDovL2xvZ28uZXhhbXBsZS5jb20vbG9nby5qcGVn
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc9399.id_pe_logotype, asn1Object['extnID'])
+        self.assertEqual(rfc9399.id_pe_logotype, asn1Object["extnID"])
 
-        s = asn1Object['extnValue']
+        s = asn1Object["extnValue"]
         logotype, rest = der_decoder(s, asn1Spec=rfc9399.LogotypeExtn())
         self.assertFalse(rest)
         self.assertTrue(logotype.prettyPrint())
         self.assertEqual(s, der_encoder(logotype))
 
-        self.assertTrue(logotype['issuerLogo'].hasValue())
-        self.assertEqual(1, len(logotype['issuerLogo']['direct']['image']))
-        ilti = logotype['issuerLogo']['direct']['image'][0]
-        url = ilti['imageDetails']['logotypeURI'][0]
-        self.assertEqual('http://logo.example.com/logo.jpeg', url)
+        self.assertTrue(logotype["issuerLogo"].hasValue())
+        self.assertEqual(1, len(logotype["issuerLogo"]["direct"]["image"]))
+        ilti = logotype["issuerLogo"]["direct"]["image"][0]
+        url = ilti["imageDetails"]["logotypeURI"][0]
+        self.assertEqual("http://logo.example.com/logo.jpeg", url)
 
 
 class ExtnLogotyeIssuerGIFTestCase(unittest.TestCase):
@@ -492,23 +495,23 @@ Y29tL2xvZ28uZ2lm
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(rfc9399.id_pe_logotype, asn1Object['extnID'])
+        self.assertEqual(rfc9399.id_pe_logotype, asn1Object["extnID"])
 
-        s = asn1Object['extnValue']
+        s = asn1Object["extnValue"]
         logotype, rest = der_decoder(s, asn1Spec=rfc9399.LogotypeExtn())
         self.assertFalse(rest)
         self.assertTrue(logotype.prettyPrint())
         self.assertEqual(s, der_encoder(logotype))
 
-        self.assertTrue(logotype['issuerLogo'].hasValue())
-        self.assertEqual(1, len(logotype['issuerLogo']['direct']['image']))
-        ilti = logotype['issuerLogo']['direct']['image'][0]
-        url = ilti['imageDetails']['logotypeURI'][0]
-        self.assertEqual('http://logo.example.com/logo.gif', url)
+        self.assertTrue(logotype["issuerLogo"].hasValue())
+        self.assertEqual(1, len(logotype["issuerLogo"]["direct"]["image"]))
+        ilti = logotype["issuerLogo"]["direct"]["image"][0]
+        url = ilti["imageDetails"]["logotypeURI"][0]
+        self.assertEqual("http://logo.example.com/logo.gif", url)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

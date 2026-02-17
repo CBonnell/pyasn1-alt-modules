@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Subject Identification Method (SIM)
@@ -21,17 +21,18 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-otherNamesMap = opentypemap.get('otherNamesMap')
+otherNamesMap = opentypemap.get("otherNamesMap")
 
 
 # Used to compute the PEPSI value
 
+
 class HashContent(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('userPassword', char.UTF8String()),
-        namedtype.NamedType('authorityRandom', univ.OctetString()),
-        namedtype.NamedType('identifierType', univ.ObjectIdentifier()),
-        namedtype.NamedType('identifier', char.UTF8String())
+        namedtype.NamedType("userPassword", char.UTF8String()),
+        namedtype.NamedType("authorityRandom", univ.OctetString()),
+        namedtype.NamedType("identifierType", univ.ObjectIdentifier()),
+        namedtype.NamedType("identifier", char.UTF8String()),
     )
 
 
@@ -46,9 +47,9 @@ id_on_SIM = id_on + (6,)
 
 class SIM(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('hashAlg', rfc5280.AlgorithmIdentifier()),
-        namedtype.NamedType('authorityRandom', univ.OctetString()),
-        namedtype.NamedType('pEPSI', univ.OctetString())
+        namedtype.NamedType("hashAlg", rfc5280.AlgorithmIdentifier()),
+        namedtype.NamedType("authorityRandom", univ.OctetString()),
+        namedtype.NamedType("pEPSI", univ.OctetString()),
     )
 
 
@@ -61,9 +62,9 @@ id_regEPEPSI = id_pkip + (3,)
 
 class EncryptedPEPSI(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('identifierType', univ.ObjectIdentifier()),
-        namedtype.NamedType('identifier', char.UTF8String()),
-        namedtype.NamedType('sIM', SIM())
+        namedtype.NamedType("identifierType", univ.ObjectIdentifier()),
+        namedtype.NamedType("identifier", char.UTF8String()),
+        namedtype.NamedType("sIM", SIM()),
     )
 
 

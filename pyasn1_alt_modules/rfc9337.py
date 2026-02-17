@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # GOST Algorithms with PKCS#5
@@ -17,8 +17,7 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-algorithmIdentifierMap = opentypemap.get('algorithmIdentifierMap')
-
+algorithmIdentifierMap = opentypemap.get("algorithmIdentifierMap")
 
 # Object Identifiers
 
@@ -34,41 +33,40 @@ id_tc26_cipher = id_tc26_algorithms + (5,)
 
 id_tc26_cipher_gostr3412_2015_magma = id_tc26_cipher + (1,)
 
-id_tc26_cipher_gostr3412_2015_magma_ctracpkm = \
-    id_tc26_cipher_gostr3412_2015_magma + (1,)
+id_tc26_cipher_gostr3412_2015_magma_ctracpkm = id_tc26_cipher_gostr3412_2015_magma + (
+    1,
+)
 
-id_tc26_cipher_gostr3412_2015_magma_ctracpkm_omac = \
+id_tc26_cipher_gostr3412_2015_magma_ctracpkm_omac = (
     id_tc26_cipher_gostr3412_2015_magma + (2,)
+)
 
 id_tc26_cipher_gostr3412_2015_kuznyechik = id_tc26_cipher + (2,)
 
-id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm = \
+id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm = (
     id_tc26_cipher_gostr3412_2015_kuznyechik + (1,)
+)
 
-id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm_omac = \
+id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm_omac = (
     id_tc26_cipher_gostr3412_2015_kuznyechik + (2,)
+)
 
 
 # Parameters
 
+
 class Gost3412_15_Encryption_Parameters(univ.Sequence):
-    componentType = namedtype.NamedTypes(
-        namedtype.NamedType('ukm', univ.OctetString())
-    )
+    componentType = namedtype.NamedTypes(namedtype.NamedType("ukm", univ.OctetString()))
 
 
 # Update the algorithm identifiers map
 
 _algorithmIdentifierMapUpdate = {
     id_tc26_hmac_gost3411_12_512: univ.Null(),
-    id_tc26_cipher_gostr3412_2015_magma_ctracpkm: \
-        Gost3412_15_Encryption_Parameters(),
-    id_tc26_cipher_gostr3412_2015_magma_ctracpkm_omac: \
-        Gost3412_15_Encryption_Parameters(),
-    id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm: \
-        Gost3412_15_Encryption_Parameters(),
-    id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm_omac: \
-        Gost3412_15_Encryption_Parameters(),
+    id_tc26_cipher_gostr3412_2015_magma_ctracpkm: Gost3412_15_Encryption_Parameters(),
+    id_tc26_cipher_gostr3412_2015_magma_ctracpkm_omac: Gost3412_15_Encryption_Parameters(),
+    id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm: Gost3412_15_Encryption_Parameters(),
+    id_tc26_cipher_gostr3412_2015_kuznyechik_ctracpkm_omac: Gost3412_15_Encryption_Parameters(),
 }
 
 algorithmIdentifierMap.update(_algorithmIdentifierMapUpdate)

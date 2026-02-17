@@ -2,7 +2,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Enhanced JWT Claim Constraints certificate extensions
@@ -18,14 +18,13 @@ from pyasn1.type import univ
 
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # EnhancedJWTClaimConstraints Certificate Extension
 
-id_pe_eJWTClaimConstraints = univ.ObjectIdentifier('1.3.6.1.5.5.7.1.33')
+id_pe_eJWTClaimConstraints = univ.ObjectIdentifier("1.3.6.1.5.5.7.1.33")
 
 
 class JWTClaimName(char.IA5String):
@@ -39,10 +38,13 @@ class JWTClaimNames(univ.SequenceOf):
 
 class JWTClaimValues(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('claim', JWTClaimName()),
-        namedtype.NamedType('values', univ.SequenceOf(
-            componentType=char.UTF8String()).subtype(
-                sizeSpec=constraint.ValueSizeConstraint(1, MAX)))
+        namedtype.NamedType("claim", JWTClaimName()),
+        namedtype.NamedType(
+            "values",
+            univ.SequenceOf(componentType=char.UTF8String()).subtype(
+                sizeSpec=constraint.ValueSizeConstraint(1, MAX)
+            ),
+        ),
     )
 
 
@@ -53,23 +55,35 @@ class JWTClaimValuesList(univ.SequenceOf):
 
 class EnhancedJWTClaimConstraints(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.OptionalNamedType('mustInclude',
-            JWTClaimNames().subtype(explicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 0))),
-        namedtype.OptionalNamedType('permittedValues',
-            JWTClaimValuesList().subtype(explicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 1))),
-        namedtype.OptionalNamedType('mustExclude',
-            JWTClaimNames().subtype(explicitTag=tag.Tag(
-                tag.tagClassContext, tag.tagFormatSimple, 2)))
+        namedtype.OptionalNamedType(
+            "mustInclude",
+            JWTClaimNames().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "permittedValues",
+            JWTClaimValuesList().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 1)
+            ),
+        ),
+        namedtype.OptionalNamedType(
+            "mustExclude",
+            JWTClaimNames().subtype(
+                explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 2)
+            ),
+        ),
     )
     subtypeSpec = constraint.ConstraintsUnion(
         constraint.WithComponentsConstraint(
-            ('mustInclude', constraint.ComponentPresentConstraint())),
+            ("mustInclude", constraint.ComponentPresentConstraint())
+        ),
         constraint.WithComponentsConstraint(
-            ('permittedValues', constraint.ComponentPresentConstraint())),
+            ("permittedValues", constraint.ComponentPresentConstraint())
+        ),
         constraint.WithComponentsConstraint(
-            ('mustExclude', constraint.ComponentPresentConstraint()))
+            ("mustExclude", constraint.ComponentPresentConstraint())
+        ),
     )
 
 

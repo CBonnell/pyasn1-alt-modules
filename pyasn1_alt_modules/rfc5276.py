@@ -4,7 +4,7 @@
 # Created by Russ Housley with assistance from asn1ate v.0.6.0.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Using SCVP to convey Long-Term Evidence Records
@@ -22,10 +22,9 @@ from pyasn1_alt_modules import rfc4998
 from pyasn1_alt_modules import rfc5055
 from pyasn1_alt_modules import opentypemap
 
-scvpWantBackMap = opentypemap.get('scvpWantBackMap')
+scvpWantBackMap = opentypemap.get("scvpWantBackMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 # Imports from RFC 4998 and RFC 5055
 
@@ -36,10 +35,11 @@ CertBundle = rfc5055.CertBundle
 
 # Long-Term Evidence Records in SCVP
 
+
 class EvidenceRecordWantBack(univ.Sequence):
     componentType = namedtype.NamedTypes(
-        namedtype.NamedType('targetWantBack', univ.ObjectIdentifier()),
-        namedtype.OptionalNamedType('evidenceRecord', EvidenceRecord())
+        namedtype.NamedType("targetWantBack", univ.ObjectIdentifier()),
+        namedtype.OptionalNamedType("evidenceRecord", EvidenceRecord()),
     )
 
 
@@ -66,7 +66,6 @@ id_swb_ers_partial_cert_path = id_swb + (18,)
 id_swb_ers_revocation_info = id_swb + (19,)
 
 id_swb_ers_all = id_swb + (20,)
-
 
 # Update the SCVP Want Back Map
 

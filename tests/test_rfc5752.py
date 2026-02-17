@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -83,74 +83,73 @@ jdEOIlE+zO/fF9I+syiz898JzTosN/V8wvaDoALtnQ==
     def testDerCodec(self):
         substrate = pem.readBase64fromText(self.pem_text)
 
-        layers = { }
-        layers.update(opentypemap.get('cmsContentTypesMap'))
+        layers = {}
+        layers.update(opentypemap.get("cmsContentTypesMap"))
 
         getNextLayer = {
-            rfc5652.id_ct_contentInfo: lambda x: x['contentType'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContentType'],
-            rfc5652.id_data: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["contentType"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContentType"],
+            rfc5652.id_data: lambda x: None,
         }
 
         getNextSubstrate = {
-            rfc5652.id_ct_contentInfo: lambda x: x['content'],
-            rfc5652.id_signedData: lambda x: x['encapContentInfo']['eContent'],
-            rfc5652.id_data: lambda x: None
+            rfc5652.id_ct_contentInfo: lambda x: x["content"],
+            rfc5652.id_signedData: lambda x: x["encapContentInfo"]["eContent"],
+            rfc5652.id_data: lambda x: None,
         }
 
         next_layer = rfc5652.id_ct_contentInfo
         while not next_layer == rfc5652.id_data:
-            asn1Object, rest = der_decoder(
-                substrate, asn1Spec=layers[next_layer])
+            asn1Object, rest = der_decoder(substrate, asn1Spec=layers[next_layer])
 
             self.assertFalse(rest)
             self.assertTrue(asn1Object.prettyPrint())
             self.assertEqual(substrate, der_encoder(asn1Object))
 
             if next_layer == rfc5652.id_signedData:
-                signerInfos = asn1Object['signerInfos']
+                signerInfos = asn1Object["signerInfos"]
 
             substrate = getNextSubstrate[next_layer](asn1Object)
             next_layer = getNextLayer[next_layer](asn1Object)
 
-        cmsAttributesMap = opentypemap.get('cmsAttributesMap')
+        cmsAttributesMap = opentypemap.get("cmsAttributesMap")
 
         found_mult_sig1 = False
-        for attr in signerInfos[0]['signedAttrs']:
-            if attr['attrType'] in cmsAttributesMap:
-                av, rest = der_decoder(attr['attrValues'][0],
-                    asn1Spec=cmsAttributesMap[attr['attrType']])
+        for attr in signerInfos[0]["signedAttrs"]:
+            if attr["attrType"] in cmsAttributesMap:
+                av, rest = der_decoder(
+                    attr["attrValues"][0], asn1Spec=cmsAttributesMap[attr["attrType"]]
+                )
                 self.assertFalse(rest)
                 self.assertTrue(av.prettyPrint())
-                self.assertEqual(attr['attrValues'][0], der_encoder(av))
+                self.assertEqual(attr["attrValues"][0], der_encoder(av))
 
-                if attr['attrType'] == rfc5752.id_aa_multipleSignatures:
-                    self.assertEqual(
-                        av['bodyHashAlg']['algorithm'], rfc4055.id_sha384)
+                if attr["attrType"] == rfc5752.id_aa_multipleSignatures:
+                    self.assertEqual(av["bodyHashAlg"]["algorithm"], rfc4055.id_sha384)
 
                     self.assertEqual(
-                        'dfaf6c0a',
-                        av['signAttrsHash']['hash'].prettyPrint()[2:10])
+                        "dfaf6c0a", av["signAttrsHash"]["hash"].prettyPrint()[2:10]
+                    )
 
                     found_mult_sig1 = True
 
         found_mult_sig2 = False
-        for attr in signerInfos[1]['signedAttrs']:
-            if attr['attrType'] in cmsAttributesMap:
-                av, rest = der_decoder(attr['attrValues'][0],
-                    asn1Spec=cmsAttributesMap[attr['attrType']])
+        for attr in signerInfos[1]["signedAttrs"]:
+            if attr["attrType"] in cmsAttributesMap:
+                av, rest = der_decoder(
+                    attr["attrValues"][0], asn1Spec=cmsAttributesMap[attr["attrType"]]
+                )
 
                 self.assertFalse(rest)
                 self.assertTrue(av.prettyPrint())
-                self.assertEqual(attr['attrValues'][0], der_encoder(av))
+                self.assertEqual(attr["attrValues"][0], der_encoder(av))
 
-                if attr['attrType'] == rfc5752.id_aa_multipleSignatures:
-                    self.assertEqual(
-                        av['bodyHashAlg']['algorithm'], rfc4055.id_sha256)
+                if attr["attrType"] == rfc5752.id_aa_multipleSignatures:
+                    self.assertEqual(av["bodyHashAlg"]["algorithm"], rfc4055.id_sha256)
 
                     self.assertEqual(
-                        '7329527d',
-                        av['signAttrsHash']['hash'].prettyPrint()[2:10])
+                        "7329527d", av["signAttrsHash"]["hash"].prettyPrint()[2:10]
+                    )
 
                     found_mult_sig2 = True
 
@@ -160,36 +159,35 @@ jdEOIlE+zO/fF9I+syiz898JzTosN/V8wvaDoALtnQ==
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True)
+            substrate, asn1Spec=rfc5652.ContentInfo(), decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found_mult_sig1 = False
-        for attr in asn1Object['content']['signerInfos'][0]['signedAttrs']:
-            if attr['attrType'] == rfc5752.id_aa_multipleSignatures:
-                av = attr['attrValues'][0]
+        for attr in asn1Object["content"]["signerInfos"][0]["signedAttrs"]:
+            if attr["attrType"] == rfc5752.id_aa_multipleSignatures:
+                av = attr["attrValues"][0]
+
+                self.assertEqual(av["bodyHashAlg"]["algorithm"], rfc4055.id_sha384)
 
                 self.assertEqual(
-                    av['bodyHashAlg']['algorithm'], rfc4055.id_sha384)
-
-                self.assertEqual(
-                    'dfaf6c0a',
-                    av['signAttrsHash']['hash'].prettyPrint()[2:10])
+                    "dfaf6c0a", av["signAttrsHash"]["hash"].prettyPrint()[2:10]
+                )
 
                 found_mult_sig1 = True
 
         found_mult_sig2 = False
-        for attr in asn1Object['content']['signerInfos'][1]['signedAttrs']:
-            if attr['attrType'] == rfc5752.id_aa_multipleSignatures:
-                av = attr['attrValues'][0]
+        for attr in asn1Object["content"]["signerInfos"][1]["signedAttrs"]:
+            if attr["attrType"] == rfc5752.id_aa_multipleSignatures:
+                av = attr["attrValues"][0]
+
+                self.assertEqual(av["bodyHashAlg"]["algorithm"], rfc4055.id_sha256)
 
                 self.assertEqual(
-                    av['bodyHashAlg']['algorithm'], rfc4055.id_sha256)
-
-                self.assertEqual(
-                    '7329527d',
-                    av['signAttrsHash']['hash'].prettyPrint()[2:10])
+                    "7329527d", av["signAttrsHash"]["hash"].prettyPrint()[2:10]
+                )
 
                 found_mult_sig2 = True
 
@@ -199,7 +197,7 @@ jdEOIlE+zO/fF9I+syiz898JzTosN/V8wvaDoALtnQ==
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     result = unittest.TextTestRunner(verbosity=2).run(suite)

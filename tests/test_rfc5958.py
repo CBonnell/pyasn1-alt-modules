@@ -2,7 +2,7 @@
 # This file is part of pyasn1-alt-modules software.
 #
 # Created by Russ Housley
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -36,13 +36,12 @@ Z9w7lshQhqowtrbLDFw4rXAxZuE=
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(
-            rfc8410.id_Ed25519, asn1Object['privateKeyAlgorithm']['algorithm'])
-        self.assertTrue(asn1Object['privateKey'].isValue)
-        self.assertEqual(
-            "0x0420d4ee", asn1Object['privateKey'].prettyPrint()[0:10])
-        self.assertTrue(asn1Object['publicKey'].isValue)
-        self.assertEqual(
-            "1164575857", asn1Object['publicKey'].prettyPrint()[0:10])
+            rfc8410.id_Ed25519, asn1Object["privateKeyAlgorithm"]["algorithm"]
+        )
+        self.assertTrue(asn1Object["privateKey"].isValue)
+        self.assertEqual("0x0420d4ee", asn1Object["privateKey"].prettyPrint()[0:10])
+        self.assertTrue(asn1Object["publicKey"].isValue)
+        self.assertEqual("1164575857", asn1Object["publicKey"].prettyPrint()[0:10])
         self.assertEqual(substrate, der_encoder(asn1Object))
 
 
@@ -57,27 +56,26 @@ YWlyc4EhABm/RAlphM3+hUG6wWfcO5bIUIaqMLa2ywxcOK1wMWbh
         self.asn1Spec = rfc5652.ContentInfo()
 
     def testOpenTypes(self):
-        cmsContentTypesMap = opentypemap.get('cmsContentTypesMap')
+        cmsContentTypesMap = opentypemap.get("cmsContentTypesMap")
         self.assertIn(rfc5958.id_ct_KP_aKeyPackage, cmsContentTypesMap)
 
         substrate = pem.readBase64fromText(self.asymmetric_key_pkg_pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        oneKey = asn1Object['content'][0]
-        self.assertEqual(
-            rfc8410.id_Ed25519, oneKey['privateKeyAlgorithm']['algorithm'])
+        oneKey = asn1Object["content"][0]
+        self.assertEqual(rfc8410.id_Ed25519, oneKey["privateKeyAlgorithm"]["algorithm"])
 
-        pkcs_9_at_friendlyName = univ.ObjectIdentifier('1.2.840.113549.1.9.9.20')
-        self.assertEqual(
-            pkcs_9_at_friendlyName, oneKey['attributes'][0]['attrType'])
+        pkcs_9_at_friendlyName = univ.ObjectIdentifier("1.2.840.113549.1.9.9.20")
+        self.assertEqual(pkcs_9_at_friendlyName, oneKey["attributes"][0]["attrType"])
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

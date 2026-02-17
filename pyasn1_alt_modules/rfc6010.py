@@ -5,7 +5,7 @@
 # Modified by Russ Housley to add maps for use with opentypes.
 # Modified by Russ Housley to include the opentypemap manager.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # Certificate Extension for CMS Content Constraints (CCC)
@@ -22,65 +22,72 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import rfc5280
 from pyasn1_alt_modules import opentypemap
 
-certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
+certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
 
-MAX = float('inf')
-
+MAX = float("inf")
 
 AttributeType = rfc5280.AttributeType
 
 AttributeValue = rfc5280.AttributeValue
 
-
-id_ct_anyContentType = univ.ObjectIdentifier('1.2.840.113549.1.9.16.1.0')
+id_ct_anyContentType = univ.ObjectIdentifier("1.2.840.113549.1.9.16.1.0")
 
 
 class AttrConstraint(univ.Sequence):
     pass
 
+
 AttrConstraint.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('attrType', AttributeType()),
-    namedtype.NamedType('attrValues', univ.SetOf(
-        componentType=AttributeValue()).subtype(subtypeSpec=constraint.ValueSizeConstraint(1, MAX)))
+    namedtype.NamedType("attrType", AttributeType()),
+    namedtype.NamedType(
+        "attrValues",
+        univ.SetOf(componentType=AttributeValue()).subtype(
+            subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+        ),
+    ),
 )
 
 
 class AttrConstraintList(univ.SequenceOf):
     pass
 
+
 AttrConstraintList.componentType = AttrConstraint()
-AttrConstraintList.subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
+AttrConstraintList.subtypeSpec = constraint.ValueSizeConstraint(1, MAX)
 
 
 class ContentTypeGeneration(univ.Enumerated):
     pass
 
+
 ContentTypeGeneration.namedValues = namedval.NamedValues(
-    ('canSource', 0),
-    ('cannotSource', 1)
+    ("canSource", 0), ("cannotSource", 1)
 )
 
 
 class ContentTypeConstraint(univ.Sequence):
     pass
 
-ContentTypeConstraint.componentType = namedtype.NamedTypes(
-    namedtype.NamedType('contentType', univ.ObjectIdentifier()),
-    namedtype.DefaultedNamedType('canSource', ContentTypeGeneration().subtype(value='canSource')),
-    namedtype.OptionalNamedType('attrConstraints', AttrConstraintList())
-)
 
+ContentTypeConstraint.componentType = namedtype.NamedTypes(
+    namedtype.NamedType("contentType", univ.ObjectIdentifier()),
+    namedtype.DefaultedNamedType(
+        "canSource", ContentTypeGeneration().subtype(value="canSource")
+    ),
+    namedtype.OptionalNamedType("attrConstraints", AttrConstraintList()),
+)
 
 # CMS Content Constraints (CCC) Extension and Object Identifier
 
-id_pe_cmsContentConstraints = univ.ObjectIdentifier('1.3.6.1.5.5.7.1.18')
+id_pe_cmsContentConstraints = univ.ObjectIdentifier("1.3.6.1.5.5.7.1.18")
+
 
 class CMSContentConstraints(univ.SequenceOf):
     pass
 
-CMSContentConstraints.componentType = ContentTypeConstraint()
-CMSContentConstraints.subtypeSpec=constraint.ValueSizeConstraint(1, MAX)
 
+CMSContentConstraints.componentType = ContentTypeConstraint()
+CMSContentConstraints.subtypeSpec = constraint.ValueSizeConstraint(1, MAX)
 
 # Map of Certificate Extension OIDs to Extensions
 # To be added to the ones that are in rfc5280.py

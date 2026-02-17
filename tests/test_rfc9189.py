@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2022-2025, Vigil Security, LLC
+# Copyright (c) 2022-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -15,8 +15,8 @@ from pyasn1.type import univ
 from pyasn1_alt_modules import pem
 from pyasn1_alt_modules import rfc9189
 
-
 # RFC 9189 Section A.1.3.1
+
 
 class RFC9189FirstTestCase(unittest.TestCase):
     a131_pem_text = """\
@@ -35,12 +35,13 @@ RGtdyjQ=
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        oid = asn1Object['ephemeralPublicKey']['algorithm']['algorithm']
-        self.assertEqual(univ.ObjectIdentifier('1.2.643.7.1.1.1.1'), oid)
+
+        oid = asn1Object["ephemeralPublicKey"]["algorithm"]["algorithm"]
+        self.assertEqual(univ.ObjectIdentifier("1.2.643.7.1.1.1.1"), oid)
 
 
 # RFC 9189 Section A.1.3.2
+
 
 class RFC9189SecondTestCase(unittest.TestCase):
     a132_pem_text = """\
@@ -60,12 +61,13 @@ wKtTQYfehsdr4pqUCo2yrXFkaqDJUv30ESBlSIE+ufdUoQ==
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        oid = asn1Object['ephemeralPublicKey']['algorithm']['algorithm']
-        self.assertEqual(univ.ObjectIdentifier('1.2.643.7.1.1.1.2'), oid)
+
+        oid = asn1Object["ephemeralPublicKey"]["algorithm"]["algorithm"]
+        self.assertEqual(univ.ObjectIdentifier("1.2.643.7.1.1.1.2"), oid)
 
 
 # RFC 9189 Section A.2.2
+
 
 class RFC9189ThirdTestCase(unittest.TestCase):
     a22_pem_text = """\
@@ -86,14 +88,15 @@ EOgAr3A=
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
-        
-        oid = asn1Object['keyBlob']['transportParameters'] \
-                  ['ephemeralPublicKey']['algorithm']['algorithm']
-        self.assertEqual(univ.ObjectIdentifier('1.2.643.7.1.1.1.2'), oid)
+
+        oid = asn1Object["keyBlob"]["transportParameters"]["ephemeralPublicKey"][
+            "algorithm"
+        ]["algorithm"]
+        self.assertEqual(univ.ObjectIdentifier("1.2.643.7.1.1.1.2"), oid)
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -56,35 +56,38 @@ PQMBBwYFK4EEACIGBSuBBAAjMBoGCSqGSIb3DQEBCDANBglghkgBZQMEAgEFAA==
         ]
 
         count = 0
-        smimeCapabilityMap = opentypemap.get('smimeCapabilityMap')
+        smimeCapabilityMap = opentypemap.get("smimeCapabilityMap")
         for cap in asn1Object:
-            if cap['capabilityID'] in expectedCaps:
-                self.assertIn(cap['capabilityID'], smimeCapabilityMap)
-                cap_p, rest = der_decoder(cap['parameters'],
-                    asn1Spec=rfc5751.smimeCapabilityMap[cap['capabilityID']])
+            if cap["capabilityID"] in expectedCaps:
+                self.assertIn(cap["capabilityID"], smimeCapabilityMap)
+                cap_p, rest = der_decoder(
+                    cap["parameters"],
+                    asn1Spec=rfc5751.smimeCapabilityMap[cap["capabilityID"]],
+                )
                 self.assertFalse(rest)
                 self.assertTrue(cap_p.prettyPrint())
-                self.assertEqual(cap['parameters'], der_encoder(cap_p))
+                self.assertEqual(cap["parameters"], der_encoder(cap_p))
                 count += 1
 
         self.assertEqual(len(expectedCaps), count)
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.smime_capabilities_pem_text)
-        asn1Object, rest = der_decoder(substrate,
-            asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+        asn1Object, rest = der_decoder(
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         parameterValue = {
-            rfc6664.rsaEncryption: lambda x: x['maxKeySize'],
-            rfc6664.id_RSAES_OAEP: lambda x: x['maxKeySize'],
-            rfc6664.id_RSASSA_PSS: lambda x: x['minKeySize'],
-            rfc6664.id_dsa: lambda x: x['keySizes']['maxKeySize'],
-            rfc6664.dhpublicnumber: lambda x: x['keyParams']['q'] % 1023,
-            rfc6664.id_ecPublicKey: lambda x: x[0]['namedCurve'],
-            rfc6664.id_ecMQV: lambda x: x[1]['namedCurve'],
+            rfc6664.rsaEncryption: lambda x: x["maxKeySize"],
+            rfc6664.id_RSAES_OAEP: lambda x: x["maxKeySize"],
+            rfc6664.id_RSASSA_PSS: lambda x: x["minKeySize"],
+            rfc6664.id_dsa: lambda x: x["keySizes"]["maxKeySize"],
+            rfc6664.dhpublicnumber: lambda x: x["keyParams"]["q"] % 1023,
+            rfc6664.id_ecPublicKey: lambda x: x[0]["namedCurve"],
+            rfc6664.id_ecMQV: lambda x: x[1]["namedCurve"],
         }
 
         expectedValue = {
@@ -99,9 +102,9 @@ PQMBBwYFK4EEACIGBSuBBAAjMBoGCSqGSIb3DQEBCDANBglghkgBZQMEAgEFAA==
 
         count = 0
         for cap in asn1Object:
-            if cap['capabilityID'] in parameterValue.keys():
-                pValue = parameterValue[cap['capabilityID']](cap['parameters'])
-                eValue = expectedValue[cap['capabilityID']]
+            if cap["capabilityID"] in parameterValue.keys():
+                pValue = parameterValue[cap["capabilityID"]](cap["parameters"])
+                eValue = expectedValue[cap["capabilityID"]]
                 self.assertEqual(eValue, pValue)
                 count += 1
 
@@ -110,6 +113,6 @@ PQMBBwYFK4EEACIGBSuBBAAjMBoGCSqGSIb3DQEBCDANBglghkgBZQMEAgEFAA==
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

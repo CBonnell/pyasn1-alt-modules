@@ -3,7 +3,7 @@
 #
 # Created by Russ Housley.
 #
-# Copyright (c) 2021-2025, Vigil Security, LLC
+# Copyright (c) 2021-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 # RSASSA-PSS Signature Algorithm in CMS
@@ -13,7 +13,6 @@
 #
 
 from pyasn1_alt_modules import rfc4055
-
 
 # Imports from RFC 4055
 
@@ -45,12 +44,11 @@ rSASSA_PSS_SHA512_Params = rfc4055.rSASSA_PSS_SHA512_Params
 
 rSASSA_PSS_SHA512_Identifier = rfc4055.rSASSA_PSS_SHA512_Identifier
 
-
 # The Algorithm Identifiers Map is updated by importing rfc4055.
 #  As a reminder it includes:
 #
 # _algorithmIdentifierMapUpdate = {
 #     id_RSASSA_PSS: RSASSA_PSS_params(),
 # }
-# 
+#
 # algorithmIdentifierMap.update(_algorithmIdentifierMapUpdate)

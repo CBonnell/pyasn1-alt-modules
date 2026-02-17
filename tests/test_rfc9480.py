@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2023-2025, Vigil Security, LLC
+# Copyright (c) 2023-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -118,26 +118,27 @@ JA5RSwQoMDYTj2WrwtM/nsP12T39or4JRZhlLSM43IaTwEBtQw==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(2, asn1Object['header']['pvno'])
-        self.assertEqual(0, 
-            asn1Object['body']['cp']['response'][0]['status']['status'])
+        self.assertEqual(2, asn1Object["header"]["pvno"])
+        self.assertEqual(0, asn1Object["body"]["cp"]["response"][0]["status"]["status"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        rdns = asn1Object['header']['sender']['directoryName']['rdnSequence']
+        rdns = asn1Object["header"]["sender"]["directoryName"]["rdnSequence"]
         for rdn in rdns:
-            if rdn[0]['type'].prettyPrint() == '2.5.4.11':
-                self.assertEqual('TrustCenter', rdn[0]['value']['printableString'])
+            if rdn[0]["type"].prettyPrint() == "2.5.4.11":
+                self.assertEqual("TrustCenter", rdn[0]["value"]["printableString"])
                 found = True
 
         self.assertTrue(found)
+
 
 class V3CertConfMessageTestCase(unittest.TestCase):
     pem_text = """\
@@ -160,52 +161,54 @@ H7/mZ0aOaQ==
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        self.assertEqual(3, asn1Object['header']['pvno'])
-        self.assertTrue(asn1Object['body']['certConf'][0]['hashAlg'].hasValue())
-        self.assertEqual(0, 
-            asn1Object['body']['certConf'][0]['statusInfo']['status'])
+        self.assertEqual(3, asn1Object["header"]["pvno"])
+        self.assertTrue(asn1Object["body"]["certConf"][0]["hashAlg"].hasValue())
+        self.assertEqual(0, asn1Object["body"]["certConf"][0]["statusInfo"]["status"])
 
     def testOpenTypes(self):
         substrate = pem.readBase64fromText(self.pem_text)
         asn1Object, rest = der_decoder(
-            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True)
+            substrate, asn1Spec=self.asn1Spec, decodeOpenTypes=True
+        )
         self.assertFalse(rest)
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         found = False
-        rdns = asn1Object['header']['sender']['directoryName']['rdnSequence']
+        rdns = asn1Object["header"]["sender"]["directoryName"]["rdnSequence"]
         for rdn in rdns:
-            if rdn[0]['type'].prettyPrint() == '2.5.4.3':
-                self.assertEqual('test1', rdn[0]['value']['printableString'])
+            if rdn[0]["type"].prettyPrint() == "2.5.4.3":
+                self.assertEqual("test1", rdn[0]["value"]["printableString"])
                 found = True
 
         self.assertTrue(found)
 
+
 class CMPMapsTestCase(unittest.TestCase):
 
     def testOldCMPITValues(self):
-        cmpInfoTypeAndValueMap = opentypemap.get('cmpInfoTypeAndValueMap')
-        for i in range(1, 7+1):
+        cmpInfoTypeAndValueMap = opentypemap.get("cmpInfoTypeAndValueMap")
+        for i in range(1, 7 + 1):
             oid = rfc9480.id_it + (i,)
             self.assertIn(oid, cmpInfoTypeAndValueMap)
             self.assertIsNotNone(cmpInfoTypeAndValueMap[oid])
-        for i in range(10, 16+1):
+        for i in range(10, 16 + 1):
             oid = rfc9480.id_it + (i,)
             self.assertIn(oid, cmpInfoTypeAndValueMap)
             self.assertIsNotNone(cmpInfoTypeAndValueMap[oid])
 
     def testNewCMPITValues(self):
-        cmpInfoTypeAndValueMap = opentypemap.get('cmpInfoTypeAndValueMap')
-        for i in range(17, 23+1):
+        cmpInfoTypeAndValueMap = opentypemap.get("cmpInfoTypeAndValueMap")
+        for i in range(17, 23 + 1):
             oid = rfc9480.id_it + (i,)
             self.assertIn(oid, cmpInfoTypeAndValueMap)
 
     def testRegCtrlValues(self):
-        cmsAttributesMap = opentypemap.get('cmsAttributesMap')
-        regCtrlOIDs = [rfc9480.id_regCtrl_altCertTemplate,
-                       rfc9480.id_regCtrl_algId,
-                       rfc9480.id_regCtrl_rsaKeyLen,
+        cmsAttributesMap = opentypemap.get("cmsAttributesMap")
+        regCtrlOIDs = [
+            rfc9480.id_regCtrl_altCertTemplate,
+            rfc9480.id_regCtrl_algId,
+            rfc9480.id_regCtrl_rsaKeyLen,
         ]
         for oid in regCtrlOIDs:
             self.assertIn(oid, cmsAttributesMap)
@@ -214,6 +217,6 @@ class CMPMapsTestCase(unittest.TestCase):
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())

@@ -1,7 +1,7 @@
 #
 # This file is part of pyasn1-alt-modules software.
 #
-# Copyright (c) 2019-2025, Vigil Security, LLC
+# Copyright (c) 2019-2026, Vigil Security, LLC
 # License: http://vigilsec.com/pyasn1-alt-modules-license.txt
 #
 import sys
@@ -53,18 +53,18 @@ V+vo2L72yerdbsP9xjqvhZrLKfsLZjYK4SdYYthi
         self.assertEqual(substrate, der_encoder(asn1Object))
 
         extn_list = []
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            extn_list.append(extn['extnID'])
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            extn_list.append(extn["extnID"])
 
-            if extn['extnID'] == rfc3779.id_pe_ipAddrBlocks:
-                s = extn['extnValue']
+            if extn["extnID"] == rfc3779.id_pe_ipAddrBlocks:
+                s = extn["extnValue"]
                 addr_blocks, rest = der_decoder(s, rfc3779.IPAddrBlocks())
                 self.assertFalse(rest)
                 self.assertTrue(addr_blocks.prettyPrint())
                 self.assertEqual(s, der_encoder(addr_blocks))
 
-            if extn['extnID'] == rfc3779.id_pe_autonomousSysIds:
-                s = extn['extnValue']
+            if extn["extnID"] == rfc3779.id_pe_autonomousSysIds:
+                s = extn["extnValue"]
                 as_ids, rest = der_decoder(s, rfc3779.ASIdentifiers())
                 self.assertFalse(rest)
                 self.assertTrue(as_ids.prettyPrint())
@@ -80,17 +80,20 @@ V+vo2L72yerdbsP9xjqvhZrLKfsLZjYK4SdYYthi
         self.assertTrue(asn1Object.prettyPrint())
         self.assertEqual(substrate, der_encoder(asn1Object))
 
-        certificateExtensionsMap = opentypemap.get('certificateExtensionsMap')
-        for extn in asn1Object['tbsCertificate']['extensions']:
-            if (extn['extnID'] == rfc3779.id_pe_ipAddrBlocks or
-                    extn['extnID'] == rfc3779.id_pe_autonomousSysIds):
-                extnValue, rest = der_decoder(extn['extnValue'],
-                    asn1Spec=certificateExtensionsMap[extn['extnID']])
-                self.assertEqual(extn['extnValue'], der_encoder(extnValue))
+        certificateExtensionsMap = opentypemap.get("certificateExtensionsMap")
+        for extn in asn1Object["tbsCertificate"]["extensions"]:
+            if (
+                extn["extnID"] == rfc3779.id_pe_ipAddrBlocks
+                or extn["extnID"] == rfc3779.id_pe_autonomousSysIds
+            ):
+                extnValue, rest = der_decoder(
+                    extn["extnValue"], asn1Spec=certificateExtensionsMap[extn["extnID"]]
+                )
+                self.assertEqual(extn["extnValue"], der_encoder(extnValue))
 
 
 suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     sys.exit(not result.wasSuccessful())
